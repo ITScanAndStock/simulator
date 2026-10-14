@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Toasts · communs à tout le parcours</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&amp;family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#007A66}a:hover{color:#022B2B}
+</style>
+</helmet>
+<div style="position: relative; width: 1280px; height: 770px; box-sizing: border-box; background: #FFFFFF; color: #2F2C25; font-family: 'Hanken Grotesk', Arial, sans-serif; display: flex; flex-direction: column">
+<div style="flex-grow: 1; background: #F4F5F2; padding: 40px 48px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 30px; font-weight: 400; letter-spacing: -0.02em">Toasts · communs à tout le parcours</h1>
+<p style="margin: 0; font-size: 15px; color: #5E5849">Chaque toast avec son déclencheur. Les toasts s'affichent en haut à droite, sous le bandeau, et se ferment seuls après [6 s] sauf les erreurs, qui restent jusqu'à leur fermeture. Valeurs entre crochets : à fixer.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 48px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FBE9E4; padding: 3px 7px; border-radius: 3px">Erreur</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Le navigateur passe hors ligne.</span></div>
+<div role="alert" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Connexion perdue</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Vous semblez hors ligne. Vos réponses sont gardées ; nous réessayons dès le retour du réseau.</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #DCF2EC; padding: 3px 7px; border-radius: 3px">Succès</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Retour du réseau.</span></div>
+<div role="status" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #DCF2EC; color: #007A66"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.7 2.7L16 9.8"></path></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Connexion rétablie</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Vous pouvez reprendre où vous en étiez.</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FDF0D5; padding: 3px 7px; border-radius: 3px">Attention</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Inactivité prolongée (durée à fixer).</span></div>
+<div role="status" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FDF0D5; color: #8A5A00"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"></path><path d="M12 10v4"></path><path d="M12 17h.01"></path></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Votre session va expirer</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Sans action de votre part, votre simulation sera fermée dans 5 minutes.</span>
+<a href="#" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 32px; font-size: 14px; font-weight: 700">Continuer</a>
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FBE9E4; padding: 3px 7px; border-radius: 3px">Erreur</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Erreur serveur inattendue (500).</span></div>
+<div role="alert" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Une erreur est survenue</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Un problème de notre côté a interrompu l'opération. Réessayez dans quelques instants.</span>
+<a href="#" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 32px; font-size: 14px; font-weight: 700">Réessayer</a>
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FBE9E4; padding: 3px 7px; border-radius: 3px">Erreur</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Limitation de débit (429).</span></div>
+<div role="alert" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Trop de demandes</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Vous allez un peu vite : patientez quelques secondes avant de réessayer.</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #E3EFEB; padding: 3px 7px; border-radius: 3px">Information</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Bandeau de maintenance planifiée.</span></div>
+<div role="status" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #E3EFEB; color: #1D6B5B"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5"></path><path d="M12 8h.01"></path></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Maintenance prévue</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Le simulateur sera indisponible le [date] de [heure] à [heure].</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":770}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

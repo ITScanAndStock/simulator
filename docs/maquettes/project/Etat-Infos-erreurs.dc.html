@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Coordonnées, erreurs de saisie</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&amp;family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#007A66}a:hover{color:#022B2B}
+/* Checkbox adapted from uiverse.io/00Kubi/hot-dragonfly-56 (MIT) */
+.neon-checkbox{--primary:#00AA8D;--primary-dark:#1D6B5B;--size:24px;position:relative;display:inline-block;flex-shrink:0;width:var(--size);height:var(--size);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.neon-checkbox input{position:absolute;inset:0;z-index:2;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.neon-checkbox__frame,.neon-checkbox__box,.neon-checkbox__check-container,.neon-checkbox__glow,.neon-checkbox__borders,.neon-checkbox__effects,.neon-checkbox__particles,.neon-checkbox__rings,.neon-checkbox__sparks{display:block}
+.neon-checkbox__frame{position:relative;width:100%;height:100%}
+.neon-checkbox__box{position:absolute;inset:0;background:#FFFFFF;border-radius:5px;border:2px solid var(--primary-dark);transition:all .4s ease}
+.neon-checkbox__check-container{position:absolute;inset:2px;display:flex;align-items:center;justify-content:center}
+.neon-checkbox__check{width:80%;height:80%;fill:none;stroke:#1D6B5B;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;transform-origin:center;transition:all .4s cubic-bezier(.16,1,.3,1)}
+.neon-checkbox__glow{position:absolute;inset:-2px;border-radius:7px;background:var(--primary);opacity:0;filter:blur(8px);transform:scale(1.2);transition:all .4s ease}
+.neon-checkbox__borders{position:absolute;inset:0;border-radius:5px;overflow:hidden}
+.neon-checkbox__borders span{position:absolute;width:40px;height:1px;background:#FAA091;opacity:0;transition:opacity .4s ease}
+.neon-checkbox__borders span:nth-child(1){top:0;left:-100%;animation:borderFlow1 2s linear infinite}
+.neon-checkbox__borders span:nth-child(2){top:-100%;right:0;width:1px;height:40px;animation:borderFlow2 2s linear infinite}
+.neon-checkbox__borders span:nth-child(3){bottom:0;right:-100%;animation:borderFlow3 2s linear infinite}
+.neon-checkbox__borders span:nth-child(4){bottom:-100%;left:0;width:1px;height:40px;animation:borderFlow4 2s linear infinite}
+.neon-checkbox__particles span{position:absolute;width:4px;height:4px;background:var(--primary);border-radius:50%;opacity:0;pointer-events:none;top:50%;left:50%;box-shadow:0 0 6px var(--primary)}
+.neon-checkbox__particles span:nth-child(even){background:#FAA091;box-shadow:0 0 6px #FAA091}
+.neon-checkbox__rings{position:absolute;inset:-20px;pointer-events:none}
+.neon-checkbox__rings .ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--primary);opacity:0;transform:scale(0)}
+.neon-checkbox__sparks span{position:absolute;width:20px;height:1px;background:linear-gradient(90deg,var(--primary),transparent);opacity:0}
+.neon-checkbox:hover .neon-checkbox__box{border-color:var(--primary);transform:scale(1.05)}
+.neon-checkbox input:focus-visible ~ .neon-checkbox__frame .neon-checkbox__box{outline:2px solid #FAA091;outline-offset:3px}
+.neon-checkbox input:checked ~ .neon-checkbox__frame .neon-checkbox__box{border-color:var(--primary);background:#00AA8D}
+.neon-checkbox input:checked ~ .neon-checkbox__frame .neon-checkbox__check{stroke:#022B2B;stroke-dashoffset:0;transform:scale(1.1)}
+.neon-checkbox input:checked ~ .neon-checkbox__frame .neon-checkbox__glow{opacity:.25}
+.neon-checkbox input:checked ~ .neon-checkbox__frame .neon-checkbox__borders span{opacity:1}
+.neon-checkbox input:checked ~ .neon-checkbox__frame .neon-checkbox__particles span{animation:particleExplosion .6s ease-out forwards}
+.neon-checkbox input:checked ~ .neon-checkbox__frame .neon-checkbox__rings .ring{animation:ringPulse .6s ease-out forwards}
+.neon-checkbox input:checked ~ .neon-checkbox__frame .neon-checkbox__sparks span{animation:sparkFlash .6s ease-out forwards}
+@keyframes borderFlow1{0%{transform:translateX(0)}100%{transform:translateX(200%)}}
+@keyframes borderFlow2{0%{transform:translateY(0)}100%{transform:translateY(200%)}}
+@keyframes borderFlow3{0%{transform:translateX(0)}100%{transform:translateX(-200%)}}
+@keyframes borderFlow4{0%{transform:translateY(0)}100%{transform:translateY(-200%)}}
+@keyframes particleExplosion{0%{transform:translate(-50%,-50%) scale(1);opacity:0}20%{opacity:1}100%{transform:translate(calc(-50% + var(--x,20px)),calc(-50% + var(--y,20px))) scale(0);opacity:0}}
+@keyframes ringPulse{0%{transform:scale(0);opacity:1}100%{transform:scale(2);opacity:0}}
+@keyframes sparkFlash{0%{transform:rotate(var(--r,0deg)) translateX(0) scale(1);opacity:1}100%{transform:rotate(var(--r,0deg)) translateX(30px) scale(0);opacity:0}}
+.neon-checkbox__particles span:nth-child(1){--x:25px;--y:-25px}.neon-checkbox__particles span:nth-child(2){--x:-25px;--y:-25px}.neon-checkbox__particles span:nth-child(3){--x:25px;--y:25px}.neon-checkbox__particles span:nth-child(4){--x:-25px;--y:25px}.neon-checkbox__particles span:nth-child(5){--x:35px;--y:0px}.neon-checkbox__particles span:nth-child(6){--x:-35px;--y:0px}.neon-checkbox__particles span:nth-child(7){--x:0px;--y:35px}.neon-checkbox__particles span:nth-child(8){--x:0px;--y:-35px}.neon-checkbox__particles span:nth-child(9){--x:20px;--y:-30px}.neon-checkbox__particles span:nth-child(10){--x:-20px;--y:30px}.neon-checkbox__particles span:nth-child(11){--x:30px;--y:20px}.neon-checkbox__particles span:nth-child(12){--x:-30px;--y:-20px}
+.neon-checkbox__sparks span:nth-child(1){--r:0deg;top:50%;left:50%}.neon-checkbox__sparks span:nth-child(2){--r:90deg;top:50%;left:50%}.neon-checkbox__sparks span:nth-child(3){--r:180deg;top:50%;left:50%}.neon-checkbox__sparks span:nth-child(4){--r:270deg;top:50%;left:50%}
+.neon-checkbox__rings .ring:nth-child(2){animation-delay:.1s}.neon-checkbox__rings .ring:nth-child(3){animation-delay:.2s}
+@media (prefers-reduced-motion:reduce){.neon-checkbox *{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="position: relative; width: 1280px; height: 1180px; box-sizing: border-box; background: #FFFFFF; color: #2F2C25; font-family: 'Hanken Grotesk', Arial, sans-serif; display: flex; flex-direction: column">
+<header style="display: flex; align-items: center; justify-content: space-between; height: 76px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E8E6E1">
+<div style="display: flex; align-items: center; gap: 40px">
+<img src="/_blob/da99154c7d0993295db3c995a2ef5086" alt="Club Santé Premium" style="display: block; width: 95px; height: auto">
+<nav aria-label="Navigation principale" style="display: flex; align-items: center; gap: 28px; font-size: 17px">
+<a href="#" style="color: #022B2B; text-decoration: none">Qui sommes-nous ?</a>
+<a href="#" style="color: #022B2B; text-decoration: none">La formule club</a>
+<a href="#" style="color: #022B2B; text-decoration: none">Les services à la carte</a>
+<a href="#" style="color: #022B2B; text-decoration: none">Témoignages</a>
+<a href="#" style="color: #022B2B; text-decoration: none">Blog</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 18px">
+<a href="#" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 4px; color: #022B2B; font-size: 17px; text-decoration: none; border-bottom: 1px solid #022B2B; box-sizing: border-box">Espace affilié·e<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg></a>
+<a href="#" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; background: #00AA8D; color: #022B2B; border-radius: 9px; font-size: 17px; font-weight: 500; text-decoration: none">Contactez-nous</a>
+</div>
+</header>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 48px; background: #F4F5F2">
+<span style="font-size: 16px; color: #022B2B">Simulateur d'économies</span>
+<span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 15px; color: #022B2B; background: #FAA091; padding: 5px 9px; border-radius: 3px">Étape 1 sur 4</span>
+</div>
+<main style="flex-grow: 1; display: flex; flex-direction: column; gap: 28px; padding: 24px 64px 40px">
+<nav aria-label="Votre simulation" style="position: relative; overflow: hidden; background: #1D6B5B; color: #FEFAF3; border-radius: 6px; padding: 16px 28px">
+<div aria-hidden="true" style="position: absolute; right: -60px; top: -60px; width: 140px; height: 140px; border-radius: 50%; background: #FAA091"></div>
+<ol style="position: relative; margin: 0; padding: 0 70px 0 0; list-style: none; display: flex; align-items: center; gap: 16px"><li style="display: flex; align-items: center; gap: 12px" aria-current="step"><span style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FAA091; color: #022B2B; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 17px">1</span><div style="display: flex; flex-direction: column; gap: 2px"><strong style="font-size: 16px">Vos coordonnées</strong><span style="font-size: 14px; color: #CFE3DD">En cours</span></div></li><li aria-hidden="true" style="flex-grow: 1; height: 1px; background: #3F8A79; min-width: 24px"></li><li style="display: flex; align-items: center; gap: 12px"><span style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #8FC2B5; color: #FEFAF3; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 17px">2</span><span style="font-size: 16px; color: #E3EFEB">Dépôt des factures</span></li><li aria-hidden="true" style="flex-grow: 1; height: 1px; background: #3F8A79; min-width: 24px"></li><li style="display: flex; align-items: center; gap: 12px"><span style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #8FC2B5; color: #FEFAF3; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 17px">3</span><span style="font-size: 16px; color: #E3EFEB">Vérification des lignes</span></li><li aria-hidden="true" style="flex-grow: 1; height: 1px; background: #3F8A79; min-width: 24px"></li><li style="display: flex; align-items: center; gap: 12px"><span style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #8FC2B5; color: #FEFAF3; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 17px">4</span><span style="font-size: 16px; color: #E3EFEB">Votre économie</span></li></ol>
+</nav>
+<form style="width: 560px; align-self: center; display: flex; flex-direction: column; gap: 24px">
+<h1 style="margin: 0; font-weight: 400; letter-spacing: -0.02em; font-size: 48px; line-height: 1.1">Où vous envoyer votre résultat&nbsp;?</h1>
+<div role="alert" style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1px solid #E8B4A8; border-radius: 9px; background: #FBE9E4; font-size: 15px; line-height: 1.45"><span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span><span><strong>3 champs à corriger</strong> avant de continuer.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0"><label for="email" style="font-size: 15px; font-weight: 700">Email professionnel</label><input id="email" type="email" value="contact@cabinet-exemple" aria-invalid="true" aria-describedby="email-err" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 2px solid #B4432F; border-radius: 9px; background: #FFFFFF"><span id="email-err" style="display: flex; gap: 6px; align-items: center; font-size: 14px; font-weight: 700; color: #B4432F">Adresse incomplète : il manque l'extension (.fr, .com…).</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0"><label for="cabinet" style="font-size: 15px; font-weight: 700">Nom du cabinet</label><input id="cabinet" type="text" value="Cabinet dentaire des Tilleuls" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06)"></div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0"><label for="praticien" style="font-size: 15px; font-weight: 700">Nom du praticien</label><input id="praticien" type="text" value="" aria-invalid="true" aria-describedby="praticien-err" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 2px solid #B4432F; border-radius: 9px; background: #FFFFFF"><span id="praticien-err" style="display: flex; gap: 6px; align-items: center; font-size: 14px; font-weight: 700; color: #B4432F">Indiquez le nom du praticien.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0"><label for="telephone" style="font-size: 15px; font-weight: 700">Téléphone</label><input id="telephone" type="tel" value="04 72 00" aria-invalid="true" aria-describedby="telephone-err" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 2px solid #B4432F; border-radius: 9px; background: #FFFFFF"><span id="telephone-err" style="display: flex; gap: 6px; align-items: center; font-size: 14px; font-weight: 700; color: #B4432F">Numéro incomplet : 10 chiffres attendus.</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 1.5; color: #5E5849"><span class="neon-checkbox"><input type="checkbox" id="rgpd" required="" aria-invalid="true"><span class="neon-checkbox__frame" aria-hidden="true"><span class="neon-checkbox__box"><span class="neon-checkbox__check-container"><svg viewBox="0 0 24 24" class="neon-checkbox__check"><path d="M3,12.5l7,7L21,5"></path></svg></span><span class="neon-checkbox__glow"></span><span class="neon-checkbox__borders"><span></span><span></span><span></span><span></span></span></span><span class="neon-checkbox__effects"><span class="neon-checkbox__particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="neon-checkbox__rings"><span class="ring"></span><span class="ring"></span><span class="ring"></span></span><span class="neon-checkbox__sparks"><span></span><span></span><span></span><span></span></span></span></span></span><span><label for="rgpd">J'ai lu l'information sur le traitement de mes données.</label> <a href="Rgpd.dc.html">Lire l'information</a><br><strong style="color: #B4432F">Cochez cette case pour continuer.</strong></span></div>
+<label style="display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 1.5; color: #5E5849"><span class="neon-checkbox"><input type="checkbox" checked="checked"><span class="neon-checkbox__frame" aria-hidden="true"><span class="neon-checkbox__box"><span class="neon-checkbox__check-container"><svg viewBox="0 0 24 24" class="neon-checkbox__check"><path d="M3,12.5l7,7L21,5"></path></svg></span><span class="neon-checkbox__glow"></span><span class="neon-checkbox__borders"><span></span><span></span><span></span><span></span></span></span><span class="neon-checkbox__effects"><span class="neon-checkbox__particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="neon-checkbox__rings"><span class="ring"></span><span class="ring"></span><span class="ring"></span></span><span class="neon-checkbox__sparks"><span></span><span></span><span></span><span></span></span></span></span></span>J'accepte d'être recontacté par un conseiller CSP au sujet de ma simulation.</label>
+</div>
+<div style="display: flex; gap: 16px; align-items: center"><a href="#" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; box-sizing: border-box; background: #00AA8D; color: #022B2B; border-radius: 9px; font-size: 17px; font-weight: 500; text-decoration: none">Continuer</a><a href="Main.dc.html" style="font-size: 15px">Retour</a></div>
+</form>
+</main>
+<div aria-live="polite" style="position: absolute; top: 148px; right: 24px; z-index: 5; display: flex; flex-direction: column; gap: 12px"><div role="alert" style="box-sizing: border-box; width: 400px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Information sur vos données</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Cochez la case « J'ai lu l'information sur le traitement de mes données » pour continuer.</span>
+<a href="#" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 32px; font-size: 14px; font-weight: 700">Lire l'information</a>
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1180}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
