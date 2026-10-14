@@ -12,7 +12,7 @@ Issues and specs for this repo live as markdown files in `.scratch/`. These file
 
 ## Notion mirror
 
-- Database: "Issues", under the Notion page "Simulateur de remise de prix CSP" (https://app.notion.com/p/3ea0e2d2c3c280b4aa5fe2e78e74b546). If it does not exist yet, ask the user before creating it.
+- Database: "Issues", under the Notion page "Simulateur de remise CSP" (https://app.notion.com/p/3f20e2d2c3c2812f9003f36e6f8e3ba7). If it does not exist yet, ask the user before creating it.
 - One row per issue file, with the properties Title, Status (same strings as the `Status:` line) and Path (the repo-relative path of the issue file).
 - Whenever an issue file is created or its `Status:` changes, update the matching row. Ask the user before each Notion write.
 - On any conflict, the markdown file wins.
