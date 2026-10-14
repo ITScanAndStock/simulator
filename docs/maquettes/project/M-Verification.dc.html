@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vérification des lignes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&amp;family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#007A66}a:hover{color:#022B2B}
+</style>
+</helmet>
+<div style="width: 390px; height: 1760px; box-sizing: border-box; background: #FFFFFF; color: #2F2C25; font-family: 'Hanken Grotesk', Arial, sans-serif; display: flex; flex-direction: column">
+<header style="display: flex; align-items: center; justify-content: space-between; height: 60px; padding: 0 8px 0 16px; border-bottom: 1px solid #E8E6E1">
+<img src="/_blob/da99154c7d0993295db3c995a2ef5086" alt="Club Santé Premium" style="display: block; width: 80px; height: auto">
+<button type="button" aria-label="Ouvrir le menu" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: none; background: none; color: #022B2B; cursor: pointer"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></button>
+</header>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 0 16px; background: #F4F5F2">
+<span style="font-size: 15px; color: #022B2B">Simulateur d'économies</span>
+<span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 14px; color: #022B2B; background: #FAA091; padding: 4px 8px; border-radius: 3px">Étape 3 sur 4</span>
+</div>
+<main style="flex-grow: 1; display: flex; flex-direction: column; gap: 20px; padding: 16px 16px 32px">
+<nav aria-label="Votre simulation" style="position: relative; overflow: hidden; background: #1D6B5B; color: #FEFAF3; border-radius: 6px; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px">
+<div aria-hidden="true" style="position: absolute; right: -40px; top: -40px; width: 90px; height: 90px; border-radius: 50%; background: #FAA091"></div>
+<div style="position: relative; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-right: 40px">
+<strong style="font-size: 16px" aria-current="step">3. Vérification des lignes</strong>
+<span style="font-size: 13px; color: #CFE3DD">Ensuite : Votre économie</span>
+</div>
+<div aria-hidden="true" style="position: relative; display: flex; gap: 6px"><span style="flex: 1; height: 6px; border-radius: 3px; background: #00AA8D"></span><span style="flex: 1; height: 6px; border-radius: 3px; background: #00AA8D"></span><span style="flex: 1; height: 6px; border-radius: 3px; background: #FAA091"></span><span style="flex: 1; height: 6px; border-radius: 3px; background: #3F8A79"></span></div>
+</nav>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-weight: 400; letter-spacing: -0.02em; font-size: 32px; line-height: 1.1">Deux lignes à vérifier</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4B473E">Nous avons lu vos 2 factures. Sur ces lignes, une erreur de lecture est probable : corrigez-les si besoin, ou passez cette étape.</p>
+</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><span style="display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 999px; font-size: 14px; font-weight: 700; border: 1px solid #DCD8CF">23 lignes lues</span><span style="display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 999px; font-size: 14px; font-weight: 700; background: #CDEFE8; color: #022B2B">21 lues sans doute</span><span style="display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 999px; font-size: 14px; font-weight: 700; background: #FAA091; color: #022B2B">2 à vérifier</span></div>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px">
+<li style="border: 1px solid #DCD8CF; border-radius: 6px; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px"><div style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #8A3A2B"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 13px; color: #022B2B; background: #FAA091; padding: 3px 7px; border-radius: 3px">À vérifier</span><span>Référence incertaine : A-3O0915 ou A-300915 ?</span></div><button type="button" aria-label="Supprimer la ligne" style="flex-shrink: 0; width: 44px; height: 44px; border: none; background: none; color: #5E5849; font-size: 22px; cursor: pointer">×</button></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="ref0" style="font-size: 13px; color: #5E5849">Référence</label><input id="ref0" value="A-3O0915" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06); background: #FFFFFF"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="des0" style="font-size: 13px; color: #5E5849">Désignation</label><input id="des0" value="Fraise diamantée FG, grain moyen, x5" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06); background: #FFFFFF"></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><label for="q0" style="font-size: 13px; color: #5E5849">Quantité</label><input id="q0" inputmode="numeric" value="2" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06); background: #FFFFFF"></div>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><label for="pu0" style="font-size: 13px; color: #5E5849">Prix unitaire payé</label><input id="pu0" inputmode="decimal" value="21,00 €" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06); background: #FFFFFF"></div>
+</div>
+</li>
+<li style="border: 1px solid #DCD8CF; border-radius: 6px; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px"><div style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 700; color: #8A3A2B"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 13px; color: #022B2B; background: #FAA091; padding: 3px 7px; border-radius: 3px">À vérifier</span><span>Prix inhabituel : 3,85 € ou 38,50 € ?</span></div><button type="button" aria-label="Supprimer la ligne" style="flex-shrink: 0; width: 44px; height: 44px; border: none; background: none; color: #5E5849; font-size: 22px; cursor: pointer">×</button></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="ref1" style="font-size: 13px; color: #5E5849">Référence</label><input id="ref1" value="A-200871" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06); background: #FFFFFF"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="des1" style="font-size: 13px; color: #5E5849">Désignation</label><input id="des1" value="Composite universel, teinte A2, seringue 4 g" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06); background: #FFFFFF"></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><label for="q1" style="font-size: 13px; color: #5E5849">Quantité</label><input id="q1" inputmode="numeric" value="3" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06); background: #FFFFFF"></div>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><label for="pu1" style="font-size: 13px; color: #5E5849">Prix unitaire payé</label><input id="pu1" inputmode="decimal" value="3,85 €" style="box-sizing: border-box; width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid rgba(47, 44, 37, 0.3); border-radius: 9px; background: rgba(47, 44, 37, 0.06); background: #FFFFFF"></div>
+</div>
+</li>
+</ul>
+<div style="display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; gap: 8px">
+<button type="button" style="min-height: 44px; padding: 0 16px; font: inherit; font-size: 15px; border: 1px solid rgba(47, 44, 37, 0.3); background: #FFFFFF; border-radius: 6px">+ Ajouter une ligne oubliée</button>
+<a href="#" style="display: inline-flex; align-items: center; justify-content: center; min-height: 44px; font-size: 15px">Voir aussi les 21 autres lignes</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 8px; align-items: stretch">
+<a href="M-Resultat.dc.html" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; box-sizing: border-box; background: #00AA8D; color: #022B2B; border-radius: 9px; font-size: 17px; font-weight: 500; text-decoration: none; text-align: center">Valider et calculer mon économie</a>
+<a href="M-Resultat.dc.html" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; box-sizing: border-box; background: #00AA8D; color: #022B2B; border-radius: 9px; font-size: 17px; font-weight: 500; text-decoration: none; text-align: center; background: #FFFFFF; border: 1.5px solid #1D6B5B; color: #1D6B5B">Passer cette étape</a>
+<a href="M-Depot.dc.html" style="display: inline-flex; align-items: center; justify-content: center; min-height: 44px; font-size: 15px">Retour</a>
+</div>
+<span style="font-size: 14px; line-height: 1.5; color: #5E5849">Si vous passez cette étape, l'économie est calculée avec les lignes telles que nous les avons lues.</span>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1760}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

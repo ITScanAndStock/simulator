@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Accueil du simulateur</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&amp;family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#007A66}a:hover{color:#022B2B}
+</style>
+</helmet>
+<div style="width: 1280px; height: 960px; box-sizing: border-box; background: #FFFFFF; color: #2F2C25; font-family: 'Hanken Grotesk', Arial, sans-serif; display: flex; flex-direction: column">
+<header style="display: flex; align-items: center; justify-content: space-between; height: 76px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E8E6E1">
+<div style="display: flex; align-items: center; gap: 40px">
+<img src="/_blob/da99154c7d0993295db3c995a2ef5086" alt="Club Santé Premium" style="display: block; width: 95px; height: auto">
+<nav aria-label="Navigation principale" style="display: flex; align-items: center; gap: 28px; font-size: 17px">
+<a href="#" style="color: #022B2B; text-decoration: none">Qui sommes-nous ?</a>
+<a href="#" style="color: #022B2B; text-decoration: none">La formule club</a>
+<a href="#" style="color: #022B2B; text-decoration: none">Les services à la carte</a>
+<a href="#" style="color: #022B2B; text-decoration: none">Témoignages</a>
+<a href="#" style="color: #022B2B; text-decoration: none">Blog</a>
+</nav>
+</div>
+<div style="display: flex; align-items: center; gap: 18px">
+<a href="#" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 4px; color: #022B2B; font-size: 17px; text-decoration: none; border-bottom: 1px solid #022B2B; box-sizing: border-box">Espace affilié·e<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg></a>
+<a href="#" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; background: #00AA8D; color: #022B2B; border-radius: 9px; font-size: 17px; font-weight: 500; text-decoration: none">Contactez-nous</a>
+</div>
+</header>
+<div style="display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 48px; background: #F4F5F2">
+<span style="font-size: 16px; color: #022B2B">Simulateur d'économies</span>
+<span style="font-size: 13px; color: #5E5849; border: 1px solid #C9C3B6; padding: 6px 10px; border-radius: 6px">Maquette · données fictives</span>
+</div>
+<main style="flex-grow: 1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; padding: 48px 48px 40px">
+<div style="display: flex; flex-direction: column; gap: 28px">
+<span style="align-self: flex-start; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.02em; text-transform: uppercase; color: #022B2B; background: #FAA091; padding: 5px 9px; border-radius: 3px">Simulateur gratuit</span>
+<h1 style="margin: 0; font-weight: 400; letter-spacing: -0.02em; font-size: 64px; line-height: 1.05; color: #2F2C25">Combien paieriez-vous vos consommables <em style="font-style: italic">avec <b>CSP</b></em>&nbsp;?</h1>
+<p style="margin: 0; font-size: 19px; line-height: 1.5; color: #2F2C25">Déposez une ou plusieurs factures de vos fournisseurs actuels. Nous retrouvons les mêmes produits et calculons ce que vous auriez payé au tarif négocié CSP.</p>
+<div style="display: flex; gap: 16px; align-items: center">
+<a href="Infos.dc.html" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; background: #00AA8D; color: #022B2B; border-radius: 9px; font-size: 17px; font-weight: 500; text-decoration: none">Commencer la simulation</a>
+<span style="font-size: 15px; color: #5E5849">Gratuit · environ 3 minutes</span>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #5E5849">Vos factures sont supprimées dès leur lecture. Votre simulation est transmise à l'équipe CSP ; nous ne gardons ensuite que des prix anonymes. <a href="Rgpd.dc.html">Comment nous traitons vos données</a></p>
+</div>
+<aside style="position: relative; overflow: hidden; align-self: start; background: #1D6B5B; color: #FEFAF3; border-radius: 6px; padding: 36px 40px 40px; display: flex; flex-direction: column; gap: 28px">
+<div aria-hidden="true" style="position: absolute; right: -100px; bottom: -100px; width: 260px; height: 260px; border-radius: 50%; background: #FAA091"></div>
+<h2 style="position: relative; margin: 0; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; font-size: 30px; letter-spacing: 0.01em; text-transform: uppercase; color: #FEFAF3">Votre simulation</h2>
+<ol style="position: relative; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 18px">
+<li style="display: flex; align-items: center; gap: 16px"><span style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #8FC2B5; color: #FEFAF3; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; font-size: 17px">1</span><span style="font-size: 18px; color: #E3EFEB">Vos coordonnées</span></li>
+<li style="display: flex; align-items: center; gap: 16px"><span style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #8FC2B5; color: #FEFAF3; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; font-size: 17px">2</span><span style="font-size: 18px; color: #E3EFEB">Dépôt des factures</span></li>
+<li style="display: flex; align-items: center; gap: 16px"><span style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #8FC2B5; color: #FEFAF3; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; font-size: 17px">3</span><span style="font-size: 18px; color: #E3EFEB">Vérification des lignes</span></li>
+<li style="display: flex; align-items: center; gap: 16px"><span style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #8FC2B5; color: #FEFAF3; font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; font-size: 17px">4</span><span style="font-size: 18px; color: #E3EFEB">Votre économie</span></li>
+</ol>
+<div style="position: relative; height: 1px; background: #3F8A79"></div>
+<ul style="position: relative; margin: 0; padding: 0 180px 0 0; list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 16px; line-height: 1.4">
+<li style="display: flex; gap: 12px; align-items: flex-start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FAA091" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Gratuit · environ 3 minutes</span></li>
+<li style="display: flex; gap: 12px; align-items: flex-start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FAA091" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Vos factures sont supprimées dès leur lecture</span></li>
+<li style="display: flex; gap: 12px; align-items: flex-start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FAA091" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Seuls des prix anonymes sont conservés</span></li>
+</ul>
+</aside>
+</main>
+<footer style="display: flex; gap: 24px; padding: 20px 48px; background: #F4F5F2; font-size: 14px; color: #5E5849">
+<a href="Rgpd.dc.html">Données personnelles</a>
+<span>[Mentions légales]</span>
+<span>[Conditions d'utilisation]</span>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":960}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

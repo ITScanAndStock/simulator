@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Toasts · coordonnées (écran 2)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600&amp;family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#007A66}a:hover{color:#022B2B}
+</style>
+</helmet>
+<div style="position: relative; width: 1280px; height: 980px; box-sizing: border-box; background: #FFFFFF; color: #2F2C25; font-family: 'Hanken Grotesk', Arial, sans-serif; display: flex; flex-direction: column">
+<div style="flex-grow: 1; background: #F4F5F2; padding: 40px 48px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 30px; font-weight: 400; letter-spacing: -0.02em">Toasts · coordonnées (écran 2)</h1>
+<p style="margin: 0; font-size: 15px; color: #5E5849">Chaque toast avec son déclencheur. Les toasts s'affichent en haut à droite, sous le bandeau, et se ferment seuls après [6 s] sauf les erreurs, qui restent jusqu'à leur fermeture. Valeurs entre crochets : à fixer.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 48px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FBE9E4; padding: 3px 7px; border-radius: 3px">Erreur</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Envoi du formulaire avec un email mal formé (le champ passe aussi en erreur).</span></div>
+<div role="alert" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Adresse email invalide</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Vérifiez l'adresse : elle doit ressembler à nom@cabinet.fr.</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FBE9E4; padding: 3px 7px; border-radius: 3px">Erreur</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Envoi avec un ou plusieurs champs obligatoires vides.</span></div>
+<div role="alert" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Champs obligatoires</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Renseignez l'email, le nom du cabinet, le nom du praticien et le téléphone pour continuer.</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FBE9E4; padding: 3px 7px; border-radius: 3px">Erreur</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Téléphone mal formé ou étranger.</span></div>
+<div role="alert" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Numéro de téléphone invalide</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Indiquez un numéro français à 10 chiffres, par exemple 04 72 00 00 00.</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FBE9E4; padding: 3px 7px; border-radius: 3px">Erreur</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Envoi sans la case RGPD obligatoire.</span></div>
+<div role="alert" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Information sur vos données</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Cochez la case « J'ai lu l'information sur le traitement de mes données » pour continuer.</span>
+<a href="#" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 32px; font-size: 14px; font-weight: 700">Lire l'information</a>
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FDF0D5; padding: 3px 7px; border-radius: 3px">Attention</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Email d'un webmail grand public (gmail, orange…). Proposition : simple avertissement, non bloquant.</span></div>
+<div role="status" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FDF0D5; color: #8A5A00"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"></path><path d="M12 10v4"></path><path d="M12 17h.01"></path></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Adresse personnelle ?</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Une adresse professionnelle nous permet de mieux vous identifier. Vous pouvez quand même continuer.</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #FBE9E4; padding: 3px 7px; border-radius: 3px">Erreur</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Protection contre les abus : limite par email ou par adresse IP, valeur à fixer.</span></div>
+<div role="alert" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #FBE9E4; color: #B4432F"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 16.5h.01"></path><circle cx="12" cy="12" r="9"></circle></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Trop de simulations</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Vous avez atteint la limite de [N] simulations par jour depuis cette adresse. Réessayez demain ou contactez-nous.</span>
+<a href="#" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 32px; font-size: 14px; font-weight: 700">Contactez-nous</a>
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div><div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="font-family: 'Barlow Semi Condensed', Arial, sans-serif; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; font-size: 12px; color: #022B2B; background: #E3EFEB; padding: 3px 7px; border-radius: 3px">Information</span><span style="font-size: 13px; line-height: 1.4; color: #5E5849">Email trouvé dans la base Scan&Stock (endpoint « email connu ? »). Proposition, à valider.</span></div>
+<div role="status" style="box-sizing: border-box; width: 560px; display: flex; gap: 12px; align-items: flex-start; background: #FFFFFF; border: 1px solid #DCD8CF; border-radius: 9px; padding: 14px 8px 14px 14px; box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14); ">
+<span aria-hidden="true" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #E3EFEB; color: #1D6B5B"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5"></path><path d="M12 8h.01"></path></svg></span>
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 2px">
+<strong style="font-size: 15px; color: #2F2C25">Vous êtes déjà client Scan&Stock</strong>
+<span style="font-size: 14px; line-height: 1.45; color: #4B473E">Nous avons reconnu votre adresse : votre simulation sera transmise à votre conseiller habituel.</span>
+
+</div>
+<button type="button" aria-label="Fermer" style="flex-shrink: 0; width: 36px; height: 36px; border: none; background: none; color: #5E5849; font-size: 20px; cursor: pointer">×</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":980}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
