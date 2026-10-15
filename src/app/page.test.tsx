@@ -6,6 +6,9 @@ test("the home page names the simulator in its main heading", () => {
   render(<Home />);
 
   expect(
-    screen.getByRole("heading", { level: 1, name: "Simulateur d'économies Club Santé Premium" }),
+    screen.getByRole("heading", {
+      level: 1,
+      name: "Simulateur d'économies Club Santé Premium",
+    }),
   ).toBeInTheDocument();
 });

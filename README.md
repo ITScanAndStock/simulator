@@ -2,7 +2,7 @@
 
 Le simulateur montre à un cabinet dentaire combien il aurait économisé en achetant aux prix négociés par Club Santé Premium (CSP).
 
-Le praticien dépose les factures de ses fournisseurs. Le simulateur compare chaque produit facturé au prix CSP du même produit et affiche l'économie, en euros et en pourcentage, sur les produits qu'il a pu comparer. 
+Le praticien dépose les factures de ses fournisseurs. Le simulateur compare chaque produit facturé au prix CSP du même produit et affiche l'économie, en euros et en pourcentage, sur les produits qu'il a pu comparer.
 Le praticien peut ensuite prendre rendez-vous avec un conseiller CSP pour en obtenir le détail.
 
 Le simulateur s'adresse aux cabinets déjà affiliés à CSP, aux utilisateurs de Scan&Stock et aux cabinets qui ne connaissent pas encore CSP.
