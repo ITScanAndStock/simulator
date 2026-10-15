@@ -12,9 +12,10 @@ Issues and specs for this repo live as markdown files in `.scratch/`. These file
 
 ## Notion mirror
 
-- Database: "Issues", under the Notion page "Simulateur de remise CSP" (https://app.notion.com/p/3f20e2d2c3c2812f9003f36e6f8e3ba7). If it does not exist yet, ask the user before creating it.
-- One row per issue file, with the properties Title, Status (same strings as the `Status:` line) and Path (the repo-relative path of the issue file).
-- Whenever an issue file is created or its `Status:` changes, update the matching row. Ask the user before each Notion write.
+- Database: "Issues" (https://app.notion.com/p/9f66d0b77614411588615494e21c23b9, data source `collection://f5a61994-45da-4b22-a7a1-72f90bbbebde`), under the Notion page "Simulateur de remise CSP" (https://app.notion.com/p/3f20e2d2c3c2812f9003f36e6f8e3ba7).
+- One row per issue file. Ticket = `NN · <title>`; Chemin = the repo-relative path of the issue file, written as inline code so Notion does not turn `.md` into a link. The page body copies the file: What to build, Blocked by, Proof of done, and the acceptance criteria as to-dos.
+- Statut follows the file's `Status:` line: `ready-for-agent` and `ready-for-human` → Prêt, `in-progress` → En cours, `in-review` → En revue, `done` → Terminé, `needs-info` → Bloqué, `wontfix` → Abandonné.
+- Updating the row of the ticket being worked on is done without asking: Statut, Branche, PR, Terminé le, Réalisé (j), and ticking its to-dos. Every other Notion write (a new row, another ticket's row, any other page) is approved by the user first.
 - On any conflict, the markdown file wins.
 
 ## When a skill says "publish to the issue tracker"
