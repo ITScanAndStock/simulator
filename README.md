@@ -10,3 +10,20 @@ Le simulateur s'adresse aux cabinets déjà affiliés à CSP, aux utilisateurs d
 ## Où en est le projet
 
 Le simulateur est en cours de réalisation. La première version tourne en local : elle sert à l'essayer sur de vraies factures, avec un conseiller CSP, avant d'ouvrir le simulateur au public.
+
+## Lancer en local
+
+Il faut Node 24.22.0 (voir `.nvmrc`) et pnpm, dans la version fixée par `package.json` (Corepack la fournit).
+
+```sh
+pnpm install
+pnpm dev
+```
+
+Le simulateur s'ouvre sur http://localhost:3000.
+
+Pour lancer les tests :
+
+```sh
+pnpm test
+```
