@@ -10,12 +10,245 @@
       "x": 4080,
       "y": 300
     },
+    "Etat-404.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Page introuvable (404)",
+      "w": 1280,
+      "x": 5440,
+      "y": 3670
+    },
+    "Etat-500.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Erreur serveur (500)",
+      "w": 1280,
+      "x": 6800,
+      "y": 3670
+    },
+    "Etat-Calcul.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "4 → 5 · Calcul en cours",
+      "w": 1280,
+      "x": 6800,
+      "y": 2290
+    },
+    "Etat-Depot-aucune.dc.html": {
+      "h": 980,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "3 · Dépôt : aucune facture lisible",
+      "w": 1280,
+      "x": 2720,
+      "y": 2290
+    },
+    "Etat-Depot-erreurs.dc.html": {
+      "h": 1260,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "3 · Dépôt : erreurs par fichier",
+      "w": 1280,
+      "x": 1360,
+      "y": 2290
+    },
+    "Etat-Donnees-supprimees.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Mes données : suppression confirmée",
+      "w": 1280,
+      "x": 5440,
+      "y": 4650
+    },
+    "Etat-Hors-ligne.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Hors ligne",
+      "w": 1280,
+      "x": 1360,
+      "y": 4650
+    },
+    "Etat-Infos-erreurs.dc.html": {
+      "h": 1180,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "2 · Coordonnées : erreurs de saisie",
+      "w": 1280,
+      "x": 0,
+      "y": 2290
+    },
+    "Etat-Lecture.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "3 → 4 · Lecture des factures en cours",
+      "w": 1280,
+      "x": 4080,
+      "y": 2290
+    },
+    "Etat-Lien-expire.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Lien de simulation expiré ou inconnu",
+      "w": 1280,
+      "x": 4080,
+      "y": 3670
+    },
+    "Etat-Limite.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Limite de simulations atteinte",
+      "w": 1280,
+      "x": 1360,
+      "y": 3670
+    },
+    "Etat-Maintenance.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Maintenance",
+      "w": 1280,
+      "x": 0,
+      "y": 4650
+    },
+    "Etat-Mes-donnees-envoye.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Mes données : demande envoyée",
+      "w": 1280,
+      "x": 4080,
+      "y": 4650
+    },
+    "Etat-Mes-donnees.dc.html": {
+      "h": 1000,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Mes données : demande",
+      "w": 1280,
+      "x": 2720,
+      "y": 4650
+    },
+    "Etat-Opposition.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Opposition au rappel confirmée",
+      "w": 1280,
+      "x": 6800,
+      "y": 4650
+    },
+    "Etat-Session-expiree.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "Session expirée",
+      "w": 1280,
+      "x": 2720,
+      "y": 3670
+    },
+    "Etat-Tarifs-indisponibles.dc.html": {
+      "h": 860,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "5 · Tarifs CSP indisponibles",
+      "w": 1280,
+      "x": 0,
+      "y": 3670
+    },
+    "Etat-Verification-erreurs.dc.html": {
+      "h": 960,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "4 · Vérification : erreurs de saisie",
+      "w": 1280,
+      "x": 5440,
+      "y": 2290
+    },
+    "Etat-Volume-implants.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "etats",
+      "title": "3 → 4 · Question du volume d'implants (facture Straumann reconnue)",
+      "w": 1280,
+      "x": 8160,
+      "y": 2290
+    },
+    "Idee-Origine-economie.dc.html": {
+      "h": 560,
+      "page": "idees",
+      "title": "Idée · D'où vient l'économie",
+      "w": 1280,
+      "x": 0,
+      "y": 300
+    },
     "Infos.dc.html": {
       "h": 1150,
       "is_interactive": true,
       "title": "2 · Email et statut",
       "w": 1280,
       "x": 1360,
+      "y": 300
+    },
+    "M-Accueil.dc.html": {
+      "h": 1440,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Téléphone · 1 · Accueil",
+      "w": 390,
+      "x": 0,
+      "y": 300
+    },
+    "M-Depot.dc.html": {
+      "h": 1360,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Téléphone · 3 · Dépôt des factures",
+      "w": 390,
+      "x": 1410,
+      "y": 300
+    },
+    "M-Infos.dc.html": {
+      "h": 1560,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Téléphone · 2 · Email et statut",
+      "w": 390,
+      "x": 470,
+      "y": 300
+    },
+    "M-Resultat.dc.html": {
+      "h": 1820,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Téléphone · 5 · Résultat",
+      "w": 390,
+      "x": 2350,
+      "y": 300
+    },
+    "M-Rgpd.dc.html": {
+      "h": 1320,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Téléphone · 2b · Information RGPD",
+      "w": 390,
+      "x": 940,
+      "y": 300
+    },
+    "M-Verification.dc.html": {
+      "h": 1760,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Téléphone · 4 · Vérification des lignes",
+      "w": 390,
+      "x": 1880,
       "y": 300
     },
     "Mail-CSP.dc.html": {
@@ -56,6 +289,100 @@
       "x": 2720,
       "y": 300
     },
+    "T-Accueil.dc.html": {
+      "h": 1320,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Tablette · 1 · Accueil",
+      "w": 834,
+      "x": 0,
+      "y": 2500
+    },
+    "T-Depot.dc.html": {
+      "h": 1120,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Tablette · 3 · Dépôt des factures",
+      "w": 834,
+      "x": 2742,
+      "y": 2500
+    },
+    "T-Infos.dc.html": {
+      "h": 1180,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Tablette · 2 · Email et statut",
+      "w": 834,
+      "x": 914,
+      "y": 2500
+    },
+    "T-Resultat.dc.html": {
+      "h": 1260,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Tablette · 5 · Résultat",
+      "w": 834,
+      "x": 4570,
+      "y": 2500
+    },
+    "T-Rgpd.dc.html": {
+      "h": 1160,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Tablette · 2b · Information RGPD",
+      "w": 834,
+      "x": 1828,
+      "y": 2500
+    },
+    "T-Verification.dc.html": {
+      "h": 1120,
+      "is_interactive": true,
+      "page": "appareils",
+      "title": "Tablette · 4 · Vérification des lignes",
+      "w": 834,
+      "x": 3656,
+      "y": 2500
+    },
+    "Toasts-Coordonnees.dc.html": {
+      "h": 980,
+      "page": "etats",
+      "title": "Toasts · coordonnées (écran 2)",
+      "w": 1280,
+      "x": 0,
+      "y": 300
+    },
+    "Toasts-Depot.dc.html": {
+      "h": 1610,
+      "page": "etats",
+      "title": "Toasts · dépôt et lecture des factures (écran 3)",
+      "w": 1280,
+      "x": 1360,
+      "y": 300
+    },
+    "Toasts-General.dc.html": {
+      "h": 770,
+      "page": "etats",
+      "title": "Toasts · communs à tout le parcours",
+      "w": 1280,
+      "x": 5440,
+      "y": 300
+    },
+    "Toasts-Resultat.dc.html": {
+      "h": 980,
+      "page": "etats",
+      "title": "Toasts · résultat, mails et rendez-vous (écrans 5 à 7)",
+      "w": 1280,
+      "x": 4080,
+      "y": 300
+    },
+    "Toasts-Verification.dc.html": {
+      "h": 980,
+      "page": "etats",
+      "title": "Toasts · vérification des lignes (écran 4)",
+      "w": 1280,
+      "x": 2720,
+      "y": 300
+    },
     "Verification.dc.html": {
       "h": 960,
       "is_interactive": true,
@@ -63,333 +390,6 @@
       "w": 1280,
       "x": 5440,
       "y": 300
-    },
-    "Idee-Origine-economie.dc.html": {
-      "x": 0,
-      "y": 300,
-      "w": 1280,
-      "h": 560,
-      "title": "Idée · D'où vient l'économie",
-      "page": "idees"
-    },
-    "M-Accueil.dc.html": {
-      "w": 390,
-      "h": 1440,
-      "title": "Téléphone · 1 · Accueil",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 0,
-      "y": 300
-    },
-    "M-Infos.dc.html": {
-      "w": 390,
-      "h": 1560,
-      "title": "Téléphone · 2 · Email et statut",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 470,
-      "y": 300
-    },
-    "M-Rgpd.dc.html": {
-      "w": 390,
-      "h": 1320,
-      "title": "Téléphone · 2b · Information RGPD",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 940,
-      "y": 300
-    },
-    "M-Depot.dc.html": {
-      "w": 390,
-      "h": 1360,
-      "title": "Téléphone · 3 · Dépôt des factures",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 1410,
-      "y": 300
-    },
-    "M-Verification.dc.html": {
-      "w": 390,
-      "h": 1760,
-      "title": "Téléphone · 4 · Vérification des lignes",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 1880,
-      "y": 300
-    },
-    "M-Resultat.dc.html": {
-      "w": 390,
-      "h": 1820,
-      "title": "Téléphone · 5 · Résultat",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 2350,
-      "y": 300
-    },
-    "T-Accueil.dc.html": {
-      "w": 834,
-      "h": 1320,
-      "title": "Tablette · 1 · Accueil",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 0,
-      "y": 2500
-    },
-    "T-Infos.dc.html": {
-      "w": 834,
-      "h": 1180,
-      "title": "Tablette · 2 · Email et statut",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 914,
-      "y": 2500
-    },
-    "T-Rgpd.dc.html": {
-      "w": 834,
-      "h": 1160,
-      "title": "Tablette · 2b · Information RGPD",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 1828,
-      "y": 2500
-    },
-    "T-Depot.dc.html": {
-      "w": 834,
-      "h": 1120,
-      "title": "Tablette · 3 · Dépôt des factures",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 2742,
-      "y": 2500
-    },
-    "T-Verification.dc.html": {
-      "w": 834,
-      "h": 1120,
-      "title": "Tablette · 4 · Vérification des lignes",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 3656,
-      "y": 2500
-    },
-    "T-Resultat.dc.html": {
-      "w": 834,
-      "h": 1260,
-      "title": "Tablette · 5 · Résultat",
-      "is_interactive": true,
-      "page": "appareils",
-      "x": 4570,
-      "y": 2500
-    },
-    "Toasts-Coordonnees.dc.html": {
-      "x": 0,
-      "y": 300,
-      "w": 1280,
-      "h": 980,
-      "title": "Toasts · coordonnées (écran 2)",
-      "page": "etats"
-    },
-    "Toasts-Depot.dc.html": {
-      "x": 1360,
-      "y": 300,
-      "w": 1280,
-      "h": 1610,
-      "title": "Toasts · dépôt et lecture des factures (écran 3)",
-      "page": "etats"
-    },
-    "Toasts-Verification.dc.html": {
-      "x": 2720,
-      "y": 300,
-      "w": 1280,
-      "h": 980,
-      "title": "Toasts · vérification des lignes (écran 4)",
-      "page": "etats"
-    },
-    "Toasts-Resultat.dc.html": {
-      "x": 4080,
-      "y": 300,
-      "w": 1280,
-      "h": 980,
-      "title": "Toasts · résultat, mails et rendez-vous (écrans 5 à 7)",
-      "page": "etats"
-    },
-    "Toasts-General.dc.html": {
-      "x": 5440,
-      "y": 300,
-      "w": 1280,
-      "h": 770,
-      "title": "Toasts · communs à tout le parcours",
-      "page": "etats"
-    },
-    "Etat-Infos-erreurs.dc.html": {
-      "x": 0,
-      "y": 2290,
-      "w": 1280,
-      "h": 1180,
-      "title": "2 · Coordonnées : erreurs de saisie",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Depot-erreurs.dc.html": {
-      "x": 1360,
-      "y": 2290,
-      "w": 1280,
-      "h": 1260,
-      "title": "3 · Dépôt : erreurs par fichier",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Depot-aucune.dc.html": {
-      "x": 2720,
-      "y": 2290,
-      "w": 1280,
-      "h": 980,
-      "title": "3 · Dépôt : aucune facture lisible",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Lecture.dc.html": {
-      "x": 4080,
-      "y": 2290,
-      "w": 1280,
-      "h": 900,
-      "title": "3 → 4 · Lecture des factures en cours",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Verification-erreurs.dc.html": {
-      "x": 5440,
-      "y": 2290,
-      "w": 1280,
-      "h": 960,
-      "title": "4 · Vérification : erreurs de saisie",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Calcul.dc.html": {
-      "x": 6800,
-      "y": 2290,
-      "w": 1280,
-      "h": 900,
-      "title": "4 → 5 · Calcul en cours",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Tarifs-indisponibles.dc.html": {
-      "x": 0,
-      "y": 3670,
-      "w": 1280,
-      "h": 860,
-      "title": "5 · Tarifs CSP indisponibles",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Limite.dc.html": {
-      "x": 1360,
-      "y": 3670,
-      "w": 1280,
-      "h": 860,
-      "title": "Limite de simulations atteinte",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Session-expiree.dc.html": {
-      "x": 2720,
-      "y": 3670,
-      "w": 1280,
-      "h": 860,
-      "title": "Session expirée",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Lien-expire.dc.html": {
-      "x": 4080,
-      "y": 3670,
-      "w": 1280,
-      "h": 860,
-      "title": "Lien de simulation expiré ou inconnu",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-404.dc.html": {
-      "x": 5440,
-      "y": 3670,
-      "w": 1280,
-      "h": 860,
-      "title": "Page introuvable (404)",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-500.dc.html": {
-      "x": 6800,
-      "y": 3670,
-      "w": 1280,
-      "h": 860,
-      "title": "Erreur serveur (500)",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Maintenance.dc.html": {
-      "x": 0,
-      "y": 4650,
-      "w": 1280,
-      "h": 860,
-      "title": "Maintenance",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Hors-ligne.dc.html": {
-      "x": 1360,
-      "y": 4650,
-      "w": 1280,
-      "h": 860,
-      "title": "Hors ligne",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Mes-donnees.dc.html": {
-      "x": 2720,
-      "y": 4650,
-      "w": 1280,
-      "h": 1000,
-      "title": "Mes données : demande",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Mes-donnees-envoye.dc.html": {
-      "x": 4080,
-      "y": 4650,
-      "w": 1280,
-      "h": 860,
-      "title": "Mes données : demande envoyée",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Donnees-supprimees.dc.html": {
-      "x": 5440,
-      "y": 4650,
-      "w": 1280,
-      "h": 860,
-      "title": "Mes données : suppression confirmée",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Opposition.dc.html": {
-      "x": 6800,
-      "y": 4650,
-      "w": 1280,
-      "h": 860,
-      "title": "Opposition au rappel confirmée",
-      "page": "etats",
-      "is_interactive": true
-    },
-    "Etat-Volume-implants.dc.html": {
-      "x": 8160,
-      "y": 2290,
-      "w": 1280,
-      "h": 900,
-      "title": "3 → 4 · Question du volume d'implants (facture Straumann reconnue)",
-      "page": "etats",
-      "is_interactive": true
     }
   },
   "createdOnFiles": {
@@ -401,6 +401,58 @@
     "view": "canvas"
   },
   "notes": {
+    "appareils-tab": {
+      "kind": "title1",
+      "maxW": 5404,
+      "page": "appareils",
+      "text": "Tablette (834 px)",
+      "w": 240,
+      "x": 0,
+      "y": 2240
+    },
+    "appareils-tel": {
+      "kind": "title1",
+      "maxW": 2740,
+      "page": "appareils",
+      "text": "Téléphone (390 px)",
+      "w": 240,
+      "x": 0,
+      "y": 0
+    },
+    "etats-pages": {
+      "kind": "title1",
+      "maxW": 8000,
+      "page": "etats",
+      "text": "Pages d'état et d'erreur",
+      "w": 240,
+      "x": 0,
+      "y": 2030
+    },
+    "etats-toasts": {
+      "kind": "title1",
+      "maxW": 6720,
+      "page": "etats",
+      "text": "Toasts",
+      "w": 240,
+      "x": 0,
+      "y": 0
+    },
+    "idees-titre": {
+      "kind": "title1",
+      "maxW": 1280,
+      "page": "idees",
+      "text": "Idées à réutiliser",
+      "w": 240,
+      "x": 0,
+      "y": 0
+    },
+    "pipedrive": {
+      "fill": "orange",
+      "text": "Piste : CSP utilise Pipedrive comme CRM. Envoyer la fiche prospect et le détail par produit directement dans Pipedrive, pour que le commercial les ait sous les yeux au rendez-vous. À étudier.",
+      "w": 360,
+      "x": 1600,
+      "y": 3420
+    },
     "row1": {
       "kind": "title1",
       "maxW": 6720,
@@ -424,58 +476,6 @@
       "w": 240,
       "x": 0,
       "y": 3120
-    },
-    "idees-titre": {
-      "kind": "title1",
-      "maxW": 1280,
-      "text": "Idées à réutiliser",
-      "w": 240,
-      "x": 0,
-      "y": 0,
-      "page": "idees"
-    },
-    "pipedrive": {
-      "x": 1600,
-      "y": 3420,
-      "w": 360,
-      "fill": "orange",
-      "text": "Piste : CSP utilise Pipedrive comme CRM. Envoyer la fiche prospect et le détail par produit directement dans Pipedrive, pour que le commercial les ait sous les yeux au rendez-vous. À étudier."
-    },
-    "appareils-tel": {
-      "kind": "title1",
-      "maxW": 2740,
-      "text": "Téléphone (390 px)",
-      "w": 240,
-      "x": 0,
-      "y": 0,
-      "page": "appareils"
-    },
-    "appareils-tab": {
-      "kind": "title1",
-      "maxW": 5404,
-      "text": "Tablette (834 px)",
-      "w": 240,
-      "x": 0,
-      "y": 2240,
-      "page": "appareils"
-    },
-    "etats-toasts": {
-      "kind": "title1",
-      "maxW": 6720,
-      "text": "Toasts",
-      "w": 240,
-      "x": 0,
-      "y": 0,
-      "page": "etats"
-    },
-    "etats-pages": {
-      "kind": "title1",
-      "maxW": 9440,
-      "text": "Pages d'état et d'erreur",
-      "w": 240,
-      "x": 0,
-      "y": 2030,
-      "page": "etats"
     }
   },
   "order": [
