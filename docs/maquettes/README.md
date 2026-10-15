@@ -1,6 +1,6 @@
 # Simulator mockups
 
-Copy of the Claude Design canvas "Maquettes simulateur CSP" as of 2026-10-08:
+Copy of the Claude Design canvas "Maquettes simulateur CSP" as of 2026-10-15:
 https://claude.ai/artifact/4kTM1r7k9J62MyXRzs4Amb (private, ask Robin for access).
 The canvas is the reference; this copy is refreshed after each round of changes.
 
