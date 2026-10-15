@@ -381,6 +381,15 @@
       "title": "Opposition au rappel confirmée",
       "page": "etats",
       "is_interactive": true
+    },
+    "Etat-Volume-implants.dc.html": {
+      "x": 8160,
+      "y": 2290,
+      "w": 1280,
+      "h": 900,
+      "title": "3 → 4 · Question du volume d'implants (facture Straumann reconnue)",
+      "page": "etats",
+      "is_interactive": true
     }
   },
   "createdOnFiles": {
@@ -461,7 +470,7 @@
     },
     "etats-pages": {
       "kind": "title1",
-      "maxW": 8080,
+      "maxW": 9440,
       "text": "Pages d'état et d'erreur",
       "w": 240,
       "x": 0,
@@ -502,6 +511,7 @@
     "Etat-Lecture.dc.html",
     "Etat-Verification-erreurs.dc.html",
     "Etat-Calcul.dc.html",
+    "Etat-Volume-implants.dc.html",
     "Etat-Tarifs-indisponibles.dc.html",
     "Etat-Limite.dc.html",
     "Etat-Session-expiree.dc.html",
