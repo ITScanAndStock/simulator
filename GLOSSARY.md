@@ -1,4 +1,4 @@
-# Simulateur de remise CSP
+# Simulateur d'économies Club Santé Premium
 
 A dental practice drops its own supplier invoices and sees how much it would have saved at the Club Santé Premium (CSP) negotiated price. This glossary fixes the words used for that journey and for the states a line can end in.
 
@@ -19,7 +19,7 @@ The supplier-specific knowledge that turns the text of that supplier's invoices 
 _Avoid_: Parser, extractor, template, scraper, mapping
 
 **Reference price**:
-The unit price, tax-inclusive, that a line's price paid is compared against: the price at the reference supplier, or the CSP price for an invoice of the Straumann group.
+The unit price, tax-inclusive, that a line's price paid is compared against: the price at the reference supplier, which is Doctor AI until the GACD prices are available, or the CSP price for an invoice of the Straumann group.
 _Avoid_: Doctor AI price, target price, best price
 
 ### Line states
@@ -41,5 +41,5 @@ A line that cannot be compared: its reference is not found at the issuing suppli
 _Avoid_: Not found, unknown, missing, unmatched
 
 **À vérifier par un conseiller**:
-A matched line held back because its saving is above the threshold or because the pack sizes of the two offers differ. It does not count in the saving and is left to a CSP advisor.
+A matched line held back because its saving is above the threshold or because the pack sizes of the issuing offer and the reference offer are both known and differ; this state takes precedence over Compared and Already cheaper. It does not count in the saving and is left to a CSP advisor.
 _Avoid_: "À vérifier" (that state is for doubtful reading, fixed by the practitioner), suspicious, outlier
