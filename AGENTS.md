@@ -8,7 +8,7 @@ Local markdown under `.scratch/` (source of truth), mirrored to a Notion "Issues
 
 ### Triage labels
 
-The five default labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+The five default labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`), plus the work states (`in-progress`, `in-review`, `done`), each with its Notion Statut. See `docs/agents/triage-labels.md`.
 
 ### Domain docs
 
