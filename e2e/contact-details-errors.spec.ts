@@ -379,3 +379,35 @@ test("tabs pasted into the practice name are stored as single spaces and trimmed
     "Cabinet dentaire des Tilleuls",
   );
 });
+
+test("text fields holding only spaces are refused as empty, each with its message", async ({
+  page,
+}) => {
+  await field(page, "Email professionnel").fill("   ");
+  await field(page, "Nom du cabinet").fill("   ");
+  await field(page, "Nom du praticien").fill("   ");
+  await field(page, "Téléphone").fill("   ");
+  await dataInformationBox(page).click();
+
+  await continueOnScreen2(page);
+
+  await expectPointedOut(
+    field(page, "Email professionnel"),
+    "Indiquez votre email professionnel.",
+  );
+  await expectPointedOut(
+    field(page, "Nom du cabinet"),
+    "Indiquez le nom du cabinet.",
+  );
+  await expectPointedOut(
+    field(page, "Nom du praticien"),
+    "Indiquez le nom du praticien.",
+  );
+  await expectPointedOut(
+    field(page, "Téléphone"),
+    "Indiquez votre numéro de téléphone.",
+  );
+  await expect(summary(page)).toHaveText(
+    "4 champs à corriger avant de continuer.",
+  );
+});
