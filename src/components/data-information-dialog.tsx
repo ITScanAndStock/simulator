@@ -34,7 +34,13 @@ const sections = [
 
 const noSubscription = () => () => {};
 
-export function DataInformationDialog({ children }: { children: string }) {
+export function DataInformationDialog({
+  children,
+  triggerClassName,
+}: {
+  children: string;
+  triggerClassName?: string;
+}) {
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLButtonElement>(null);
   const titleId = useId();
@@ -50,7 +56,11 @@ export function DataInformationDialog({ children }: { children: string }) {
       <button
         ref={opener}
         type="button"
-        className={styles.trigger}
+        className={
+          triggerClassName
+            ? `${styles.trigger} ${triggerClassName}`
+            : styles.trigger
+        }
         onClick={() => dialog.current?.showModal()}
       >
         {children}

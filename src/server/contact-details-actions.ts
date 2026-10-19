@@ -1,38 +1,25 @@
 "use server";
 
 import { notFound, redirect } from "next/navigation";
-import {
-  startSimulation,
-  updateContactDetails,
-  type ContactDetails,
-} from "./simulations";
+import type { ContactDetailsFormState } from "@/contact-details";
+import { checkContactDetails } from "./contact-details-validation";
+import { startSimulation, updateContactDetails } from "./simulations";
 
 export async function saveContactDetails(
   simulationId: string | undefined,
-  _state: undefined,
+  _state: ContactDetailsFormState,
   formData: FormData,
-): Promise<undefined> {
-  const details = readContactDetails(formData);
+): Promise<ContactDetailsFormState> {
+  // Anyone can call a Server Action with any arguments, not only this form.
+  if (!(formData instanceof FormData)) return undefined;
+  const checked = checkContactDetails(formData);
+  if (!checked.valid) return { errors: checked.errors, values: checked.values };
+
   let id = simulationId;
   if (id === undefined) {
-    id = await startSimulation(details);
-  } else if (!(await updateContactDetails(id, details))) {
+    id = await startSimulation(checked.details);
+  } else if (!(await updateContactDetails(id, checked.details))) {
     notFound();
   }
   redirect(`/simulations/${id}/factures`);
-}
-
-function readContactDetails(formData: FormData): ContactDetails {
-  const text = (name: string) => String(formData.get(name) ?? "");
-  const ticked = (name: string) => formData.get(name) !== null;
-  return {
-    email: text("email"),
-    practice: text("practice"),
-    practitioner: text("practitioner"),
-    phone: text("phone"),
-    cspMember: ticked("cspMember"),
-    scanAndStockUser: ticked("scanAndStockUser"),
-    callBack: ticked("callBack"),
-    dataInformationRead: ticked("dataInformationRead"),
-  };
 }

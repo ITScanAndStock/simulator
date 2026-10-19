@@ -111,3 +111,108 @@
 .back {
   font-size: 15px;
 }
+
+/* The thicker border eats into the box, so a field keeps its size and its text when it turns invalid. */
+.invalidInput {
+  height: 46px;
+  padding: 0 13px;
+  border: 2px solid var(--color-error);
+  background: var(--color-white);
+}
+
+.error {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-error);
+}
+
+.consentError {
+  color: var(--color-error);
+}
+
+.summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #e8b4a8;
+  border-radius: var(--radius-control);
+  background: var(--color-error-light);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.alertIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-error-light);
+  color: var(--color-error);
+}
+
+.toasts {
+  position: fixed;
+  top: 148px;
+  right: 24px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toast {
+  box-sizing: border-box;
+  width: 400px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 8px 14px 14px;
+  border: 1px solid #dcd8cf;
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  box-shadow: 0 8px 24px rgba(2, 43, 43, 0.14);
+}
+
+.toastBody {
+  flex-grow: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 2px;
+}
+
+.toastTitle {
+  font-size: 15px;
+  color: var(--color-text);
+}
+
+.toastText {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #4b473e;
+}
+
+.toast .toastLink {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.toastClose {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}

@@ -1,16 +1,6 @@
 import "server-only";
+import type { ContactDetails } from "@/contact-details";
 import { databasePool } from "./db";
-
-export type ContactDetails = {
-  email: string;
-  practice: string;
-  practitioner: string;
-  phone: string;
-  cspMember: boolean;
-  scanAndStockUser: boolean;
-  callBack: boolean;
-  dataInformationRead: boolean;
-};
 
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

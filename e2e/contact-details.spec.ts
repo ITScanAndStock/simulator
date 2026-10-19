@@ -203,6 +203,12 @@ test("Continuer keeps the typed contact details out of every URL", async ({
   for (const [label, value] of typed) {
     await page.getByLabel(label, { exact: true }).fill(value);
   }
+  await page
+    .getByRole("checkbox", {
+      name: "J'ai lu l'information sur le traitement de mes données.",
+      exact: true,
+    })
+    .check();
   const requested: string[] = [];
   page.on("request", (request) => requested.push(request.url()));
 

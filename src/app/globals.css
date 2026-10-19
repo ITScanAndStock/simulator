@@ -10,6 +10,8 @@
   --color-light: #f4f5f2;
   --color-border: #e8e6e1;
   --color-white: #ffffff;
+  --color-error: #b4432f;
+  --color-error-light: #fbe9e4;
   --radius-control: 9px;
   --radius-card: 6px;
 }
