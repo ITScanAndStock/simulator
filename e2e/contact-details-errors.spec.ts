@@ -411,3 +411,18 @@ test("text fields holding only spaces are refused as empty, each with its messag
     "4 champs à corriger avant de continuer.",
   );
 });
+
+test("a number of ten zeros is refused as not French", async ({ page }) => {
+  await fillValidly(page, "00 00 00 00 00");
+  await dataInformationBox(page).click();
+
+  await continueOnScreen2(page);
+
+  await expectPointedOut(
+    field(page, "Téléphone"),
+    "Numéro non reconnu : indiquez un numéro français à 10 chiffres.",
+  );
+  await expect(summary(page)).toHaveText(
+    "1 champ à corriger avant de continuer.",
+  );
+});

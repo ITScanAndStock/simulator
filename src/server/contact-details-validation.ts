@@ -7,6 +7,12 @@ type Checked =
 
 const completeEmail = /^[^\s@]+@([^\s@.]+\.)+[A-Za-z]{2,}$/;
 const emailWithoutExtension = /^[^\s@]+@[^\s@.]+\.?$/;
+const internationalPrefix = String.raw`(?:\+33|0033)0?`;
+const nationalNumber = /^0[1-9]\d{8}$/;
+const internationalNumber = new RegExp(`^${internationalPrefix}([1-9]\\d{8})$`);
+const incompleteNumber = new RegExp(
+  `^(?:0\\d{0,8}|${internationalPrefix}\\d{0,8})$`,
+);
 const unprintableCharacter = /(?![\t\n\r\v\f\u0085])\p{Cc}/u;
 const spacingControlRun = / *[\t\n\r\v\f\u0085][ \t\n\r\v\f\u0085]*/g;
 const unprintableMessage = "Retirez les caractères non imprimables.";
@@ -73,14 +79,14 @@ function professionalEmailError(email: string) {
 }
 
 function nationalPhoneNumber(compact: string) {
-  if (/^0\d{9}$/.test(compact)) return compact;
-  const international = /^(?:\+33|0033)0?([1-9]\d{8})$/.exec(compact);
+  if (nationalNumber.test(compact)) return compact;
+  const international = internationalNumber.exec(compact);
   return international ? `0${international[1]}` : undefined;
 }
 
 function phoneNumberError(compact: string) {
   if (compact === "") return "Indiquez votre numéro de téléphone.";
-  if (/^(?:0\d{0,8}|(?:\+33|0033)0?\d{0,8})$/.test(compact)) {
+  if (incompleteNumber.test(compact)) {
     return "Numéro incomplet : 10 chiffres attendus.";
   }
   return "Numéro non reconnu : indiquez un numéro français à 10 chiffres.";
