@@ -53,7 +53,7 @@ Pour lancer le simulateur :
 pnpm dev
 ```
 
-Le simulateur s'ouvre sur http://localhost:3000.
+Le simulateur s'ouvre sur http://127.0.0.1:3000 et ne répond que sur cet ordinateur : les autres appareils du réseau ne peuvent pas l'ouvrir. `pnpm start` fait de même.
 
 Pour lancer les tests :
 
@@ -73,4 +73,4 @@ puis :
 pnpm test:e2e
 ```
 
-La commande migre la base `simulator-e2e` (`E2E_DATABASE_URL`, obligatoire), construit le simulateur en production, le démarre sur http://localhost:3100 branché sur cette base le temps des tests, puis l'arrête. Le port 3100 doit être libre. Le dernier test vide la base `simulator-e2e` avec `pnpm db:empty`, une fois tous les autres terminés.
+La commande migre la base `simulator-e2e` (`E2E_DATABASE_URL`, obligatoire), construit le simulateur en production, le démarre sur http://127.0.0.1:3100 branché sur cette base le temps des tests, puis l'arrête. Le port 3100 doit être libre. Le dernier test vide la base `simulator-e2e` avec `pnpm db:empty`, une fois tous les autres terminés.

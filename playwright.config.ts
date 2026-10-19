@@ -2,6 +2,8 @@ import { existsSync } from "node:fs";
 import { defineConfig, devices } from "@playwright/test";
 
 const port = 3100;
+// The server listens on 127.0.0.1 only; "localhost" may resolve to ::1 first.
+const origin = `http://127.0.0.1:${port}`;
 
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
 const e2eDatabaseUrl = process.env.E2E_DATABASE_URL;
@@ -40,7 +42,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    baseURL: `http://localhost:${port}`,
+    baseURL: origin,
     trace: "retain-on-failure",
   },
   // db:empty wipes the whole e2e database, so it runs alone once every other test has finished.
@@ -59,7 +61,7 @@ export default defineConfig({
   ],
   webServer: {
     command: `pnpm build && pnpm start --port ${port}`,
-    url: `http://localhost:${port}`,
+    url: origin,
     env: { NEXT_DIST_DIR: ".next-e2e", DATABASE_URL: e2eDatabaseUrl },
     reuseExistingServer: false,
     timeout: 180_000,
