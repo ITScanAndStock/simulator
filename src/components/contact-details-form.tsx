@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Checkbox } from "./checkbox";
+import { DataInformationDialog } from "./data-information-dialog";
 import styles from "./contact-details-form.module.css";
 
 export function ContactDetailsForm() {
@@ -87,7 +88,9 @@ export function ContactDetailsForm() {
             <label htmlFor="dataInformationRead">
               J&apos;ai lu l&apos;information sur le traitement de mes données.
             </label>{" "}
-            <a href="#">Lire l&apos;information</a>
+            <DataInformationDialog>
+              Lire l&apos;information
+            </DataInformationDialog>
           </span>
         </div>
         <label className={styles.consent}>

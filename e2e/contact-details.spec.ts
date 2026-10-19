@@ -115,7 +115,7 @@ test("the consent boxes are reached with Tab and toggled with Space", async ({
 
   await page.keyboard.press("Tab");
   await expect(
-    page.getByRole("link", { name: "Lire l'information" }),
+    page.getByRole("button", { name: "Lire l'information" }),
   ).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(callBackBox).toBeFocused();

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DataInformationDialog } from "@/components/data-information-dialog";
 import { simulationSteps } from "@/simulation-steps";
 import styles from "./page.module.css";
 
@@ -39,7 +40,9 @@ export default function Home() {
             Vos factures sont supprimées dès leur lecture. Votre simulation est
             transmise à l&apos;équipe Club Santé Premium ; nous ne gardons
             ensuite que des prix anonymes.{" "}
-            <a href="#">Comment nous traitons vos données</a>
+            <DataInformationDialog>
+              Comment nous traitons vos données
+            </DataInformationDialog>
           </p>
         </div>
         <aside
@@ -85,7 +88,7 @@ export default function Home() {
         </aside>
       </main>
       <footer className={styles.footer}>
-        <a href="#">Données personnelles</a>
+        <DataInformationDialog>Données personnelles</DataInformationDialog>
         <span>[Mentions légales]</span>
         <span>[Conditions d&apos;utilisation]</span>
       </footer>
