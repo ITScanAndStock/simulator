@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import { defineConfig, devices } from "@playwright/test";
+import { localHosts, readDatabaseUrl } from "./scripts/database-url.mts";
 
 const port = 3100;
 // The server listens on 127.0.0.1 only; "localhost" may resolve to ::1 first.
@@ -12,28 +13,31 @@ if (!e2eDatabaseUrl) {
     "E2E_DATABASE_URL is not set: the journey tests need their own database (see README).",
   );
 }
-const e2eDatabase = databaseName(e2eDatabaseUrl, "E2E_DATABASE_URL");
+const e2eTarget = databaseTarget(e2eDatabaseUrl, "E2E_DATABASE_URL");
+if (!localHosts.has(e2eTarget.host)) {
+  throw new Error(
+    `E2E_DATABASE_URL must point to a database on this computer; it points to "${e2eTarget.host}".`,
+  );
+}
 // Compared by name alone: host, port and options have too many spellings for the same server.
 if (
   process.env.DATABASE_URL &&
-  databaseName(process.env.DATABASE_URL, "DATABASE_URL") === e2eDatabase
+  databaseTarget(process.env.DATABASE_URL, "DATABASE_URL").database ===
+    e2eTarget.database
 ) {
   throw new Error(
     "E2E_DATABASE_URL must name another database than DATABASE_URL: the journey tests would write to the local database.",
   );
 }
 
-function databaseName(connectionString: string, variable: string) {
-  let name = "";
-  try {
-    name = decodeURIComponent(new URL(connectionString).pathname.slice(1));
-  } catch {}
-  if (!name) {
+function databaseTarget(connectionString: string, variable: string) {
+  const target = readDatabaseUrl(connectionString);
+  if (!target?.database) {
     throw new Error(
-      `${variable} must be a postgresql:// URL naming its database.`,
+      `${variable} must be a postgresql://user:password@host:port/database URL.`,
     );
   }
-  return name;
+  return target;
 }
 
 export default defineConfig({

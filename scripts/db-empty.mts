@@ -1,7 +1,9 @@
 import pg from "pg";
+import { localHosts, readDatabaseUrl } from "./database-url.mts";
 
-const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
 const lockTimeout = "5s";
+
+class Refusal extends Error {}
 
 function refuse(message: string): never {
   console.error(message);
@@ -11,26 +13,45 @@ function refuse(message: string): never {
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) refuse("DATABASE_URL is not set (see README).");
 
-let named = "";
-try {
-  named = decodeURIComponent(new URL(connectionString).pathname.slice(1));
-} catch {
-  refuse("DATABASE_URL must be a postgresql:// URL (see README).");
+const target = readDatabaseUrl(connectionString);
+if (!target) {
+  refuse(
+    "DATABASE_URL must be a postgresql://user:password@host:port/database URL (see README).",
+  );
 }
 // Without a name pg falls back to PGDATABASE or the user name, which could be another local database.
-if (!named) refuse("DATABASE_URL must name the database to empty.");
-
-const client = new pg.Client({ connectionString });
-if (!localHosts.has(client.host)) {
+if (!target.database) refuse("DATABASE_URL must name the database to empty.");
+if (!localHosts.has(target.host)) {
   refuse(
-    `db:empty only empties a local database; DATABASE_URL points to "${client.host}".`,
+    `db:empty only empties a local database; DATABASE_URL points to "${target.host}".`,
   );
 }
 
+const client = new pg.Client({ connectionString });
 await client.connect();
 try {
   await client.query("BEGIN");
   await client.query(`SET LOCAL lock_timeout = '${lockTimeout}'`);
+  const {
+    rows: [{ database, schema, simulator }],
+  } = await client.query<{
+    database: string;
+    schema: string | null;
+    simulator: boolean;
+  }>(
+    `SELECT current_database() AS database, current_schema() AS schema,
+      EXISTS (SELECT 1 FROM pg_tables
+        WHERE schemaname = current_schema() AND tablename = 'schema_migration') AS simulator`,
+  );
+  if (!simulator || !schema) {
+    throw new Refusal(
+      `db:empty only empties a simulator database: schema "${schema}" of database "${database}" has no schema_migration table. Nothing was emptied.`,
+    );
+  }
+  // Checked before locking anything else, then pinned: ACCESS SHARE blocks a DROP of schema_migration until COMMIT.
+  await client.query(
+    `LOCK TABLE ${client.escapeIdentifier(schema)}.schema_migration IN ACCESS SHARE MODE`,
+  );
   const { rows: tables } = await client.query<{
     schema: string;
     name: string;
@@ -38,11 +59,6 @@ try {
     `SELECT schemaname AS schema, tablename AS name FROM pg_tables
       WHERE schemaname = current_schema() AND tablename <> 'schema_migration'
       ORDER BY tablename`,
-  );
-  const {
-    rows: [{ database }],
-  } = await client.query<{ database: string }>(
-    "SELECT current_database() AS database",
   );
   const qualified = tables.map(
     (table) =>
@@ -76,10 +92,15 @@ try {
     .catch((rollbackError: unknown) =>
       console.error("ROLLBACK failed:", rollbackError),
     );
-  if ((error as { code?: string }).code !== "55P03") throw error;
-  console.error(
-    `db:empty could not lock the tables within ${lockTimeout}: another transaction is using them. Nothing was emptied.`,
-  );
+  if (error instanceof Refusal) {
+    console.error(error.message);
+  } else if ((error as { code?: string }).code === "55P03") {
+    console.error(
+      `db:empty could not lock the tables within ${lockTimeout}: another transaction is using them. Nothing was emptied.`,
+    );
+  } else {
+    throw error;
+  }
   process.exitCode = 1;
 } finally {
   await client.end();

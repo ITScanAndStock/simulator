@@ -37,7 +37,7 @@ Puis créer les tables, une fois, et après chaque nouvelle migration (fichiers 
 pnpm db:migrate
 ```
 
-La commande n'applique que les migrations pas encore passées ; rien n'est migré au démarrage du simulateur.
+La commande n'applique que les migrations pas encore passées ; rien n'est migré au démarrage du simulateur. Elle refuse une base qui contient déjà des tables sans la liste des migrations du simulateur (table `schema_migration`) : c'est la base d'un autre projet, et elle n'y crée rien. Une base vide est acceptée.
 
 Pour vider la base, par exemple après des essais :
 
@@ -45,7 +45,7 @@ Pour vider la base, par exemple après des essais :
 pnpm db:empty
 ```
 
-La commande vide toutes les tables de la base nommée par `DATABASE_URL` (celle de `.env.local`, donc `simulator-local`), sauf la liste des migrations passées : les tables restent prêtes à servir. Elle affiche la base vidée et le nombre de lignes retirées de chaque table. Elle refuse une base qui n'est pas sur cet ordinateur (`localhost`, `127.0.0.1` ou `::1`) et une URL qui ne nomme pas sa base, et s'arrête sans rien vider si une autre transaction tient les tables plus de 5 secondes. **Le vidage est définitif** : rien ne permet de retrouver les coordonnées et les simulations retirées.
+La commande vide toutes les tables de la base nommée par `DATABASE_URL` (celle de `.env.local`, donc `simulator-local`), sauf la liste des migrations passées : les tables restent prêtes à servir. Elle affiche la base vidée et le nombre de lignes retirées de chaque table. Elle refuse une base qui n'est pas sur cet ordinateur (`localhost`, `127.0.0.1` ou `::1`), une URL qui ne nomme pas sa base et une base que `pnpm db:migrate` n'a pas préparée (sans table `schema_migration`) : une variable `DATABASE_URL` exportée dans le terminal passe avant `.env.local` et pourrait viser la base d'un autre projet. Elle s'arrête sans rien vider si une autre transaction tient les tables plus de 5 secondes. **Le vidage est définitif** : rien ne permet de retrouver les coordonnées et les simulations retirées.
 
 Pour lancer le simulateur :
 
@@ -73,4 +73,4 @@ puis :
 pnpm test:e2e
 ```
 
-La commande migre la base `simulator-e2e` (`E2E_DATABASE_URL`, obligatoire), construit le simulateur en production, le démarre sur http://127.0.0.1:3100 branché sur cette base le temps des tests, puis l'arrête. Le port 3100 doit être libre. Le dernier test vide la base `simulator-e2e` avec `pnpm db:empty`, une fois tous les autres terminés.
+La commande migre la base `simulator-e2e` (`E2E_DATABASE_URL`, obligatoire, sur cet ordinateur et différente de celle de `DATABASE_URL` : sinon elle s'arrête avant de rien écrire), construit le simulateur en production, le démarre sur http://127.0.0.1:3100 branché sur cette base le temps des tests, puis l'arrête. Le port 3100 doit être libre. Le dernier test vide la base `simulator-e2e` avec `pnpm db:empty`, une fois tous les autres terminés.

@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { expect, test, type Page } from "@playwright/test";
-import { runDbEmpty } from "./run-db-empty";
+import { e2eDatabase, runDbCommand } from "./run-db-command";
 
 async function storeSimulation(page: Page) {
   await page.goto("/coordonnees");
@@ -34,12 +34,9 @@ test("pnpm db:empty removes the stored simulations and keeps the database usable
   const stored = await storeSimulation(page);
   expect((await page.goto(stored))?.status()).toBe(200);
 
-  const output = runDbEmpty(e2eDatabaseUrl);
+  const output = runDbCommand("db:empty", e2eDatabaseUrl);
 
-  const e2eDatabase = decodeURIComponent(
-    new URL(e2eDatabaseUrl).pathname.slice(1),
-  );
-  expect(output).toContain(`Emptied database "${e2eDatabase}"`);
+  expect(output).toContain(`Emptied database "${e2eDatabase()}"`);
   expect((await page.goto(stored))?.status()).toBe(404);
   expect(
     execFileSync("pnpm", ["--silent", "db:migrate"], {

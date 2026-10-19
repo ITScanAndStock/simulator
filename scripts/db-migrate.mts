@@ -9,6 +9,8 @@ if (!connectionString) {
   process.exit(1);
 }
 
+class Refusal extends Error {}
+
 const files = (await readdir(migrationsDirectory))
   .filter((file) => file.endsWith(".sql"))
   .sort();
@@ -21,6 +23,23 @@ try {
   await client.query(
     "SELECT pg_advisory_xact_lock(hashtext('simulator schema_migration'))",
   );
+  const {
+    rows: [{ database, schema, foreign }],
+  } = await client.query<{
+    database: string;
+    schema: string | null;
+    foreign: boolean;
+  }>(
+    `SELECT current_database() AS database, current_schema() AS schema,
+      NOT EXISTS (SELECT 1 FROM pg_tables
+          WHERE schemaname = current_schema() AND tablename = 'schema_migration')
+        AND EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = current_schema()) AS foreign`,
+  );
+  if (foreign) {
+    throw new Refusal(
+      `db:migrate only migrates a simulator database: schema "${schema}" of database "${database}" already holds tables but no schema_migration table. Nothing was migrated.`,
+    );
+  }
   await client.query(
     `CREATE TABLE IF NOT EXISTS schema_migration (
       name text PRIMARY KEY,
@@ -49,7 +68,9 @@ try {
     .catch((rollbackError: unknown) =>
       console.error("ROLLBACK failed:", rollbackError),
     );
-  throw error;
+  if (!(error instanceof Refusal)) throw error;
+  console.error(error.message);
+  process.exitCode = 1;
 } finally {
   await client.end();
 }
