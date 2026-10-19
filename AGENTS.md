@@ -18,7 +18,7 @@ Single-context: one `GLOSSARY.md` plus `docs/adr/` at the repo root. See `docs/a
 
 One ticket = one feature = one branch = one pull request. Pull requests are squash-merged, so `main` holds one commit per feature. On the branch, one commit per step, each approved by Robin.
 
-CI (typecheck, lint, format, tests, build) passes before merging. The current GitHub plan has no branch protection, so this holds by convention.
+CI (typecheck, lint, format, tests, build, journey tests) passes before merging. The current GitHub plan has no branch protection, so this holds by convention.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

@@ -1,0 +1,292 @@
+/* Adapted from uiverse.io/00Kubi/hot-dragonfly-56 (MIT); the real input stays on top so it keeps keyboard focus. */
+.checkbox {
+  --size: 24px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--size);
+  height: var(--size);
+  cursor: pointer;
+}
+
+.checkbox input {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.frame,
+.box,
+.checkContainer,
+.glow,
+.effects,
+.particles,
+.rings,
+.sparks {
+  display: block;
+}
+
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.box {
+  position: absolute;
+  inset: 0;
+  background: var(--color-white);
+  border-radius: 5px;
+  border: 2px solid var(--color-green-dark);
+  transition:
+    border-color 0.4s ease,
+    background-color 0.4s ease,
+    transform 0.4s ease;
+}
+
+.checkContainer {
+  position: absolute;
+  inset: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check {
+  width: 80%;
+  height: 80%;
+  fill: none;
+  stroke: var(--color-green-dark);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  transform-origin: center;
+  transition-property: stroke, stroke-dashoffset, transform;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: 7px;
+  background: var(--color-green);
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.2);
+  transition: opacity 0.4s ease;
+}
+
+.particles span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--color-green);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  box-shadow: 0 0 6px var(--color-green);
+}
+
+.particles span:nth-child(even) {
+  background: var(--color-coral);
+  box-shadow: 0 0 6px var(--color-coral);
+}
+
+.particles span:nth-child(1) {
+  --x: 25px;
+  --y: -25px;
+}
+
+.particles span:nth-child(2) {
+  --x: -25px;
+  --y: -25px;
+}
+
+.particles span:nth-child(3) {
+  --x: 25px;
+  --y: 25px;
+}
+
+.particles span:nth-child(4) {
+  --x: -25px;
+  --y: 25px;
+}
+
+.particles span:nth-child(5) {
+  --x: 35px;
+  --y: 0px;
+}
+
+.particles span:nth-child(6) {
+  --x: -35px;
+  --y: 0px;
+}
+
+.particles span:nth-child(7) {
+  --x: 0px;
+  --y: 35px;
+}
+
+.particles span:nth-child(8) {
+  --x: 0px;
+  --y: -35px;
+}
+
+.particles span:nth-child(9) {
+  --x: 20px;
+  --y: -30px;
+}
+
+.particles span:nth-child(10) {
+  --x: -20px;
+  --y: 30px;
+}
+
+.particles span:nth-child(11) {
+  --x: 30px;
+  --y: 20px;
+}
+
+.particles span:nth-child(12) {
+  --x: -30px;
+  --y: -20px;
+}
+
+.rings {
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--color-green);
+  opacity: 0;
+  transform: scale(0);
+}
+
+.ring:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.ring:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.sparks span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-green), transparent);
+  opacity: 0;
+}
+
+.sparks span:nth-child(1) {
+  --r: 0deg;
+}
+
+.sparks span:nth-child(2) {
+  --r: 90deg;
+}
+
+.sparks span:nth-child(3) {
+  --r: 180deg;
+}
+
+.sparks span:nth-child(4) {
+  --r: 270deg;
+}
+
+.checkbox:hover .box {
+  border-color: var(--color-green);
+  transform: scale(1.05);
+}
+
+.checkbox input:focus-visible ~ .frame .box {
+  outline: 2px solid var(--color-coral);
+  outline-offset: 3px;
+}
+
+.checkbox input:checked ~ .frame .box {
+  border-color: var(--color-green);
+  background: var(--color-green);
+}
+
+.checkbox input:checked ~ .frame .check {
+  stroke: var(--color-forest);
+  stroke-dashoffset: 0;
+  transform: scale(1.1);
+}
+
+.checkbox input:checked ~ .frame .glow {
+  opacity: 0.25;
+}
+
+.checkbox input:checked ~ .frame .particles span {
+  animation: particleExplosion 0.6s ease-out forwards;
+}
+
+.checkbox input:checked ~ .frame .ring {
+  animation: ringPulse 0.6s ease-out forwards;
+}
+
+.checkbox input:checked ~ .frame .sparks span {
+  animation: sparkFlash 0.6s ease-out forwards;
+}
+
+@keyframes particleExplosion {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes ringPulse {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkFlash {
+  0% {
+    transform: rotate(var(--r)) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--r)) translateX(30px) scale(0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkbox * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

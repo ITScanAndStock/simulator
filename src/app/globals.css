@@ -1,0 +1,53 @@
+:root {
+  --color-text: #2f2c25;
+  --color-text-muted: #5e5849;
+  --color-forest: #022b2b;
+  --color-green: #00aa8d;
+  --color-green-dark: #1d6b5b;
+  --color-link: #007a66;
+  --color-coral: #faa091;
+  --color-cream: #fefaf3;
+  --color-light: #f4f5f2;
+  --color-border: #e8e6e1;
+  --color-white: #ffffff;
+  --color-error: #b4432f;
+  --color-error-light: #fbe9e4;
+  --radius-control: 9px;
+  --radius-card: 6px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  color: var(--color-text);
+  font-family: var(--font-text), Arial, sans-serif;
+}
+
+/* Zero specificity so a component's own link colours win, hover included. */
+:where(a) {
+  color: var(--color-link);
+}
+
+:where(a:hover) {
+  color: var(--color-forest);
+}
+
+/* Zero specificity so a component class can resize it, as the header does. */
+:where(.primary-button) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 24px;
+  border: none;
+  background: var(--color-green);
+  color: var(--color-white);
+  border-radius: var(--radius-control);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
