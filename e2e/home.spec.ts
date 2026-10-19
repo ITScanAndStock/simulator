@@ -30,12 +30,13 @@ test("the home page lists the four simulation steps in order", async ({
   ]);
 });
 
-test("the start link points to the contact details screen", async ({
-  page,
-}) => {
-  await expect(
-    page.getByRole("link", { name: "Commencer la simulation" }),
-  ).toHaveAttribute("href", "/coordonnees");
+test("the start link opens the contact details screen", async ({ page }) => {
+  await page.getByRole("link", { name: "Commencer la simulation" }).click();
+
+  await expect(page).toHaveURL("/coordonnees");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Où vous envoyer votre résultat ?",
+  );
 });
 
 test("the home page declares an SVG icon that the server serves", async ({

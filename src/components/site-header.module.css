@@ -45,14 +45,6 @@
 }
 
 .contactLink {
-  display: inline-flex;
-  align-items: center;
   min-height: 44px;
   padding: 0 18px;
-  background: var(--color-green);
-  color: var(--color-white);
-  border-radius: var(--radius-control);
-  font-size: 17px;
-  font-weight: 500;
-  text-decoration: none;
 }

@@ -1,0 +1,158 @@
+import { expect, test } from "@playwright/test";
+
+test.beforeEach(async ({ page }) => {
+  await page.goto("/coordonnees");
+});
+
+test("the contact details screen asks where to send the result", async ({
+  page,
+}) => {
+  // textContent keeps the non-breaking space that toHaveText would normalise away.
+  await expect(page.getByRole("heading", { level: 1 })).toHaveJSProperty(
+    "textContent",
+    "Où vous envoyer votre résultat ?",
+  );
+  await expect(page.getByText("Étape 1 sur 4", { exact: true })).toBeVisible();
+});
+
+test("the step band shows the four steps with the first one current", async ({
+  page,
+}) => {
+  const steps = page
+    .getByRole("list", { name: "Étapes de la simulation" })
+    .getByRole("listitem");
+
+  await expect(steps).toHaveText([
+    /Vos coordonnées\s*En cours$/,
+    /Dépôt des factures$/,
+    /Vérification des lignes$/,
+    /Votre économie$/,
+  ]);
+  await expect(steps.nth(0)).toHaveAttribute("aria-current", "step");
+  for (const index of [1, 2, 3]) {
+    await expect(steps.nth(index)).not.toHaveAttribute("aria-current");
+  }
+});
+
+test("each contact field is named by its label and typed for autofill", async ({
+  page,
+}) => {
+  const fields = [
+    ["Email professionnel", "email", "email"],
+    ["Nom du cabinet", "text", "organization"],
+    ["Nom du praticien", "text", "name"],
+    ["Téléphone", "tel", "tel"],
+  ] as const;
+
+  for (const [label, type, autocomplete] of fields) {
+    const field = page.getByLabel(label, { exact: true });
+    await expect(field).toHaveAttribute("type", type);
+    await expect(field).toHaveAttribute("autocomplete", autocomplete);
+  }
+});
+
+test("both declared statuses start unticked and are independent", async ({
+  page,
+}) => {
+  const statuses = page.getByRole("group", {
+    name: "Vous êtes déjà… (facultatif)",
+  });
+  const member = statuses.getByRole("checkbox", {
+    name: "affilié Club Santé Premium",
+  });
+  const scanAndStock = statuses.getByRole("checkbox", {
+    name: "utilisateur de Scan&Stock",
+  });
+
+  await expect(member).not.toBeChecked();
+  await expect(scanAndStock).not.toBeChecked();
+
+  await member.check();
+  await expect(member).toBeChecked();
+  await expect(scanAndStock).not.toBeChecked();
+
+  await scanAndStock.check();
+  await expect(scanAndStock).toBeChecked();
+  await expect(member).toBeChecked();
+});
+
+test("the data box starts unticked and the call-back box starts ticked", async ({
+  page,
+}) => {
+  await expect(
+    page.getByRole("checkbox", {
+      name: "J'ai lu l'information sur le traitement de mes données.",
+      exact: true,
+    }),
+  ).not.toBeChecked();
+  await expect(
+    page.getByRole("checkbox", {
+      name: "J'accepte d'être recontacté par un conseiller Club Santé Premium au sujet de ma simulation.",
+      exact: true,
+    }),
+  ).toBeChecked();
+});
+
+test("the consent boxes are reached with Tab and toggled with Space", async ({
+  page,
+}) => {
+  const dataBox = page.getByRole("checkbox", {
+    name: "J'ai lu l'information sur le traitement de mes données.",
+    exact: true,
+  });
+  const callBackBox = page.getByRole("checkbox", {
+    name: /^J'accepte d'être recontacté/,
+  });
+
+  await page.getByLabel("Téléphone", { exact: true }).focus();
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await expect(dataBox).toBeFocused();
+  await expect(dataBox).not.toBeChecked();
+  await page.keyboard.press("Space");
+  await expect(dataBox).toBeChecked();
+
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("link", { name: "Lire l'information" }),
+  ).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(callBackBox).toBeFocused();
+  await expect(callBackBox).toBeChecked();
+  await page.keyboard.press("Space");
+  await expect(callBackBox).not.toBeChecked();
+});
+
+test("Retour goes back to the home page", async ({ page }) => {
+  await page.getByRole("link", { name: "Retour" }).click();
+
+  await expect(page).toHaveURL("/");
+  await expect(
+    page.getByRole("link", { name: "Commencer la simulation" }),
+  ).toBeVisible();
+});
+
+test("Continuer keeps the typed contact details out of the URL", async ({
+  page,
+}) => {
+  const typed = [
+    ["Email professionnel", "claire.martin@cabinet-tilleuls.fr"],
+    ["Nom du cabinet", "Cabinet Tilleuls"],
+    ["Nom du praticien", "Claire Martin"],
+    ["Téléphone", "0472123456"],
+  ] as const;
+  for (const [label, value] of typed) {
+    await page.getByLabel(label, { exact: true }).fill(value);
+  }
+
+  const navigation = page.waitForRequest(
+    (request) =>
+      request.isNavigationRequest() && request.frame() === page.mainFrame(),
+  );
+  await page.getByRole("button", { name: "Continuer" }).click();
+  const request = await navigation;
+
+  expect(new URL(request.url()).search).toBe("");
+  await expect(page).toHaveURL("/coordonnees");
+});

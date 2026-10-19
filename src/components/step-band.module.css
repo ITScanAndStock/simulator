@@ -1,0 +1,94 @@
+.band {
+  position: relative;
+  overflow: hidden;
+  padding: 16px 28px;
+  border-radius: var(--radius-card);
+  background: var(--color-green-dark);
+  color: var(--color-cream);
+}
+
+.decor {
+  position: absolute;
+  right: -60px;
+  top: -60px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--color-coral);
+}
+
+.steps {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 0 70px 0 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step + .step {
+  flex-grow: 1;
+}
+
+/* The 4px margin adds to the 12px step gap to give the 16px between line and step. */
+.step + .step::before {
+  content: "";
+  flex-grow: 1;
+  min-width: 24px;
+  height: 1px;
+  margin-right: 4px;
+  background: #3f8a79;
+}
+
+.number,
+.currentNumber {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-family: var(--font-condensed), Arial, sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.number {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #8fc2b5;
+}
+
+.currentNumber {
+  width: 36px;
+  height: 36px;
+  background: var(--color-coral);
+  color: var(--color-forest);
+}
+
+.label {
+  font-size: 16px;
+  color: #e3efeb;
+}
+
+.currentText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.currentLabel {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.currentState {
+  font-size: 14px;
+  color: #cfe3dd;
+}

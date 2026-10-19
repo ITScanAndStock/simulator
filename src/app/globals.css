@@ -32,3 +32,20 @@ body {
 :where(a:hover) {
   color: var(--color-forest);
 }
+
+/* Zero specificity so a component class can resize it, as the header does. */
+:where(.primary-button) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 24px;
+  border: none;
+  background: var(--color-green);
+  color: var(--color-white);
+  border-radius: var(--radius-control);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}

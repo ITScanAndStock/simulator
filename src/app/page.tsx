@@ -1,12 +1,6 @@
 import Link from "next/link";
+import { simulationSteps } from "@/simulation-steps";
 import styles from "./page.module.css";
-
-const steps = [
-  "Vos coordonnées",
-  "Dépôt des factures",
-  "Vérification des lignes",
-  "Votre économie",
-];
 
 const guarantees = [
   "Gratuit · environ 3 minutes",
@@ -34,7 +28,7 @@ export default function Home() {
             au tarif négocié Club Santé Premium.
           </p>
           <div className={styles.start}>
-            <Link href="/coordonnees" className={styles.startLink}>
+            <Link href="/coordonnees" className="primary-button">
               Commencer la simulation
             </Link>
             <span className={styles.startNote}>
@@ -57,7 +51,7 @@ export default function Home() {
             Votre simulation
           </h2>
           <ol aria-label="Étapes de la simulation" className={styles.steps}>
-            {steps.map((step, index) => (
+            {simulationSteps.map((step, index) => (
               <li key={step} className={styles.step}>
                 <span aria-hidden="true" className={styles.stepNumber}>
                   {index + 1}

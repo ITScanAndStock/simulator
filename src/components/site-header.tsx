@@ -46,7 +46,7 @@ export function SiteHeader() {
             <path d="M8 7h9v9" />
           </svg>
         </a>
-        <a href="#" className={styles.contactLink}>
+        <a href="#" className={`primary-button ${styles.contactLink}`}>
           Contactez-nous
         </a>
       </div>
