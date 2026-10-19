@@ -37,3 +37,15 @@ test("the start link points to the contact details screen", async ({
     page.getByRole("link", { name: "Commencer la simulation" }),
   ).toHaveAttribute("href", "/coordonnees");
 });
+
+test("the home page declares an SVG icon that the server serves", async ({
+  page,
+  request,
+}) => {
+  const icon = page.locator('link[rel="icon"]');
+  await expect(icon).toHaveAttribute("href", /.+/);
+
+  const response = await request.get((await icon.getAttribute("href"))!);
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("image/svg+xml");
+});
