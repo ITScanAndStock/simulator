@@ -16,7 +16,8 @@
     "format:check": "prettier --check .",
     "prepare": "husky",
     "test:e2e": "playwright test",
-    "db:migrate": "node --env-file-if-exists=.env.local scripts/db-migrate.mts"
+    "db:migrate": "node --env-file-if-exists=.env.local scripts/db-migrate.mts",
+    "db:empty": "node --env-file-if-exists=.env.local scripts/db-empty.mts"
   },
   "dependencies": {
     "next": "16.4.0",

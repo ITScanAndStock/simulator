@@ -43,10 +43,18 @@ export default defineConfig({
     baseURL: `http://localhost:${port}`,
     trace: "retain-on-failure",
   },
+  // db:empty wipes the whole e2e database, so it runs alone once every other test has finished.
   projects: [
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: "db-empty.spec.ts",
+    },
+    {
+      name: "db-empty",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: "db-empty.spec.ts",
+      dependencies: ["chromium"],
     },
   ],
   webServer: {
