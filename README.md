@@ -17,6 +17,31 @@ Il faut Node 24.22.0 (voir `.nvmrc`) et pnpm, dans la version fixée par `packag
 
 ```sh
 pnpm install
+```
+
+Le simulateur garde les coordonnées et les simulations dans une base PostgreSQL locale (PostgreSQL 18). Il en faut deux : `simulator-local` pour le simulateur, `simulator-e2e` pour les tests de parcours, que ceux-ci écrivent sans toucher à la première. Pour les créer :
+
+```sh
+createdb simulator-local
+createdb simulator-e2e
+```
+
+Copier ensuite `.env.example` en `.env.local` (ce fichier n'est pas versionné) et y mettre l'utilisateur et le mot de passe de votre PostgreSQL :
+
+- `DATABASE_URL` : la base `simulator-local` ;
+- `E2E_DATABASE_URL` : la base `simulator-e2e`.
+
+Puis créer les tables, une fois, et après chaque nouvelle migration (fichiers de `db/migrations/`) :
+
+```sh
+pnpm db:migrate
+```
+
+La commande n'applique que les migrations pas encore passées ; rien n'est migré au démarrage du simulateur.
+
+Pour lancer le simulateur :
+
+```sh
 pnpm dev
 ```
 
@@ -40,4 +65,4 @@ puis :
 pnpm test:e2e
 ```
 
-La commande construit le simulateur en production, le démarre sur http://localhost:3100 le temps des tests, puis l'arrête. Le port 3100 doit être libre.
+La commande migre la base `simulator-e2e` (`E2E_DATABASE_URL`, obligatoire), construit le simulateur en production, le démarre sur http://localhost:3100 branché sur cette base le temps des tests, puis l'arrête. Le port 3100 doit être libre.

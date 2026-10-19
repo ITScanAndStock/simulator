@@ -1,5 +1,13 @@
 import { expect, test } from "@playwright/test";
 
+function safelyDecoded(url: string) {
+  try {
+    return decodeURIComponent(url.replaceAll("+", " "));
+  } catch {
+    return url;
+  }
+}
+
 test.beforeEach(async ({ page }) => {
   await page.goto("/coordonnees");
 });
@@ -133,7 +141,7 @@ test("Retour goes back to the home page", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("Continuer keeps the typed contact details out of the URL", async ({
+test("Continuer keeps the typed contact details out of every URL", async ({
   page,
 }) => {
   const typed = [
@@ -145,16 +153,20 @@ test("Continuer keeps the typed contact details out of the URL", async ({
   for (const [label, value] of typed) {
     await page.getByLabel(label, { exact: true }).fill(value);
   }
+  const requested: string[] = [];
+  page.on("request", (request) => requested.push(request.url()));
 
-  const navigation = page.waitForRequest(
-    (request) =>
-      request.isNavigationRequest() && request.frame() === page.mainFrame(),
-  );
   await page.getByRole("button", { name: "Continuer" }).click();
-  const request = await navigation;
+  await expect(page).toHaveURL(/\/simulations\/[^/]+\/factures$/);
 
-  expect(new URL(request.url()).search).toBe("");
-  await expect(page).toHaveURL("/coordonnees");
+  expect(requested.length).toBeGreaterThan(0);
+  for (const url of requested) {
+    const decoded = safelyDecoded(url);
+    for (const [, value] of typed) {
+      expect(url).not.toContain(value);
+      expect(decoded).not.toContain(value);
+    }
+  }
 });
 
 test.describe("on a screen wider than 1440px", () => {
