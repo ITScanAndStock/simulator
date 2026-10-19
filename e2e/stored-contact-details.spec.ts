@@ -192,7 +192,31 @@ test("Continuer on a reopened simulation updates it instead of starting another 
   await elsewhere.close();
 });
 
-test("browser Back after changing the stored contact details shows the change", async ({
+test("browser Back from the invoices step skips the submitted contact details screen", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "Commencer la simulation" }).click();
+  await expect(page).toHaveURL("/coordonnees");
+  await fill(
+    page,
+    someContactDetails({
+      cspMember: false,
+      scanAndStockUser: true,
+      callBack: false,
+    }),
+  );
+  await continueToInvoices(page);
+
+  await page.goBack();
+
+  await expect(page).toHaveURL("/");
+  await expect(
+    page.getByRole("link", { name: "Commencer la simulation" }),
+  ).toBeVisible();
+});
+
+test("after a change and browser Back, Retour shows the changed contact details", async ({
   page,
 }) => {
   const details = someContactDetails({
@@ -212,6 +236,8 @@ test("browser Back after changing the stored contact details shows the change", 
     .fill(changed.practice);
   await continueToInvoices(page);
   await page.goBack();
+  await expect(page).toHaveURL(`/simulations/${simulation}/factures`);
+  await page.getByRole("link", { name: "Retour" }).click();
 
   await expect(page).toHaveURL(`/simulations/${simulation}/coordonnees`);
   await expectPrefilled(page, changed);
