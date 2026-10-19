@@ -5,8 +5,10 @@ import { databasePool } from "./db";
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-function isSimulationId(id: string) {
-  return uuidPattern.test(id);
+// A bound id forged in the no-JS form can be any JSON value,
+// and test() would coerce ["<uuid>"] to a match.
+function isSimulationId(id: unknown) {
+  return typeof id === "string" && uuidPattern.test(id);
 }
 
 export async function startSimulation(details: ContactDetails) {

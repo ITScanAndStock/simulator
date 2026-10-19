@@ -7,25 +7,38 @@ type Checked =
 
 const completeEmail = /^[^\s@]+@([^\s@.]+\.)+[A-Za-z]{2,}$/;
 const emailWithoutExtension = /^[^\s@]+@[^\s@.]+\.?$/;
+const unprintableCharacter = /(?![\t\n\r\v\f\u0085])\p{Cc}/u;
+const spacingControlRun = / *[\t\n\r\v\f\u0085][ \t\n\r\v\f\u0085]*/g;
+const unprintableMessage = "Retirez les caractères non imprimables.";
 
 export function checkContactDetails(formData: FormData): Checked {
   const values = readSubmittedValues(formData);
   const errors: ContactDetailsErrors = {};
 
   const email = values.email.trim();
-  const emailError = professionalEmailError(email);
+  const emailError = unprintableCharacter.test(email)
+    ? unprintableMessage
+    : professionalEmailError(email);
   if (emailError) errors.email = emailError;
 
-  const practice = values.practice.trim();
-  if (practice === "") errors.practice = "Indiquez le nom du cabinet.";
+  const practice = spacedName(values.practice);
+  const practiceError = nameError(practice, "Indiquez le nom du cabinet.");
+  if (practiceError) errors.practice = practiceError;
 
-  const practitioner = values.practitioner.trim();
-  if (practitioner === "")
-    errors.practitioner = "Indiquez le nom du praticien.";
+  const practitioner = spacedName(values.practitioner);
+  const practitionerError = nameError(
+    practitioner,
+    "Indiquez le nom du praticien.",
+  );
+  if (practitionerError) errors.practitioner = practitionerError;
 
   const compactPhone = values.phone.replace(/[\s.()-]/g, "");
   const phone = nationalPhoneNumber(compactPhone);
-  if (phone === undefined) errors.phone = phoneNumberError(compactPhone);
+  if (unprintableCharacter.test(compactPhone)) {
+    errors.phone = unprintableMessage;
+  } else if (phone === undefined) {
+    errors.phone = phoneNumberError(compactPhone);
+  }
 
   if (!values.dataInformationRead) {
     errors.dataInformationRead = "Cochez cette case pour continuer.";
@@ -38,6 +51,16 @@ export function checkContactDetails(formData: FormData): Checked {
     valid: true,
     details: { ...values, email, practice, practitioner, phone },
   };
+}
+
+function spacedName(value: string) {
+  return value.replace(spacingControlRun, " ").trim();
+}
+
+function nameError(name: string, missingMessage: string) {
+  if (unprintableCharacter.test(name)) return unprintableMessage;
+  if (name === "") return missingMessage;
+  return undefined;
 }
 
 function professionalEmailError(email: string) {

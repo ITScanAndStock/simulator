@@ -318,3 +318,64 @@ test("fixing the pointed-out fields on a reopened simulation leads to that simul
 
   await expect(page).toHaveURL(`/simulations/${simulation}/factures`);
 });
+
+test("a name holding an unprintable character is refused next to its field, on screen 2", async ({
+  page,
+}) => {
+  await fillValidly(page);
+  await field(page, "Nom du cabinet").fill("Cabinet\u0000 des Tilleuls");
+  await dataInformationBox(page).click();
+
+  await continueOnScreen2(page);
+
+  await expectPointedOut(
+    field(page, "Nom du cabinet"),
+    "Retirez les caractères non imprimables.",
+  );
+  await expect(summary(page)).toHaveText(
+    "1 champ à corriger avant de continuer.",
+  );
+});
+
+test("an unprintable character on a reopened simulation leaves its stored contact details unchanged", async ({
+  page,
+}) => {
+  const email = await fillValidly(page);
+  await dataInformationBox(page).click();
+  const simulation = await continueToInvoices(page);
+  await page.goto(`/simulations/${simulation}/coordonnees`);
+  const storedPractitioner = await field(page, "Nom du praticien").inputValue();
+
+  await field(page, "Email professionnel").fill(email.replace("@", "\u0000@"));
+  await field(page, "Nom du praticien").fill("Dr Claire\u0000 Martin");
+  await continueOnScreen2(page);
+  await expectPointedOut(
+    field(page, "Email professionnel"),
+    "Retirez les caractères non imprimables.",
+  );
+  await expectPointedOut(
+    field(page, "Nom du praticien"),
+    "Retirez les caractères non imprimables.",
+  );
+
+  await page.goto(`/simulations/${simulation}/coordonnees`);
+  await expect(field(page, "Email professionnel")).toHaveValue(email);
+  await expect(field(page, "Nom du praticien")).toHaveValue(storedPractitioner);
+});
+
+test("tabs pasted into the practice name are stored as single spaces and trimmed", async ({
+  page,
+}) => {
+  await fillValidly(page);
+  await field(page, "Nom du cabinet").fill(
+    "Cabinet \t dentaire des\tTilleuls\t",
+  );
+  await dataInformationBox(page).click();
+
+  const simulation = await continueToInvoices(page);
+
+  await page.goto(`/simulations/${simulation}/coordonnees`);
+  await expect(field(page, "Nom du cabinet")).toHaveValue(
+    "Cabinet dentaire des Tilleuls",
+  );
+});
