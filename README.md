@@ -27,3 +27,17 @@ Pour lancer les tests :
 ```sh
 pnpm test
 ```
+
+Pour lancer les tests de parcours dans le navigateur (Playwright), installer une fois le navigateur Chromium :
+
+```sh
+pnpm exec playwright install chromium
+```
+
+puis :
+
+```sh
+pnpm test:e2e
+```
+
+La commande construit le simulateur en production, le démarre sur http://localhost:3100 le temps des tests, puis l'arrête. Le port 3100 doit être libre.
