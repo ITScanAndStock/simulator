@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 function safelyDecoded(url: string) {
   try {
@@ -130,6 +130,56 @@ test("the consent boxes are reached with Tab and toggled with Space", async ({
   await expect(callBackBox).toBeChecked();
   await page.keyboard.press("Space");
   await expect(callBackBox).not.toBeChecked();
+});
+
+function runningAnimations(checkbox: Locator) {
+  return checkbox.evaluate(
+    (input) =>
+      input
+        .parentElement!.getAnimations({ subtree: true })
+        .filter((animation) => animation.playState === "running").length,
+  );
+}
+
+function recordKeyframeStart(checkbox: Locator) {
+  return checkbox.evaluate((input) => {
+    const wrapper = input.parentElement!;
+    wrapper.addEventListener(
+      "animationstart",
+      () => (wrapper.dataset.keyframesStarted = "true"),
+      { once: true },
+    );
+  });
+}
+
+test("a ticked box plays its activation once, then stays still", async ({
+  page,
+}) => {
+  const dataBox = page.getByRole("checkbox", {
+    name: "J'ai lu l'information sur le traitement de mes données.",
+    exact: true,
+  });
+
+  await recordKeyframeStart(dataBox);
+  await dataBox.click();
+  await expect(dataBox).toBeChecked();
+  await expect(dataBox.locator("..")).toHaveAttribute(
+    "data-keyframes-started",
+    "true",
+  );
+
+  await expect.poll(() => runningAnimations(dataBox)).toBe(0);
+});
+
+test("the call-back box, ticked on arrival, settles after its activation", async ({
+  page,
+}) => {
+  const callBackBox = page.getByRole("checkbox", {
+    name: /^J'accepte d'être recontacté/,
+  });
+
+  await expect(callBackBox).toBeChecked();
+  await expect.poll(() => runningAnimations(callBackBox)).toBe(0);
 });
 
 test("Retour goes back to the home page", async ({ page }) => {

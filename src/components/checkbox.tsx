@@ -4,7 +4,6 @@ import styles from "./checkbox.module.css";
 const particles = Array.from({ length: 12 }, (_, index) => index);
 const rings = [0, 1, 2];
 const sparks = [0, 1, 2, 3];
-const borders = [0, 1, 2, 3];
 
 export function Checkbox(
   props: Omit<ComponentProps<"input">, "type" | "className">,
@@ -20,11 +19,6 @@ export function Checkbox(
             </svg>
           </span>
           <span className={styles.glow} />
-          <span className={styles.borders}>
-            {borders.map((index) => (
-              <span key={index} />
-            ))}
-          </span>
         </span>
         <span className={styles.effects}>
           <span className={styles.particles}>
