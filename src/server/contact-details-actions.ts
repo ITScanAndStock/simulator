@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 import type { ContactDetailsFormState } from "@/contact-details";
 import { checkContactDetails } from "./contact-details-validation";
@@ -21,5 +22,6 @@ export async function saveContactDetails(
   } else if (!(await updateContactDetails(id, checked.details))) {
     notFound();
   }
+  revalidatePath(`/simulations/${id}/coordonnees`);
   redirect(`/simulations/${id}/factures`);
 }

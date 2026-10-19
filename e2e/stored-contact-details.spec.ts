@@ -192,6 +192,31 @@ test("Continuer on a reopened simulation updates it instead of starting another 
   await elsewhere.close();
 });
 
+test("browser Back after changing the stored contact details shows the change", async ({
+  page,
+}) => {
+  const details = someContactDetails({
+    cspMember: false,
+    scanAndStockUser: true,
+    callBack: false,
+  });
+  await page.goto("/coordonnees");
+  await fill(page, details);
+  const simulation = await continueToInvoices(page);
+  await page.getByRole("link", { name: "Retour" }).click();
+  await expectPrefilled(page, details);
+
+  const changed = { ...details, practice: "Centre dentaire du Parc" };
+  await page
+    .getByLabel("Nom du cabinet", { exact: true })
+    .fill(changed.practice);
+  await continueToInvoices(page);
+  await page.goBack();
+
+  await expect(page).toHaveURL(`/simulations/${simulation}/coordonnees`);
+  await expectPrefilled(page, changed);
+});
+
 for (const step of ["coordonnees", "factures"]) {
   for (const [kind, id] of [
     ["an unknown", randomUUID()],
