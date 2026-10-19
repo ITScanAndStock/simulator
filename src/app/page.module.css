@@ -17,8 +17,14 @@
 .main {
   flex-grow: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  /* 541px is the card's width in the mockup at 1280, so the page matches it there
+     and the card stops growing beyond. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 541px);
   gap: 48px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
   padding: 48px 48px 40px;
 }
 

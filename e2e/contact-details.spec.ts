@@ -156,3 +156,21 @@ test("Continuer keeps the typed contact details out of the URL", async ({
   expect(new URL(request.url()).search).toBe("");
   await expect(page).toHaveURL("/coordonnees");
 });
+
+test.describe("on a screen wider than 1440px", () => {
+  test.use({ viewport: { width: 1920, height: 1080 } });
+
+  test("the content is at most 1440px wide and centred, the header spans the screen", async ({
+    page,
+  }) => {
+    const main = (await page.getByRole("main").boundingBox())!;
+    const header = (await page.getByRole("banner").boundingBox())!;
+
+    expect(main.width).toBeLessThanOrEqual(1440);
+    expect(Math.abs(main.x - (1920 - main.x - main.width))).toBeLessThanOrEqual(
+      1,
+    );
+    expect(header.x).toBe(0);
+    expect(header.width).toBe(1920);
+  });
+});
