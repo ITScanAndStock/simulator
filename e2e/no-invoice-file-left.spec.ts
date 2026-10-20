@@ -1,6 +1,11 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
-import { openInvoicesStep, uploadedFile } from "./invoices-step";
+import {
+  invoiceInput,
+  openInvoicesStep,
+  pdfFile,
+  uploadedFile,
+} from "./invoices-step";
 
 function serverTemporaryFiles() {
   return readdirSync(process.env.E2E_SERVER_TMPDIR!, { recursive: true });
@@ -9,20 +14,12 @@ function serverTemporaryFiles() {
 for (const { title, file, outcome } of [
   {
     title: "a read",
-    file: {
-      name: "lue.pdf",
-      mimeType: "application/pdf",
-      buffer: readFileSync("test-invoices/doctor-ai-fake.pdf"),
-    },
+    file: pdfFile("lue.pdf", readFileSync("test-invoices/doctor-ai-fake.pdf")),
     outcome: "Lue · 4 lignes",
   },
   {
     title: "a failed read",
-    file: {
-      name: "abimee.pdf",
-      mimeType: "application/pdf",
-      buffer: Buffer.from("%PDF-1.4 cut"),
-    },
+    file: pdfFile("abimee.pdf", Buffer.from("%PDF-1.4 cut")),
     outcome: "Non lue",
   },
 ]) {
@@ -33,9 +30,7 @@ for (const { title, file, outcome } of [
     await openInvoicesStep(page);
     const before = serverTemporaryFiles();
 
-    await page
-      .getByLabel("Glissez vos factures ici, ou choisissez des fichiers")
-      .setInputFiles(file);
+    await invoiceInput(page).setInputFiles(file);
     await expect(uploadedFile(page, file.name)).toContainText(outcome);
 
     expect(serverTemporaryFiles()).toEqual(before);

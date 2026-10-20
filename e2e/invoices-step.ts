@@ -26,3 +26,13 @@ export async function openInvoicesStep(page: Page) {
 export function uploadedFile(page: Page, name: string) {
   return page.getByRole("listitem").filter({ hasText: name });
 }
+
+export function invoiceInput(page: Page) {
+  return page.getByLabel(
+    "Glissez vos factures ici, ou choisissez des fichiers",
+  );
+}
+
+export function pdfFile(name: string, buffer: Buffer) {
+  return { name, mimeType: "application/pdf", buffer };
+}

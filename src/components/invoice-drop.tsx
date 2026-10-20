@@ -1,11 +1,11 @@
 "use client";
 
 import { startTransition, useRef, useState, type DragEvent } from "react";
-import { maxInvoices, type InvoiceReadOutcome } from "@/invoice-upload";
+import { maxInvoices, type InvoiceUploadResult } from "@/invoice-upload";
 import { readUploadedInvoice } from "@/server/invoice-actions";
 import styles from "./invoice-drop.module.css";
 
-type Upload = { id: number; name: string; outcome?: InvoiceReadOutcome };
+type Upload = { id: number; name: string; outcome?: InvoiceUploadResult };
 
 export function InvoiceDrop({ simulationId }: { simulationId: string }) {
   const [uploads, setUploads] = useState<Upload[]>([]);
@@ -25,7 +25,7 @@ export function InvoiceDrop({ simulationId }: { simulationId: string }) {
       startTransition(async () => {
         // A refused request (body over the size limit, server error) must still end the reading.
         const outcome = await readUploadedInvoice(simulationId, formData).catch(
-          (): InvoiceReadOutcome => ({ read: false }),
+          (): InvoiceUploadResult => ({ read: false }),
         );
         // State set after an await leaves the transition unless wrapped again.
         startTransition(() =>
@@ -99,7 +99,7 @@ export function InvoiceDrop({ simulationId }: { simulationId: string }) {
   );
 }
 
-function Outcome({ outcome }: { outcome?: InvoiceReadOutcome }) {
+function Outcome({ outcome }: { outcome?: InvoiceUploadResult }) {
   if (!outcome)
     return <span className={styles.pending}>Lecture en cours…</span>;
   if (!outcome.read) return <span className={styles.pending}>Non lue</span>;

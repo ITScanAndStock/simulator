@@ -1,5 +1,5 @@
 import type { PdfPage, Row } from "./pdf-rows";
-import type { InvoiceLine } from "./read-invoice";
+import type { InvoiceLine } from "./invoice-line";
 
 const vatNumber = "FR40824423735";
 

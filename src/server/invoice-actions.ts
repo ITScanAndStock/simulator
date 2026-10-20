@@ -2,13 +2,13 @@
 
 import { notFound } from "next/navigation";
 import { readInvoice } from "@/invoice-reading/read-invoice";
-import type { InvoiceReadOutcome } from "@/invoice-upload";
+import type { InvoiceUploadResult } from "@/invoice-upload";
 import { simulationExists } from "./simulations";
 
 export async function readUploadedInvoice(
   simulationId: string,
   formData: FormData,
-): Promise<InvoiceReadOutcome> {
+): Promise<InvoiceUploadResult> {
   if (!(formData instanceof FormData)) notFound();
   const file = formData.get("invoice");
   if (!(file instanceof File) || !(await simulationExists(simulationId))) {
