@@ -55,6 +55,26 @@ pnpm dev
 
 Le simulateur s'ouvre sur http://127.0.0.1:3000 et ne répond que sur cet ordinateur : les autres appareils du réseau ne peuvent pas l'ouvrir. `pnpm start` fait de même.
 
+Les prix de référence viennent de Coompy (`coompy-api`), lancé sur cet ordinateur. Le simulateur interroge sa recherche de produits avec le jeton d'un client de service Keycloak (`csp-simulator`, rôle `SIMULATOR`). Il faut le lancer depuis une branche qui porte `matchedRef` (`staging` en octobre 2026), avec le JDK 21 et le profil `local`, le crawler restant éteint :
+
+```sh
+JAVA_HOME=/chemin/vers/jdk-21 mvn -DskipTests spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+puis renseigner dans `.env.local` :
+
+- `COOMPY_API_URL` : `http://localhost:8083/api` ;
+- `COOMPY_TOKEN_URL` : l'adresse des jetons du realm `scan-and-stock` ;
+- `COOMPY_CLIENT_ID` et `COOMPY_CLIENT_SECRET` : le client de service.
+
+Les tests de l'adaptateur Coompy rejouent des réponses de `GET /products` enregistrées une fois (`test-coompy/`). Pour les enregistrer de nouveau, Coompy lancé :
+
+```sh
+pnpm coompy:record
+```
+
+Les prix Doctor AI ne doivent pas quitter cet ordinateur : la commande remplace chaque prix par un prix inventé et retire les libellés, marques, liens et images avant d'écrire les fichiers.
+
 Pour lancer les tests :
 
 ```sh

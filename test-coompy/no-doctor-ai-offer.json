@@ -1,0 +1,25 @@
+{
+  "supplier": "Dentaltix",
+  "reference": "HF-0660I-R2",
+  "answer": {
+    "content": [
+      {
+        "id": 154,
+        "designation": "Produit 1",
+        "offers": [
+          {
+            "id": 168,
+            "provider": "Dentaltix",
+            "price": 19.59,
+            "currency": "EUR",
+            "matchedRef": "HF-0660I-R2"
+          }
+        ]
+      }
+    ],
+    "page": 0,
+    "size": 50,
+    "total": 1,
+    "totalOffers": 1
+  }
+}
