@@ -1,4 +1,6 @@
-import { existsSync } from "node:fs";
+import { existsSync, mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 import { localHosts, readDatabaseUrl } from "./scripts/database-url.mts";
 
@@ -7,6 +9,10 @@ const port = 3100;
 const origin = `http://127.0.0.1:${port}`;
 
 if (existsSync(".env.local")) process.loadEnvFile(".env.local");
+// Set once by the runner; workers load this file again and must see the same folder.
+process.env.E2E_SERVER_TMPDIR ??= mkdtempSync(
+  path.join(tmpdir(), "simulator-e2e-server-"),
+);
 const e2eDatabaseUrl = process.env.E2E_DATABASE_URL;
 if (!e2eDatabaseUrl) {
   throw new Error(
@@ -64,7 +70,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `pnpm build && pnpm start --port ${port}`,
+    command: `pnpm build && TMPDIR=${process.env.E2E_SERVER_TMPDIR} pnpm start --port ${port}`,
     url: origin,
     env: { NEXT_DIST_DIR: ".next-e2e", DATABASE_URL: e2eDatabaseUrl },
     reuseExistingServer: false,
