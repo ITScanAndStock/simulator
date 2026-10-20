@@ -1,0 +1,67 @@
+import type { ReadInvoice } from "@/invoice-reading/read-invoice";
+
+export const realInvoicesExpected: Record<string, ReadInvoice> = {
+  "pdf_invoice-2ed1f14878147bc3d79fffe3.pdf": {
+    status: "read",
+    supplier: "DoctorAI",
+    lines: [
+      {
+        reference: "638-9217",
+        designation: "# NEODISHER MEDICLEAN FORTE 5L",
+        quantity: 1,
+        unitPriceCents: 5625,
+        amountCents: 5625,
+        vatRate: 20,
+      },
+      {
+        reference: "778-9273",
+        designation: "#LQ*SOLUTION N CID 6 X 500ML ACD600 NSK",
+        quantity: 1,
+        unitPriceCents: 11790,
+        amountCents: 11790,
+        vatRate: 20,
+      },
+      {
+        reference: "778-9272",
+        designation: "#SOLUTION N CLEAN 6 BOUTEILLES DE 500ML ACL600 NSK",
+        quantity: 1,
+        unitPriceCents: 11654,
+        amountCents: 11654,
+        vatRate: 20,
+      },
+      {
+        reference: "028-8273",
+        designation: "CANULES BABYJET COLOR 16MM ASSORT.(10) STERIBLUE",
+        quantity: 2,
+        unitPriceCents: 716,
+        amountCents: 1432,
+        vatRate: 20,
+      },
+      {
+        reference: "768-9094",
+        designation: "LIMES K STERILES – 25MM – N0020 (6) VDW",
+        quantity: 2,
+        unitPriceCents: 1420,
+        amountCents: 2840,
+        vatRate: 20,
+      },
+      {
+        reference: "768-9095",
+        designation: "LIMES K STERILES – 25MM – N0025 (6) VDW",
+        quantity: 1,
+        unitPriceCents: 1420,
+        amountCents: 1420,
+        vatRate: 20,
+      },
+      {
+        reference: "058-8240",
+        designation: "# NEOSEL POUDRE SEAU DE 5 KILOS",
+        quantity: 1,
+        unitPriceCents: 1590,
+        amountCents: 1590,
+        vatRate: 20,
+      },
+    ],
+    totalCents: 36351,
+  },
+};
