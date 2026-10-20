@@ -7,7 +7,7 @@ export type PdfPage = Row[];
 const sameRowTolerance = 1.5;
 
 export async function readPdfRows(bytes: Uint8Array): Promise<PdfPage[]> {
-  const pdf = await getDocumentProxy(bytes);
+  const pdf = await getDocumentProxy(bytes, { verbosity: 0 });
   try {
     const pages: PdfPage[] = [];
     for (let number = 1; number <= pdf.numPages; number++) {

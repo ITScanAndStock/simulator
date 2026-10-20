@@ -4,10 +4,11 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 
 // Only the real-invoice folder: no unit test should reach the databases named there.
-if (existsSync(".env.local")) {
-  process.env.REAL_INVOICES_DIR ??= parseEnv(
-    readFileSync(".env.local", "utf8"),
-  ).REAL_INVOICES_DIR;
+const localRealInvoicesDir = existsSync(".env.local")
+  ? parseEnv(readFileSync(".env.local", "utf8")).REAL_INVOICES_DIR
+  : undefined;
+if (localRealInvoicesDir && !process.env.REAL_INVOICES_DIR) {
+  process.env.REAL_INVOICES_DIR = localRealInvoicesDir;
 }
 
 export default defineConfig({
