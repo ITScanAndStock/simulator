@@ -7,12 +7,41 @@
   gap: 24px;
 }
 
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .title {
   margin: 0;
   font-weight: 400;
   font-size: 48px;
   line-height: 1.1;
   letter-spacing: -0.02em;
+}
+
+.lead {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #4b473e;
+}
+
+.note {
+  margin: 0;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #4b473e;
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--color-link);
 }
 
 .back {
