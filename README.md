@@ -61,6 +61,14 @@ Pour lancer les tests :
 pnpm test
 ```
 
+Les vraies factures ne sont jamais dans le dépôt : seuls leurs résultats attendus y sont (`test-invoices/real/expected.ts`, sans nom ni adresse). Pour les lire aussi, indiquer leur dossier dans `.env.local` :
+
+```sh
+REAL_INVOICES_DIR=/chemin/vers/les/factures
+```
+
+Sans cette variable, leurs tests sont sautés.
+
 Pour lancer les tests de parcours dans le navigateur (Playwright), installer une fois le navigateur Chromium :
 
 ```sh
