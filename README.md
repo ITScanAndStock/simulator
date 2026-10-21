@@ -67,6 +67,8 @@ puis renseigner dans `.env.local` :
 - `COOMPY_TOKEN_URL` : l'adresse des jetons du realm `scan-and-stock` ;
 - `COOMPY_CLIENT_ID` et `COOMPY_CLIENT_SECRET` : le client de service.
 
+Une ligne dont l'économie dépasse un seuil est écartée du total et laissée à un conseiller (« À vérifier par un conseiller ») : un tel écart signale plus souvent un mauvais rapprochement (autre conditionnement, autre produit) qu'une vraie économie. Le seuil vaut 50 % ; `SUSPICIOUS_SAVING_PERCENT` le change sans toucher au code.
+
 Les tests de l'adaptateur Coompy rejouent des réponses de `GET /products` enregistrées une fois (`test-coompy/`). Pour les enregistrer de nouveau, Coompy lancé :
 
 ```sh

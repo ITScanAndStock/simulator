@@ -15,6 +15,8 @@ export type SimulatedLine = InvoiceLine & {
   savingCents: number | undefined;
 };
 
+export type Simulation = Awaited<ReturnType<typeof simulate>>;
+
 export async function simulate(
   invoices: { supplier: SupplierCode; lines: InvoiceLine[] }[],
   lookup: PriceLookup,

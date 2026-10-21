@@ -5,6 +5,7 @@ import { defineConfig, devices } from "@playwright/test";
 import { localHosts, readDatabaseUrl } from "./scripts/database-url.mts";
 
 const port = 3100;
+const fakeCoompyPort = 3101;
 // The server listens on 127.0.0.1 only; "localhost" may resolve to ::1 first.
 const origin = `http://127.0.0.1:${port}`;
 
@@ -69,11 +70,25 @@ export default defineConfig({
       dependencies: ["chromium"],
     },
   ],
-  webServer: {
-    command: `pnpm build && TMPDIR=${process.env.E2E_SERVER_TMPDIR} pnpm start --port ${port}`,
-    url: origin,
-    env: { NEXT_DIST_DIR: ".next-e2e", DATABASE_URL: e2eDatabaseUrl },
-    reuseExistingServer: false,
-    timeout: 180_000,
-  },
+  webServer: [
+    {
+      command: `FAKE_COOMPY_PORT=${fakeCoompyPort} node e2e/fake-coompy.mts`,
+      url: `http://127.0.0.1:${fakeCoompyPort}/`,
+      reuseExistingServer: false,
+    },
+    {
+      command: `pnpm build && TMPDIR=${process.env.E2E_SERVER_TMPDIR} pnpm start --port ${port}`,
+      url: origin,
+      env: {
+        NEXT_DIST_DIR: ".next-e2e",
+        DATABASE_URL: e2eDatabaseUrl,
+        COOMPY_API_URL: `http://127.0.0.1:${fakeCoompyPort}/api`,
+        COOMPY_TOKEN_URL: `http://127.0.0.1:${fakeCoompyPort}/token`,
+        COOMPY_CLIENT_ID: "e2e",
+        COOMPY_CLIENT_SECRET: "e2e-secret",
+      },
+      reuseExistingServer: false,
+      timeout: 180_000,
+    },
+  ],
 });
