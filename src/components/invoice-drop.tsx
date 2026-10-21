@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { startTransition, useRef, useState, type DragEvent } from "react";
 import { maxInvoices, type InvoiceUploadResult } from "@/invoice-upload";
 import { readUploadedInvoice } from "@/server/invoice-actions";
+import { computeSaving } from "@/server/simulation-actions";
 import styles from "./invoice-drop.module.css";
 
 type Upload = { id: number; name: string; outcome?: InvoiceUploadResult };
@@ -38,6 +40,12 @@ export function InvoiceDrop({ simulationId }: { simulationId: string }) {
       });
     }
   }
+
+  const invoiceIds = uploads.flatMap((upload) =>
+    upload.outcome?.read ? [upload.outcome.invoiceId] : [],
+  );
+  const readyToCompute =
+    invoiceIds.length > 0 && uploads.every((upload) => upload.outcome);
 
   function drop(event: DragEvent) {
     event.preventDefault();
@@ -95,6 +103,24 @@ export function InvoiceDrop({ simulationId }: { simulationId: string }) {
           </li>
         ))}
       </ul>
+      <form
+        action={computeSaving.bind(null, simulationId, invoiceIds)}
+        className={styles.actions}
+      >
+        <button
+          type="submit"
+          className="primary-button"
+          disabled={!readyToCompute}
+        >
+          Vérifier les lignes lues
+        </button>
+        <Link
+          href={`/simulations/${simulationId}/coordonnees`}
+          className={styles.back}
+        >
+          Retour
+        </Link>
+      </form>
     </div>
   );
 }

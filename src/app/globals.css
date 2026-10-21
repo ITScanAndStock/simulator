@@ -51,3 +51,8 @@ body {
   text-decoration: none;
   cursor: pointer;
 }
+
+:where(.primary-button:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

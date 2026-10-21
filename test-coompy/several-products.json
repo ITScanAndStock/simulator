@@ -1,0 +1,51 @@
+{
+  "supplier": "Dentaltix",
+  "reference": "10020",
+  "answer": {
+    "content": [
+      {
+        "id": 48541,
+        "designation": "Produit 1",
+        "offers": [
+          {
+            "id": 61465,
+            "provider": "Dentaltix",
+            "price": 15.48,
+            "currency": "EUR",
+            "matchedRef": "10020"
+          }
+        ]
+      },
+      {
+        "id": 52167,
+        "designation": "Produit 2",
+        "offers": [
+          {
+            "id": 66796,
+            "provider": "Dentaltix",
+            "price": 16.85,
+            "currency": "EUR",
+            "matchedRef": "10/020"
+          }
+        ]
+      },
+      {
+        "id": 45996,
+        "designation": "Produit 3",
+        "offers": [
+          {
+            "id": 57923,
+            "provider": "Dentaltix",
+            "price": 18.22,
+            "currency": "EUR",
+            "matchedRef": "100205"
+          }
+        ]
+      }
+    ],
+    "page": 0,
+    "size": 50,
+    "total": 3,
+    "totalOffers": 3
+  }
+}

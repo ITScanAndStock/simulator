@@ -17,7 +17,8 @@
     "prepare": "husky",
     "test:e2e": "playwright test",
     "db:migrate": "node --env-file-if-exists=.env.local scripts/db-migrate.mts",
-    "db:empty": "node --env-file-if-exists=.env.local scripts/db-empty.mts"
+    "db:empty": "node --env-file-if-exists=.env.local scripts/db-empty.mts",
+    "coompy:record": "node --env-file-if-exists=.env.local scripts/record-coompy-answers.mts"
   },
   "dependencies": {
     "next": "16.4.0",

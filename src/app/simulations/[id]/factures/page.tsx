@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { InvoiceDrop } from "@/components/invoice-drop";
 import { SimulationScreen } from "@/components/simulation-screen";
@@ -47,9 +46,6 @@ export default async function Invoices({
           </p>
         </div>
         <InvoiceDrop simulationId={id} />
-        <Link href={`/simulations/${id}/coordonnees`} className={styles.back}>
-          Retour
-        </Link>
       </div>
     </SimulationScreen>
   );
