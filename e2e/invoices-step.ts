@@ -1,7 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { expect, type Page } from "@playwright/test";
 
-export async function openInvoicesStep(page: Page) {
+export async function openInvoicesStep(
+  page: Page,
+  { scanAndStockUser = false } = {},
+) {
   await page.goto("/coordonnees");
   await page
     .getByLabel("Email professionnel", { exact: true })
@@ -13,6 +16,11 @@ export async function openInvoicesStep(page: Page) {
     .getByLabel("Nom du praticien", { exact: true })
     .fill("Dr Claire Martin");
   await page.getByLabel("Téléphone", { exact: true }).fill("0472123456");
+  if (scanAndStockUser) {
+    await page
+      .getByRole("checkbox", { name: "utilisateur de Scan&Stock", exact: true })
+      .check();
+  }
   await page
     .getByRole("checkbox", {
       name: "J'ai lu l'information sur le traitement de mes données.",

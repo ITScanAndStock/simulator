@@ -1,15 +1,24 @@
 import { notFound, redirect } from "next/navigation";
 import { ResultScreen } from "@/components/result-screen";
 import { findResult } from "@/server/invoices";
-import { simulationExists } from "@/server/simulations";
+import { averageSavingEuros, calendlyUrl } from "@/server/settings";
+import { findContactDetails } from "@/server/simulations";
 
 export default async function Result({
   params,
 }: PageProps<"/simulations/[id]/resultat">) {
   const { id } = await params;
-  if (!(await simulationExists(id))) notFound();
+  const contactDetails = await findContactDetails(id);
+  if (!contactDetails) notFound();
   const result = await findResult(id);
   if (!result) redirect(`/simulations/${id}/factures`);
 
-  return <ResultScreen result={result} />;
+  return (
+    <ResultScreen
+      result={result}
+      scanAndStockUser={contactDetails.scanAndStockUser}
+      averageSavingEuros={averageSavingEuros()}
+      calendlyUrl={calendlyUrl()}
+    />
+  );
 }

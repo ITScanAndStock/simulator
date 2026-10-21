@@ -69,6 +69,11 @@ puis renseigner dans `.env.local` :
 
 Une ligne dont l'économie dépasse un seuil est écartée du total et laissée à un conseiller (« À vérifier par un conseiller ») : un tel écart signale plus souvent un mauvais rapprochement (autre conditionnement, autre produit) qu'une vraie économie. Le seuil vaut 50 % ; `SUSPICIOUS_SAVING_PERCENT` le change sans toucher au code.
 
+L'écran 5 se règle aussi sans toucher au code :
+
+- `AVERAGE_SAVING_EUROS` : l'économie moyenne des affiliés, en euros entiers (« En moyenne, nos affiliés économisent 26 500 € par an ») ; sans valeur, la phrase n'est pas affichée. Le chiffre attend encore sa source chez CSP avant la mise en ligne ;
+- `CALENDLY_URL` : le lien du bouton « Prendre rendez-vous avec un conseiller », par défaut https://calendly.com/clubsantepremium-rdvoffert/1h.
+
 Les tests de l'adaptateur Coompy rejouent des réponses de `GET /products` enregistrées une fois (`test-coompy/`). Pour les enregistrer de nouveau, Coompy lancé :
 
 ```sh
