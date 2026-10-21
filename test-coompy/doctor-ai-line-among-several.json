@@ -1,0 +1,37 @@
+{
+  "supplier": "DoctorAI",
+  "reference": "957-4801",
+  "answer": {
+    "content": [
+      {
+        "id": 18388,
+        "designation": "Produit 1",
+        "offers": [
+          {
+            "id": 38806,
+            "provider": "DoctorAI",
+            "price": 33.29,
+            "currency": "EUR"
+          },
+          {
+            "id": 38804,
+            "provider": "DoctorAI",
+            "price": 34.66,
+            "currency": "EUR"
+          },
+          {
+            "id": 38805,
+            "provider": "DoctorAI",
+            "price": 36.03,
+            "currency": "EUR",
+            "matchedRef": "957-4801"
+          }
+        ]
+      }
+    ],
+    "page": 0,
+    "size": 50,
+    "total": 1,
+    "totalOffers": 3
+  }
+}

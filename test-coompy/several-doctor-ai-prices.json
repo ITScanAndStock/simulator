@@ -1,0 +1,43 @@
+{
+  "supplier": "Dentalclick",
+  "reference": "56798",
+  "answer": {
+    "content": [
+      {
+        "id": 18388,
+        "designation": "Produit 1",
+        "offers": [
+          {
+            "id": 38806,
+            "provider": "DoctorAI",
+            "price": 27.81,
+            "currency": "EUR"
+          },
+          {
+            "id": 38804,
+            "provider": "DoctorAI",
+            "price": 29.18,
+            "currency": "EUR"
+          },
+          {
+            "id": 24077,
+            "provider": "Dentalclick",
+            "price": 30.55,
+            "currency": "EUR",
+            "matchedRef": "56798"
+          },
+          {
+            "id": 38805,
+            "provider": "DoctorAI",
+            "price": 31.92,
+            "currency": "EUR"
+          }
+        ]
+      }
+    ],
+    "page": 0,
+    "size": 50,
+    "total": 1,
+    "totalOffers": 4
+  }
+}

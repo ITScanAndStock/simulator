@@ -97,6 +97,21 @@ describe("coompyPriceLookup", () => {
     });
   });
 
+  // Catches: one of several Doctor AI prices of the product picked as the reference price.
+  it("does not choose between several Doctor AI prices of the product", async () => {
+    expect(await lookUp("several-doctor-ai-prices")).toEqual({
+      outcome: "ambiguous",
+    });
+  });
+
+  // Catches: a Doctor AI line priced at another Doctor AI offer of the same product.
+  it("prices a Doctor AI line at the Doctor AI offer it was found by", async () => {
+    expect(await lookUp("doctor-ai-line-among-several")).toMatchObject({
+      outcome: "matched",
+      referenceUnitPriceCents: 3603,
+    });
+  });
+
   // Catches: a new token asked to the identity server for every line of the invoice.
   it("asks for one token for several lines", async () => {
     const recorded = recording("exact");

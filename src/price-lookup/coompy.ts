@@ -7,6 +7,8 @@ export type CoompySettings = {
   clientSecret: string;
 };
 
+const referenceSupplier = "DoctorAI";
+
 type Offer = {
   provider: string;
   price: number;
@@ -27,7 +29,7 @@ export function coompyPriceLookup(
     }
     const url = new URL(`${settings.apiUrl}/compare/products`);
     url.searchParams.set("q", reference);
-    url.searchParams.set("providers", `${supplier},DoctorAI`);
+    url.searchParams.set("providers", `${supplier},${referenceSupplier}`);
     url.searchParams.set("size", "50");
     const response = await fetchImpl(url, {
       headers: { authorization: `Bearer ${token.value}` },
@@ -46,10 +48,15 @@ export function coompyPriceLookup(
     if (found.length === 0) return { outcome: "unknownReference" };
     if (found.length > 1) return { outcome: "ambiguous" };
     const [{ product, issuingOffer }] = found;
-    const referenceOffer = product.offers.find(
-      (o) => o.provider === "DoctorAI",
-    );
-    if (!referenceOffer) return { outcome: "absentAtReference" };
+    const referenceOffers =
+      supplier === referenceSupplier
+        ? [issuingOffer]
+        : product.offers.filter((o) => o.provider === referenceSupplier);
+    if (referenceOffers.length === 0) return { outcome: "absentAtReference" };
+    if (new Set(referenceOffers.map((o) => o.price)).size > 1) {
+      return { outcome: "ambiguous" };
+    }
+    const [referenceOffer] = referenceOffers;
     return {
       outcome: "matched",
       productId: product.id,

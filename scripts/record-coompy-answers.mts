@@ -17,6 +17,16 @@ const cases = [
     reference: "890-9385",
   },
   { name: "pack-sizes", supplier: "Komet", reference: "9641.104.100 VPE 100" },
+  {
+    name: "several-doctor-ai-prices",
+    supplier: "Dentalclick",
+    reference: "56798",
+  },
+  {
+    name: "doctor-ai-line-among-several",
+    supplier: "DoctorAI",
+    reference: "957-4801",
+  },
 ];
 
 type Offer = Record<string, unknown> & { provider: string; packQty?: number };
