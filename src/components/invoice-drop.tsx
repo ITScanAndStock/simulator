@@ -4,7 +4,7 @@ import Link from "next/link";
 import { startTransition, useRef, useState, type DragEvent } from "react";
 import { maxInvoices, type InvoiceUploadResult } from "@/invoice-upload";
 import { readUploadedInvoice } from "@/server/invoice-actions";
-import { computeSaving } from "@/server/simulation-actions";
+import { checkLines } from "@/server/simulation-actions";
 import styles from "./invoice-drop.module.css";
 
 type Upload = { id: number; name: string; outcome?: InvoiceUploadResult };
@@ -104,7 +104,7 @@ export function InvoiceDrop({ simulationId }: { simulationId: string }) {
         ))}
       </ul>
       <form
-        action={computeSaving.bind(null, simulationId, invoiceIds)}
+        action={checkLines.bind(null, simulationId, invoiceIds)}
         className={styles.actions}
       >
         <button

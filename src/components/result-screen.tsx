@@ -1,12 +1,9 @@
 import type { ReactNode } from "react";
+import { amount } from "@/format";
 import type { Result } from "@/server/invoices";
 import { SimulationScreen } from "./simulation-screen";
 import styles from "./result-screen.module.css";
 
-const euros = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-});
 const wholeEuros = new Intl.NumberFormat("fr-FR", {
   style: "currency",
   currency: "EUR",
@@ -16,10 +13,6 @@ const oneDecimal = new Intl.NumberFormat("fr-FR", {
   minimumFractionDigits: 1,
   maximumFractionDigits: 1,
 });
-
-function amount(cents: number) {
-  return euros.format(cents / 100);
-}
 
 function products(count: number) {
   return `${count} ${count === 1 ? "produit" : "produits"}`;

@@ -8,6 +8,17 @@ import type { SupplierCode } from "@/supplier";
 export type LineState =
   "compared" | "alreadyCheaper" | "toStudy" | "advisorCheck";
 
+export type LineCorrection = {
+  reference: string;
+  quantity: number;
+  unitPriceCents: number;
+};
+
+export type CorrectableLine = InvoiceLine & {
+  correction?: LineCorrection;
+  removed?: boolean;
+};
+
 export type SimulatedLine = InvoiceLine & {
   supplier: SupplierCode;
   state: LineState;
@@ -15,16 +26,21 @@ export type SimulatedLine = InvoiceLine & {
   savingCents: number | undefined;
 };
 
-export type Simulation = Awaited<ReturnType<typeof simulate>>;
+export type Simulation<T extends CorrectableLine = CorrectableLine> = {
+  lines: (T & SimulatedLine)[];
+  totals: ReturnType<typeof totals>;
+};
 
-export async function simulate(
-  invoices: { supplier: SupplierCode; lines: InvoiceLine[] }[],
+export async function simulate<T extends CorrectableLine>(
+  invoices: { supplier: SupplierCode; lines: T[] }[],
   lookup: PriceLookup,
   settings: { suspiciousSavingPercent: number },
-) {
-  const lines: SimulatedLine[] = [];
+): Promise<Simulation<T>> {
+  const lines: (T & SimulatedLine)[] = [];
   for (const invoice of invoices) {
-    for (const line of invoice.lines) {
+    for (const read of invoice.lines) {
+      if (read.removed) continue;
+      const line = corrected(read);
       const found = await lookup(invoice.supplier, line.reference);
       lines.push({
         ...line,
@@ -34,6 +50,18 @@ export async function simulate(
     }
   }
   return { lines, totals: totals(lines) };
+}
+
+function corrected<T extends CorrectableLine>(line: T): T {
+  if (!line.correction) return line;
+  const { reference, quantity, unitPriceCents } = line.correction;
+  return {
+    ...line,
+    reference,
+    quantity,
+    unitPriceCents,
+    amountCents: quantity * unitPriceCents,
+  };
 }
 
 function priced(

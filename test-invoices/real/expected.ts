@@ -4,6 +4,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
   "pdf_invoice-2ed1f14878147bc3d79fffe3.pdf": {
     status: "read",
     supplier: "DoctorAI",
+    taxBasis: "inclusive",
     lines: [
       {
         reference: "638-9217",
@@ -62,6 +63,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
         vatRate: 20,
       },
     ],
+    otherChargesCents: 0,
     totalCents: 36351,
   },
 };
