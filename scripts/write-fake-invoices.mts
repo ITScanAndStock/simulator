@@ -63,7 +63,7 @@ const doctorAiLines: {
   },
 ];
 
-function doctorAiInvoice(): Page[] {
+function doctorAiInvoice(lines = doctorAiLines, netToPay = "80.23 €"): Page[] {
   const first: Page = [
     ...spacedBarcode(49, 805, 15, "1E000000001"),
     [23, 795, 7, "BORDEREAU : 1000001"],
@@ -97,7 +97,7 @@ function doctorAiInvoice(): Page[] {
     [467, 558, 7, "Net T.T.C"],
   ];
   let y = 542;
-  for (const line of doctorAiLines) {
+  for (const line of lines) {
     first.push(
       [43, y, 7, line.reference],
       ...line.designation.map(([x, , size, text]): Text => [x, y, size, text]),
@@ -126,7 +126,7 @@ function doctorAiInvoice(): Page[] {
     [30, 310, 6, "66.86"],
     [218, 310, 7, "66.86"],
     [462, 310, 7, "13.37"],
-    [523, 307, 8, "80.23 €"],
+    [523, 307, 8, netToPay],
     [23, 286, 6, "SIEGE SOCIAL : Doctor AI – 88, Avenue Wagram – 75017 PARIS"],
     [23, 280, 6, "N° CLIENT T.V.A. FR40 824 423 735 – APE : 4646Z"],
     [37, 16, 7, "Page : 1 / 1"],
@@ -243,7 +243,21 @@ function writePdf(pages: Page[]) {
 
 writeFileSync("test-invoices/doctor-ai-fake.pdf", writePdf(doctorAiInvoice()));
 writeFileSync(
+  "test-invoices/doctor-ai-misread-quantity-fake.pdf",
+  writePdf(
+    doctorAiInvoice(
+      doctorAiLines.map((line) =>
+        line.reference === "512–3344" ? { ...line, quantity: "2.0" } : line,
+      ),
+    ),
+  ),
+);
+writeFileSync(
   "test-invoices/doctor-ai-without-lines-fake.pdf",
   writePdf(doctorAiWithoutLines()),
+);
+writeFileSync(
+  "test-invoices/doctor-ai-total-off-fake.pdf",
+  writePdf(doctorAiInvoice(doctorAiLines, "85.00 €")),
 );
 writeFileSync("test-invoices/stock-export-fake.pdf", writePdf(stockExport()));

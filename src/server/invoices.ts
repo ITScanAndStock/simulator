@@ -1,25 +1,36 @@
 import "server-only";
 import type { InvoiceLine } from "@/invoice-reading/invoice-line";
+import type { ReadInvoice, TaxBasis } from "@/invoice-reading/read-invoice";
+import type { CheckedInvoice } from "@/simulation/doubts";
 import type { Simulation } from "@/simulation/simulate";
 import type { SupplierCode } from "@/supplier";
 import { databasePool } from "./db";
 
-export type StoredInvoice = {
+export type StoredLine = InvoiceLine & { invoiceId: string; position: number };
+
+export type StoredInvoice = Omit<CheckedInvoice, "lines"> & {
+  id: string;
   supplier: SupplierCode;
-  lines: InvoiceLine[];
+  lines: StoredLine[];
 };
 
 export async function storeReadInvoice(
   simulationId: string,
-  invoice: StoredInvoice & { totalCents: number },
+  invoice: Extract<ReadInvoice, { status: "read" }>,
 ) {
   const client = await databasePool().connect();
   try {
     await client.query("BEGIN");
     const { rows } = await client.query<{ id: string }>(
-      `INSERT INTO invoice (simulation_id, supplier, total_cents)
-       VALUES ($1, $2, $3) RETURNING id`,
-      [simulationId, invoice.supplier, invoice.totalCents],
+      `INSERT INTO invoice (simulation_id, supplier, tax_basis, other_charges_cents, total_cents)
+       VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+      [
+        simulationId,
+        invoice.supplier,
+        invoice.taxBasis,
+        invoice.otherChargesCents,
+        invoice.totalCents,
+      ],
     );
     for (const [position, line] of invoice.lines.entries()) {
       await client.query(
@@ -49,14 +60,24 @@ export async function storeReadInvoice(
   }
 }
 
-// Each line keeps its invoice id and position, so that its state can be stored back on it.
-export async function findReadInvoices(
+// Invoices read earlier but no longer listed on screen 3 are left out of the simulation.
+export async function markListedInvoices(
   simulationId: string,
   invoiceIds: string[],
 ) {
+  await databasePool().query(
+    `UPDATE invoice SET listed = id::text = ANY($2::text[]) WHERE simulation_id = $1`,
+    [simulationId, invoiceIds],
+  );
+}
+
+export async function findListedInvoices(simulationId: string) {
   const { rows } = await databasePool().query<{
     invoice_id: string;
     supplier: SupplierCode;
+    tax_basis: TaxBasis;
+    other_charges_cents: number;
+    total_cents: number;
     position: number;
     reference: string;
     designation: string;
@@ -65,34 +86,33 @@ export async function findReadInvoices(
     amount_cents: number;
     vat_rate: string | null;
   }>(
-    `SELECT i.id AS invoice_id, i.supplier, l.position, l.reference, l.designation,
-            l.quantity, l.unit_price_cents, l.amount_cents, l.vat_rate
+    `SELECT i.id AS invoice_id, i.supplier, i.tax_basis, i.other_charges_cents, i.total_cents,
+            l.position, l.reference, l.designation, l.quantity, l.unit_price_cents,
+            l.amount_cents, l.vat_rate
      FROM invoice i JOIN invoice_line l ON l.invoice_id = i.id
-     WHERE i.simulation_id = $1 AND i.id::text = ANY($2::text[])
+     WHERE i.simulation_id = $1 AND i.listed
      ORDER BY i.read_at, i.id, l.position`,
-    [simulationId, invoiceIds],
+    [simulationId],
   );
-  const invoices = new Map<
-    string,
-    StoredInvoice & { positions: { invoiceId: string; position: number }[] }
-  >();
+  const invoices = new Map<string, StoredInvoice>();
   for (const row of rows) {
     const invoice = invoices.get(row.invoice_id) ?? {
+      id: row.invoice_id,
       supplier: row.supplier,
+      taxBasis: row.tax_basis,
+      otherChargesCents: row.other_charges_cents,
+      totalCents: row.total_cents,
       lines: [],
-      positions: [],
     };
     invoice.lines.push({
+      invoiceId: row.invoice_id,
+      position: row.position,
       reference: row.reference,
       designation: row.designation,
       quantity: row.quantity,
       unitPriceCents: row.unit_price_cents,
       amountCents: row.amount_cents,
       vatRate: row.vat_rate === null ? undefined : Number(row.vat_rate),
-    });
-    invoice.positions.push({
-      invoiceId: row.invoice_id,
-      position: row.position,
     });
     invoices.set(row.invoice_id, invoice);
   }
@@ -101,8 +121,7 @@ export async function findReadInvoices(
 
 export async function storeSimulation(
   simulationId: string,
-  positions: { invoiceId: string; position: number }[],
-  simulation: Simulation,
+  simulation: Simulation<StoredLine>,
 ) {
   const client = await databasePool().connect();
   try {
@@ -114,7 +133,7 @@ export async function storeSimulation(
        WHERE invoice_id IN (SELECT id FROM invoice WHERE simulation_id = $1)`,
       [simulationId],
     );
-    for (const [index, line] of simulation.lines.entries()) {
+    for (const line of simulation.lines) {
       await client.query(
         `UPDATE invoice_line
          SET state = $1, reference_unit_price_cents = $2, saving_cents = $3
@@ -123,8 +142,8 @@ export async function storeSimulation(
           line.state,
           line.referenceUnitPriceCents,
           line.savingCents,
-          positions[index].invoiceId,
-          positions[index].position,
+          line.invoiceId,
+          line.position,
         ],
       );
     }

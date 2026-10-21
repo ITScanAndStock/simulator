@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { InvoiceLine } from "@/invoice-reading/invoice-line";
-import { findDoubts, needsVerification, type CheckedInvoice } from "./doubts";
+import {
+  findDoubts,
+  linesToVerify,
+  needsVerification,
+  type CheckedInvoice,
+} from "./doubts";
 
 function line(
   quantity: number,
@@ -101,5 +106,32 @@ describe("findDoubts", () => {
     expect(needsVerification([clean, clean])).toBe(false);
     expect(needsVerification([clean, lineOff])).toBe(true);
     expect(needsVerification([totalOff, clean])).toBe(true);
+  });
+
+  // Catches: the lines of an invoice shown for its total counted as doubtful, a clean
+  // invoice's lines shown, or a doubtful line left out.
+  it("shows the doubtful lines and every line of an invoice whose total is off", () => {
+    const clean = invoice([line(1, 100, 100)]);
+    const lineOff = invoice([line(1, 200, 200), line(2, 891, 2673)]);
+    const totalOff = invoice([line(1, 300, 300), line(1, 400, 400)], {
+      totalCents: 1000,
+    });
+
+    const verification = linesToVerify([clean, lineOff, totalOff]);
+
+    expect(
+      verification.lines.map(({ line, doubts }) => [
+        line.unitPriceCents,
+        doubts.length,
+      ]),
+    ).toEqual([
+      [891, 1],
+      [300, 0],
+      [400, 0],
+    ]);
+    expect(verification.totals.map(({ invoice }) => invoice)).toEqual([
+      totalOff,
+    ]);
+    expect(verification).toMatchObject({ readLines: 5, doubtfulLines: 1 });
   });
 });
