@@ -133,8 +133,8 @@ export async function storeSimulation(
       `UPDATE simulation SET
          computed_at = now(), paid_cents = $1, saving_cents = $2, product_lines = $3,
          compared_lines = $4, to_study_lines = $5, already_cheaper_lines = $6,
-         updated_at = now()
-       WHERE id = $7`,
+         products_paid_cents = $7, updated_at = now()
+       WHERE id = $8`,
       [
         totals.paidCents,
         totals.savingCents,
@@ -142,6 +142,7 @@ export async function storeSimulation(
         totals.comparedLines,
         totals.toStudyLines,
         totals.alreadyCheaperLines,
+        totals.productsPaidCents,
         simulationId,
       ],
     );
@@ -154,9 +155,12 @@ export async function storeSimulation(
   }
 }
 
+export type Result = NonNullable<Awaited<ReturnType<typeof findResult>>>;
+
 export async function findResult(simulationId: string) {
   const { rows } = await databasePool().query<{
     paid_cents: number;
+    products_paid_cents: number;
     saving_cents: number;
     product_lines: number;
     compared_lines: number;
@@ -164,8 +168,8 @@ export async function findResult(simulationId: string) {
     already_cheaper_lines: number;
     invoices: number;
   }>(
-    `SELECT paid_cents, saving_cents, product_lines, compared_lines, to_study_lines,
-            already_cheaper_lines,
+    `SELECT paid_cents, products_paid_cents, saving_cents, product_lines, compared_lines,
+            to_study_lines, already_cheaper_lines,
             (SELECT count(DISTINCT i.id)::int FROM invoice i
               JOIN invoice_line l ON l.invoice_id = i.id
               WHERE i.simulation_id = s.id AND l.state IS NOT NULL) AS invoices
@@ -177,6 +181,7 @@ export async function findResult(simulationId: string) {
   return {
     invoices: row.invoices,
     paidCents: row.paid_cents,
+    productsPaidCents: row.products_paid_cents,
     savingCents: row.saving_cents,
     productLines: row.product_lines,
     comparedLines: row.compared_lines,

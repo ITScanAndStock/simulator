@@ -87,10 +87,9 @@ function priced(
 
 function totals(lines: SimulatedLine[]) {
   const compared = lines.filter((l) => l.state === "compared");
-  const paidCents = compared.reduce(
-    (sum, l) => sum + l.unitPriceCents * l.quantity,
-    0,
-  );
+  const paid = (some: SimulatedLine[]) =>
+    some.reduce((sum, l) => sum + l.unitPriceCents * l.quantity, 0);
+  const paidCents = paid(compared);
   const savingCents = compared.reduce(
     (sum, l) => sum + (l.savingCents ?? 0),
     0,
@@ -99,6 +98,7 @@ function totals(lines: SimulatedLine[]) {
     lines.filter((l) => l.state === state).length;
   return {
     paidCents,
+    productsPaidCents: paid(lines),
     withCspCents: paidCents - savingCents,
     savingCents,
     productLines: lines.length,

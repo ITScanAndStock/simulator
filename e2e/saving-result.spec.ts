@@ -10,9 +10,9 @@ async function expectResult(page: Page) {
   );
   const totals = page.getByRole("definition");
   await expect(totals).toHaveText(["31,23 €", "28,05 €", "−10,2 %"]);
-  await expect(page.getByRole("group", { name: "Comparées" })).toContainText(
-    "2 lignes sur 4",
-  );
+  const compared = page.getByRole("group", { name: "Comparées" });
+  await expect(compared).toContainText("2 lignes sur 4");
+  await expect(compared).toContainText("38 % du montant de vos factures");
   await expect(page.getByRole("group", { name: "À étudier" })).toContainText(
     "1 produit",
   );
