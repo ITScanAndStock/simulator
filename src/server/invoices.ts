@@ -1,26 +1,57 @@
 import "server-only";
-import type { InvoiceLine } from "@/invoice-reading/invoice-line";
 import type { ReadInvoice, TaxBasis } from "@/invoice-reading/read-invoice";
 import type { CheckedInvoice } from "@/simulation/doubts";
-import type { Simulation } from "@/simulation/simulate";
+import type {
+  CorrectableLine,
+  LineCorrection,
+  Simulation,
+} from "@/simulation/simulate";
 import type { SupplierCode } from "@/supplier";
+import type { PoolClient } from "pg";
 import { databasePool } from "./db";
 
-export type StoredLine = InvoiceLine & { invoiceId: string; position: number };
+export type StoredLine = CorrectableLine & {
+  invoiceId: string;
+  position: number;
+};
 
 export type StoredInvoice = Omit<CheckedInvoice, "lines"> & {
   id: string;
   supplier: SupplierCode;
   lines: StoredLine[];
+  addedLines: StoredLine[];
 };
+
+export type Corrections = {
+  lines: {
+    invoiceId: string;
+    position: number;
+    removed: boolean;
+    correction: LineCorrection | undefined;
+  }[];
+  added: (LineCorrection & { invoiceId: string; designation: string })[];
+};
+
+async function inTransaction<T>(run: (client: PoolClient) => Promise<T>) {
+  const client = await databasePool().connect();
+  try {
+    await client.query("BEGIN");
+    const result = await run(client);
+    await client.query("COMMIT");
+    return result;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}
 
 export async function storeReadInvoice(
   simulationId: string,
   invoice: Extract<ReadInvoice, { status: "read" }>,
 ) {
-  const client = await databasePool().connect();
-  try {
-    await client.query("BEGIN");
+  return inTransaction(async (client) => {
     const { rows } = await client.query<{ id: string }>(
       `INSERT INTO invoice (simulation_id, supplier, tax_basis, other_charges_cents, total_cents)
        VALUES ($1, $2, $3, $4, $5) RETURNING id`,
@@ -50,14 +81,8 @@ export async function storeReadInvoice(
         ],
       );
     }
-    await client.query("COMMIT");
     return rows[0].id;
-  } catch (error) {
-    await client.query("ROLLBACK");
-    throw error;
-  } finally {
-    client.release();
-  }
+  });
 }
 
 // Invoices read earlier but no longer listed on screen 3 are left out of the simulation.
@@ -85,10 +110,16 @@ export async function findListedInvoices(simulationId: string) {
     unit_price_cents: number;
     amount_cents: number;
     vat_rate: string | null;
+    added: boolean;
+    removed: boolean;
+    corrected_reference: string | null;
+    corrected_quantity: number | null;
+    corrected_unit_price_cents: number | null;
   }>(
     `SELECT i.id AS invoice_id, i.supplier, i.tax_basis, i.other_charges_cents, i.total_cents,
             l.position, l.reference, l.designation, l.quantity, l.unit_price_cents,
-            l.amount_cents, l.vat_rate
+            l.amount_cents, l.vat_rate, l.added, l.removed, l.corrected_reference,
+            l.corrected_quantity, l.corrected_unit_price_cents
      FROM invoice i JOIN invoice_line l ON l.invoice_id = i.id
      WHERE i.simulation_id = $1 AND i.listed
      ORDER BY i.read_at, i.id, l.position`,
@@ -103,8 +134,9 @@ export async function findListedInvoices(simulationId: string) {
       otherChargesCents: row.other_charges_cents,
       totalCents: row.total_cents,
       lines: [],
+      addedLines: [],
     };
-    invoice.lines.push({
+    const line: StoredLine = {
       invoiceId: row.invoice_id,
       position: row.position,
       reference: row.reference,
@@ -113,19 +145,104 @@ export async function findListedInvoices(simulationId: string) {
       unitPriceCents: row.unit_price_cents,
       amountCents: row.amount_cents,
       vatRate: row.vat_rate === null ? undefined : Number(row.vat_rate),
-    });
+      removed: row.removed,
+      correction:
+        row.corrected_reference === null ||
+        row.corrected_quantity === null ||
+        row.corrected_unit_price_cents === null
+          ? undefined
+          : {
+              reference: row.corrected_reference,
+              quantity: row.corrected_quantity,
+              unitPriceCents: row.corrected_unit_price_cents,
+            },
+    };
+    (row.added ? invoice.addedLines : invoice.lines).push(line);
     invoices.set(row.invoice_id, invoice);
   }
   return [...invoices.values()];
+}
+
+export async function storeCorrections(
+  simulationId: string,
+  corrections: Corrections,
+) {
+  return inTransaction(async (client) => {
+    await client.query(
+      "SELECT id FROM invoice WHERE simulation_id = $1 AND listed FOR UPDATE",
+      [simulationId],
+    );
+    await clearListedCorrections(client, simulationId);
+    for (const line of corrections.lines) {
+      await client.query(
+        `UPDATE invoice_line
+         SET removed = $1, corrected_reference = $2, corrected_quantity = $3,
+             corrected_unit_price_cents = $4
+         WHERE invoice_id = $5 AND position = $6 AND NOT added
+           AND invoice_id IN (SELECT id FROM invoice WHERE simulation_id = $7 AND listed)`,
+        [
+          line.removed,
+          line.correction?.reference ?? null,
+          line.correction?.quantity ?? null,
+          line.correction?.unitPriceCents ?? null,
+          line.invoiceId,
+          line.position,
+          simulationId,
+        ],
+      );
+    }
+    for (const line of corrections.added) {
+      await client.query(
+        `INSERT INTO invoice_line
+           (invoice_id, position, reference, designation, quantity, unit_price_cents,
+            amount_cents, added)
+         SELECT $1, coalesce(max(position), -1) + 1, $2, $3, $4, $5, $6, true
+         FROM invoice_line
+         WHERE invoice_id = $1
+           AND $1 IN (SELECT id FROM invoice WHERE simulation_id = $7 AND listed)`,
+        [
+          line.invoiceId,
+          line.reference,
+          line.designation,
+          line.quantity,
+          line.unitPriceCents,
+          line.quantity * line.unitPriceCents,
+          simulationId,
+        ],
+      );
+    }
+  });
+}
+
+export async function clearCorrections(simulationId: string) {
+  return inTransaction((client) =>
+    clearListedCorrections(client, simulationId),
+  );
+}
+
+async function clearListedCorrections(
+  client: PoolClient,
+  simulationId: string,
+) {
+  const listed = "SELECT id FROM invoice WHERE simulation_id = $1 AND listed";
+  await client.query(
+    `DELETE FROM invoice_line WHERE added AND invoice_id IN (${listed})`,
+    [simulationId],
+  );
+  await client.query(
+    `UPDATE invoice_line
+     SET removed = false, corrected_reference = NULL, corrected_quantity = NULL,
+         corrected_unit_price_cents = NULL
+     WHERE invoice_id IN (${listed})`,
+    [simulationId],
+  );
 }
 
 export async function storeSimulation(
   simulationId: string,
   simulation: Simulation<StoredLine>,
 ) {
-  const client = await databasePool().connect();
-  try {
-    await client.query("BEGIN");
+  return inTransaction(async (client) => {
     // Invoices left out of this computation keep no state from an earlier one.
     await client.query(
       `UPDATE invoice_line
@@ -165,13 +282,7 @@ export async function storeSimulation(
         simulationId,
       ],
     );
-    await client.query("COMMIT");
-  } catch (error) {
-    await client.query("ROLLBACK");
-    throw error;
-  } finally {
-    client.release();
-  }
+  });
 }
 
 export type Result = NonNullable<Awaited<ReturnType<typeof findResult>>>;
