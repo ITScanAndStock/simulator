@@ -6,23 +6,31 @@ import { invoiceInput, openInvoicesStep, uploadedFile } from "./invoices-step";
 async function expectResult(page: Page) {
   await expect(page.getByText("Étape 4 sur 4", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Sur votre facture, avec les tarifs Club Santé Premium, vous auriez payé 3,18 € de moins",
+    "Sur votre facture, avec les tarifs Club Santé Premium, vous auriez payé 3,18 € de moins*",
+  );
+  await expect(page.getByText(/^En moyenne/)).toHaveText(
+    "En moyenne, nos affiliés économisent 31 200 € par an",
   );
   const totals = page.getByRole("definition");
   await expect(totals).toHaveText(["31,23 €", "28,05 €", "−10,2 %"]);
-  await expect(page.getByRole("group", { name: "Comparées" })).toContainText(
-    "2 lignes sur 4",
-  );
+  const compared = page.getByRole("group", { name: "Comparées" });
+  await expect(compared).toContainText("2 lignes sur 4");
+  await expect(compared).toContainText("38 % du montant de vos factures");
   await expect(page.getByRole("group", { name: "À étudier" })).toContainText(
     "1 produit",
   );
   await expect(
     page.getByRole("group", { name: "Déjà moins cher" }),
   ).toContainText("1 produit");
+  await expect(
+    page.getByRole("link", { name: "Prendre rendez-vous avec un conseiller" }),
+  ).toHaveAttribute("href", "https://calendly.example/e2e");
+  await expect(page.getByText(/Vous utilisez déjà Scan&Stock/)).toHaveCount(0);
 }
 
 // Catches: a line counted in the wrong state, the saving taken on one unit, a dearer
-// reference price counted as a negative saving, or an unknown line kept in the paid total.
+// reference price counted as a negative saving, an unknown line kept in the paid total,
+// or the average figure and Calendly link not taken from the server settings.
 test("a read invoice leads to its saving on screen 5", async ({ page }) => {
   await openInvoicesStep(page);
   await invoiceInput(page).setInputFiles("test-invoices/doctor-ai-fake.pdf");
@@ -73,4 +81,22 @@ test("only the invoices listed on screen 3 are counted", async ({ page }) => {
 
   await expect(page).toHaveURL(/\/resultat$/);
   await expectResult(page);
+});
+
+// Catches: the status declared on screen 2 lost before screen 5.
+test("screen 5 speaks to a declared Scan&Stock user", async ({ page }) => {
+  await openInvoicesStep(page, { scanAndStockUser: true });
+  await invoiceInput(page).setInputFiles("test-invoices/doctor-ai-fake.pdf");
+  await expect(uploadedFile(page, "doctor-ai-fake.pdf")).toContainText(
+    "Lue · 4 lignes",
+  );
+
+  await page.getByRole("button", { name: "Vérifier les lignes lues" }).click();
+
+  await expect(page).toHaveURL(/\/resultat$/);
+  await expect(
+    page.getByText(
+      "Vous utilisez déjà Scan&Stock : l’adhésion Club Santé Premium vous donnerait accès à ces tarifs.",
+    ),
+  ).toBeVisible();
 });

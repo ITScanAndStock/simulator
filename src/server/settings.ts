@@ -13,6 +13,29 @@ export function suspiciousSavingPercent() {
   return percent;
 }
 
+export function averageSavingEuros() {
+  const value = process.env.AVERAGE_SAVING_EUROS;
+  if (value === undefined || value === "") return undefined;
+  const euros = Number(value);
+  if (!/^\d+$/.test(value) || euros <= 0) {
+    throw new Error(
+      `AVERAGE_SAVING_EUROS must be a whole number of euros above 0; it is "${value}".`,
+    );
+  }
+  return euros;
+}
+
+export function calendlyUrl() {
+  const value = process.env.CALENDLY_URL;
+  if (value === undefined || value === "") {
+    return "https://calendly.com/clubsantepremium-rdvoffert/1h";
+  }
+  if (!URL.canParse(value) || new URL(value).protocol !== "https:") {
+    throw new Error(`CALENDLY_URL must be an https:// link; it is "${value}".`);
+  }
+  return value;
+}
+
 export function coompySettings(): CoompySettings {
   return {
     apiUrl: required("COOMPY_API_URL"),

@@ -190,6 +190,38 @@ describe("simulate", () => {
     ]);
   });
 
+  // Catches: the covered share taken over the compared lines alone, or leaving out a line
+  // to study, already cheaper or held back for an advisor from the spending it covers.
+  it("totals the paid amount of every product line, compared or not", async () => {
+    const simulation = await simulate(
+      [
+        dentaltixInvoice(
+          line("DTX-1", 3, 1200),
+          line("UNKNOWN", 2, 5000),
+          line("DEARER", 1, 800),
+          line("OVER-HALF", 1, 1000),
+        ),
+      ],
+      fakeLookup({
+        "DTX-1": matched(1000),
+        DEARER: matched(900),
+        "OVER-HALF": matched(100),
+      }),
+      settings,
+    );
+
+    expect(simulation.lines.map((l) => l.state)).toEqual([
+      "compared",
+      "toStudy",
+      "alreadyCheaper",
+      "advisorCheck",
+    ]);
+    expect(simulation.totals).toMatchObject({
+      paidCents: 3600,
+      productsPaidCents: 15400,
+    });
+  });
+
   // Catches: every line looked up at the first invoice's supplier, or a second invoice left out.
   it("looks up each line at the supplier of its own invoice", async () => {
     const simulation = await simulate(

@@ -86,6 +86,8 @@ export default defineConfig({
         COOMPY_TOKEN_URL: `http://127.0.0.1:${fakeCoompyPort}/token`,
         COOMPY_CLIENT_ID: "e2e",
         COOMPY_CLIENT_SECRET: "e2e-secret",
+        AVERAGE_SAVING_EUROS: "31200",
+        CALENDLY_URL: "https://calendly.example/e2e",
       },
       reuseExistingServer: false,
       timeout: 180_000,
