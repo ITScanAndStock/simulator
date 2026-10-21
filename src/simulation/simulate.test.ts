@@ -4,7 +4,7 @@ import type {
   PriceLookup,
   PriceLookupResult,
 } from "@/price-lookup/price-lookup";
-import { simulate } from "./simulate";
+import { simulate, type CorrectableLine } from "./simulate";
 
 const settings = { suspiciousSavingPercent: 50 };
 
@@ -44,7 +44,7 @@ function fakeLookup(answers: Record<string, PriceLookupResult>): PriceLookup {
     };
 }
 
-function dentaltixInvoice(...lines: InvoiceLine[]) {
+function dentaltixInvoice(...lines: CorrectableLine[]) {
   return { supplier: "Dentaltix" as const, lines };
 }
 
@@ -219,6 +219,46 @@ describe("simulate", () => {
     expect(simulation.totals).toMatchObject({
       paidCents: 3600,
       productsPaidCents: 15400,
+    });
+  });
+
+  // Catches: a correction ignored, a corrected line priced on its quantity as read, or a
+  // removed line still counted.
+  it("prices the lines as corrected by the practitioner", async () => {
+    const simulation = await simulate(
+      [
+        dentaltixInvoice(
+          {
+            ...line("DTX-0", 2, 1200),
+            correction: {
+              reference: "DTX-1",
+              quantity: 3,
+              unitPriceCents: 1300,
+            },
+          },
+          { ...line("DTX-2", 1, 5000), removed: true },
+          line("DTX-3", 1, 1000),
+        ),
+      ],
+      fakeLookup({ "DTX-1": matched(1000), "DTX-3": matched(900) }),
+      settings,
+    );
+
+    expect(
+      simulation.lines.map((l) => [
+        l.reference,
+        l.quantity,
+        l.amountCents,
+        l.savingCents,
+      ]),
+    ).toEqual([
+      ["DTX-1", 3, 3900, 900],
+      ["DTX-3", 1, 1000, 100],
+    ]);
+    expect(simulation.totals).toMatchObject({
+      paidCents: 4900,
+      savingCents: 1000,
+      productLines: 2,
     });
   });
 
