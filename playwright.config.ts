@@ -93,6 +93,7 @@ export default defineConfig({
         COOMPY_CLIENT_SECRET: "e2e-secret",
         AVERAGE_SAVING_EUROS: "31200",
         CALENDLY_URL: "https://calendly.example/e2e",
+        MAX_INVOICE_MEGABYTES: "3",
       },
       reuseExistingServer: false,
       timeout: 180_000,

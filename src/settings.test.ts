@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { appEnv, referenceSupplier, validateSettings } from "./settings";
+import {
+  appEnv,
+  maxInvoiceMegabytes,
+  referenceSupplier,
+  validateSettings,
+} from "./settings";
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -97,6 +102,26 @@ describe("referenceSupplier", () => {
   });
 });
 
+describe("maxInvoiceMegabytes", () => {
+  // Catches: no maximum when the setting is left out, so screen 3 sends any file.
+  it("is 4 by default", () => {
+    vi.stubEnv("MAX_INVOICE_MEGABYTES", "");
+    expect(maxInvoiceMegabytes()).toBe(4);
+  });
+
+  // Catches: the setting ignored in favour of the default.
+  it("reads the setting", () => {
+    vi.stubEnv("MAX_INVOICE_MEGABYTES", "9");
+    expect(maxInvoiceMegabytes()).toBe(9);
+  });
+
+  // Catches: a maximum the server refuses (body limit 10 MB), or one no file can meet.
+  it.each(["10", "0", "2.5", "4 Mo"])("refuses %j", (value) => {
+    vi.stubEnv("MAX_INVOICE_MEGABYTES", value);
+    expect(maxInvoiceMegabytes).toThrow(/MAX_INVOICE_MEGABYTES/);
+  });
+});
+
 const validSettings = {
   APP_ENV: "staging",
   REFERENCE_SUPPLIER: "GACD",
@@ -108,6 +133,7 @@ const validSettings = {
   SUSPICIOUS_SAVING_PERCENT: "",
   AVERAGE_SAVING_EUROS: "",
   CALENDLY_URL: "",
+  MAX_INVOICE_MEGABYTES: "",
 };
 
 function stubSettings(overrides: Record<string, string> = {}) {
@@ -138,6 +164,7 @@ describe("validateSettings", () => {
       SUSPICIOUS_SAVING_PERCENT: "150",
       AVERAGE_SAVING_EUROS: "26 500",
       CALENDLY_URL: "http://calendly.example",
+      MAX_INVOICE_MEGABYTES: "12",
     });
     for (const name of [
       "REFERENCE_SUPPLIER",
@@ -149,6 +176,7 @@ describe("validateSettings", () => {
       "SUSPICIOUS_SAVING_PERCENT",
       "AVERAGE_SAVING_EUROS",
       "CALENDLY_URL",
+      "MAX_INVOICE_MEGABYTES",
     ]) {
       expect(validateSettings).toThrow(name);
     }

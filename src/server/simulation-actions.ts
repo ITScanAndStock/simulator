@@ -11,6 +11,10 @@ import {
   type LineFields,
 } from "@/line-fields";
 import { coompyPriceLookup } from "@/price-lookup/coompy";
+import {
+  PricesUnavailable,
+  unavailableOnFailure,
+} from "@/price-lookup/price-lookup";
 import { needsVerification } from "@/simulation/doubts";
 import { simulate } from "@/simulation/simulate";
 import {
@@ -144,6 +148,14 @@ export async function skipVerification(simulationId: string) {
   );
 }
 
+export async function retrySaving(simulationId: string) {
+  if (!(await simulationExists(simulationId))) notFound();
+  await computeSaving(
+    simulationId,
+    await listedInvoicesOrRedirect(simulationId),
+  );
+}
+
 async function listedInvoicesOrRedirect(simulationId: string) {
   const invoices = await findListedInvoices(simulationId);
   if (invoices.length === 0) redirect(`/simulations/${simulationId}/factures`);
@@ -154,14 +166,21 @@ async function computeSaving(
   simulationId: string,
   invoices: StoredInvoice[],
 ): Promise<never> {
-  const simulation = await simulate(
-    invoices.map((invoice) => ({
-      ...invoice,
-      lines: [...invoice.lines, ...invoice.addedLines],
-    })),
-    coompyPriceLookup(coompySettings()),
-    { suspiciousSavingPercent: suspiciousSavingPercent() },
-  );
+  let simulation;
+  try {
+    simulation = await simulate(
+      invoices.map((invoice) => ({
+        ...invoice,
+        lines: [...invoice.lines, ...invoice.addedLines],
+      })),
+      unavailableOnFailure(coompyPriceLookup(coompySettings())),
+      { suspiciousSavingPercent: suspiciousSavingPercent() },
+    );
+  } catch (error) {
+    if (!(error instanceof PricesUnavailable)) throw error;
+    console.error(error);
+    redirect(`/simulations/${simulationId}/tarifs-indisponibles`);
+  }
   await storeSimulation(simulationId, simulation);
   redirect(`/simulations/${simulationId}/resultat`);
 }

@@ -4,6 +4,9 @@ const token = "e2e-token";
 
 const askedProviders: string[][] = [];
 
+// A reference starting with "PANNE-" makes Coompy fail once, then is unknown: Coompy is back.
+const failedOnce = new Set<string>();
+
 // Reference prices of the references of test-invoices/doctor-ai-fake.pdf; a reference left out is unknown.
 const prices: Record<string, number> = {
   "412-0815": 25,
@@ -29,6 +32,10 @@ createServer((request, response) => {
   const reference = url.searchParams.get("q") ?? "";
   const providers = url.searchParams.get("providers")?.split(",") ?? [];
   askedProviders.push(providers);
+  if (reference.startsWith("PANNE-") && !failedOnce.has(reference)) {
+    failedOnce.add(reference);
+    return json(response, 503, {});
+  }
   const price = prices[reference];
   const content =
     price === undefined

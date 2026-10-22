@@ -3,6 +3,7 @@
 import { notFound } from "next/navigation";
 import { readInvoice } from "@/invoice-reading/read-invoice";
 import type { InvoiceUploadResult } from "@/invoice-upload";
+import { needsVerification } from "@/simulation/doubts";
 import { storeReadInvoice } from "./invoices";
 import { simulationExists } from "./simulations";
 
@@ -18,5 +19,10 @@ export async function readUploadedInvoice(
   const read = await readInvoice(new Uint8Array(await file.arrayBuffer()));
   if (read.status !== "read") return { read: false };
   const invoiceId = await storeReadInvoice(simulationId, read);
-  return { read: true, invoiceId, lineCount: read.lines.length };
+  return {
+    read: true,
+    invoiceId,
+    lineCount: read.lines.length,
+    toVerify: needsVerification([read]),
+  };
 }

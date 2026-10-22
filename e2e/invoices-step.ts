@@ -44,3 +44,17 @@ export function invoiceInput(page: Page) {
 export function pdfFile(name: string, buffer: Buffer) {
   return { name, mimeType: "application/pdf", buffer };
 }
+
+export function toast(page: Page) {
+  return page.getByRole("alert").filter({ has: page.getByRole("button") });
+}
+
+export async function holdServerActions(page: Page) {
+  let release = () => {};
+  const released = new Promise<void>((resolve) => (release = resolve));
+  await page.route("**/simulations/**", async (route) => {
+    if (route.request().headers()["next-action"]) await released;
+    await route.fallback();
+  });
+  return release;
+}

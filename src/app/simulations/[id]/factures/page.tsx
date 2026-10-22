@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { InvoiceDrop } from "@/components/invoice-drop";
 import { SimulationScreen } from "@/components/simulation-screen";
 import { maxInvoices } from "@/invoice-upload";
+import { maxInvoiceMegabytes } from "@/server/settings";
 import { simulationExists } from "@/server/simulations";
 import styles from "./page.module.css";
 
@@ -45,7 +46,7 @@ export default async function Invoices({
             </span>
           </p>
         </div>
-        <InvoiceDrop simulationId={id} />
+        <InvoiceDrop simulationId={id} maxMegabytes={maxInvoiceMegabytes()} />
       </div>
     </SimulationScreen>
   );
