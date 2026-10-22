@@ -1,7 +1,11 @@
 import { notFound, redirect } from "next/navigation";
 import { ResultScreen } from "@/components/result-screen";
 import { findResult } from "@/server/invoices";
-import { averageSavingEuros, calendlyUrl } from "@/server/settings";
+import {
+  averageSavingEuros,
+  calendlyUrl,
+  referenceSupplier,
+} from "@/server/settings";
 import { findContactDetails } from "@/server/simulations";
 
 export default async function Result({
@@ -19,6 +23,7 @@ export default async function Result({
       scanAndStockUser={contactDetails.scanAndStockUser}
       averageSavingEuros={averageSavingEuros()}
       calendlyUrl={calendlyUrl()}
+      referenceSupplier={referenceSupplier()}
     />
   );
 }

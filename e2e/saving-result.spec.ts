@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { e2eReferenceSupplier, fakeCoompyPort } from "./fake-coompy-settings";
 import { invoiceInput, openInvoicesStep, uploadedFile } from "./invoices-step";
 
 // Against e2e/fake-coompy.mts: 512-3344 (3 × 8,91 for 8,00) and 233-1002 compared,
@@ -99,4 +100,27 @@ test("screen 5 speaks to a declared Scan&Stock user", async ({ page }) => {
       "Vous utilisez déjà Scan&Stock : l’adhésion Club Santé Premium vous donnerait accès à ces tarifs.",
     ),
   ).toBeVisible();
+});
+
+// Catches: a reference supplier written in the code instead of read from the settings,
+// or the Doctor AI trial banner shown for another reference.
+test("Coompy is asked for the reference supplier of the settings", async ({
+  page,
+  request,
+}) => {
+  await openInvoicesStep(page);
+  await invoiceInput(page).setInputFiles("test-invoices/doctor-ai-fake.pdf");
+  await expect(uploadedFile(page, "doctor-ai-fake.pdf")).toContainText(
+    "Lue · 4 lignes",
+  );
+  await page.getByRole("button", { name: "Vérifier les lignes lues" }).click();
+  await expect(page).toHaveURL(/\/resultat$/);
+
+  await expect(page.getByText(/^Version d'essai/)).toHaveCount(0);
+  const asked: string[][] = await (
+    await request.get(`http://127.0.0.1:${fakeCoompyPort}/requests`)
+  ).json();
+  expect(asked.length).toBeGreaterThan(0);
+  for (const providers of asked)
+    expect(providers).toContain(e2eReferenceSupplier);
 });

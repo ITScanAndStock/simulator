@@ -2,10 +2,13 @@ import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
+import {
+  e2eReferenceSupplier,
+  fakeCoompyPort,
+} from "./e2e/fake-coompy-settings";
 import { localHosts, readDatabaseUrl } from "./scripts/database-url.mts";
 
 const port = 3100;
-const fakeCoompyPort = 3101;
 // The server listens on 127.0.0.1 only; "localhost" may resolve to ::1 first.
 const origin = `http://127.0.0.1:${port}`;
 
@@ -81,6 +84,8 @@ export default defineConfig({
       url: origin,
       env: {
         NEXT_DIST_DIR: ".next-e2e",
+        APP_ENV: "test",
+        REFERENCE_SUPPLIER: e2eReferenceSupplier,
         DATABASE_URL: e2eDatabaseUrl,
         COOMPY_API_URL: `http://127.0.0.1:${fakeCoompyPort}/api`,
         COOMPY_TOKEN_URL: `http://127.0.0.1:${fakeCoompyPort}/token`,

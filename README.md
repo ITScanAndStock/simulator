@@ -67,6 +67,27 @@ puis renseigner dans `.env.local` :
 - `COOMPY_TOKEN_URL` : l'adresse des jetons du realm `scan-and-stock` ;
 - `COOMPY_CLIENT_ID` et `COOMPY_CLIENT_SECRET` : le client de service.
 
+Deux réglages disent où tourne le simulateur et à quel fournisseur il compare les prix :
+
+- `APP_ENV` : `development` sur cet ordinateur, `test` pour les tests de parcours, `technical`, `staging` ou `production` sur Vercel ; aucune autre valeur n'est acceptée, et `development` ou `test` sont refusés sur Vercel (repéré par la variable système `VERCEL`, posée tant que l'option « Enable access to System Environment Variables » du projet reste cochée) ;
+- `REFERENCE_SUPPLIER` : le fournisseur de référence demandé à Coompy, `DoctorAI` ou `GACD`. `DoctorAI` n'est accepté qu'en `development` et en `test` : ses prix ne doivent pas être montrés au public (note juridique J9), et le bandeau « Version d'essai » de l'écran 5 n'apparaît qu'avec lui. Les tests de parcours peuvent prendre n'importe quel code fournisseur.
+
+En `technical` et en `staging`, chaque réponse porte l'en-tête `X-Robots-Tag: noindex`, qui tient les moteurs de recherche à l'écart ; la production n'en porte pas.
+
+Tous les réglages sont contrôlés au démarrage du serveur. Si l'un est faux, le serveur démarre mais répond une erreur 500 à chaque requête, et son journal nomme le réglage en cause. Pour contrôler les réglages sans lancer le simulateur, à partir des variables de l'environnement où elle tourne :
+
+```sh
+pnpm settings:check
+```
+
+Contre un environnement Vercel, avec la CLI Vercel reliée au projet, `vercel env run` passe les variables de cet environnement à la commande sans les écrire sur le disque (`-e` accepte `development`, `preview` ou `production`) :
+
+```sh
+vercel env run -e production -- pnpm settings:check
+```
+
+Deux limites, tirées de la documentation de la CLI (août 2026) et pas encore éprouvées sur le projet Vercel de CSP : `vercel env run` ne vise pas un environnement personnalisé (si `staging` en est un, seul le démarrage du serveur le contrôle), et Vercel ne rend pas la valeur des variables de type Secret, qui risquent d'être lues comme absentes. `APP_ENV` et `REFERENCE_SUPPLIER` sont donc enregistrées en type Config, pour que leur contrôle compte ; pour les variables Secret (`DATABASE_URL`, `COOMPY_CLIENT_SECRET`), c'est le démarrage du serveur qui fait foi.
+
 Une ligne dont l'économie dépasse un seuil est écartée du total et laissée à un conseiller (« À vérifier par un conseiller ») : un tel écart signale plus souvent un mauvais rapprochement (autre conditionnement, autre produit) qu'une vraie économie. Le seuil vaut 50 % ; `SUSPICIOUS_SAVING_PERCENT` le change sans toucher au code.
 
 L'écran 5 se règle aussi sans toucher au code :

@@ -1,3 +1,4 @@
+import type { SupplierCode } from "@/supplier";
 import type { PriceLookup } from "./price-lookup";
 
 export type CoompySettings = {
@@ -5,9 +6,8 @@ export type CoompySettings = {
   tokenUrl: string;
   clientId: string;
   clientSecret: string;
+  referenceSupplier: SupplierCode;
 };
-
-const referenceSupplier = "DoctorAI";
 
 type Offer = {
   provider: string;
@@ -22,6 +22,7 @@ export function coompyPriceLookup(
   settings: CoompySettings,
   fetchImpl: typeof fetch = fetch,
 ): PriceLookup {
+  const { referenceSupplier } = settings;
   let token: { value: string; expiresAt: number } | undefined;
   return async (supplier, reference) => {
     if (!token || Date.now() >= token.expiresAt) {

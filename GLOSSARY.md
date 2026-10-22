@@ -19,8 +19,12 @@ The supplier-specific knowledge that turns the text of that supplier's invoices 
 _Avoid_: Parser, extractor, template, scraper, mapping
 
 **Reference price**:
-The unit price, tax-inclusive, that a line's price paid is compared against: the price at the reference supplier, which is Doctor AI until the GACD prices are available, or the CSP price for an invoice of the Straumann group.
+The unit price, tax-inclusive, that a line's price paid is compared against: the price at the reference supplier, or the CSP price for an invoice of the Straumann group.
 _Avoid_: Doctor AI price, target price, best price
+
+**Reference supplier**:
+The supplier whose Coompy price is the reference price, set per environment: GACD on the technical deployment, staging and production, Doctor AI only on Robin's computer and in the journey tests, until the GACD prices are available.
+_Avoid_: Target supplier, CSP supplier, comparison supplier
 
 ### Line states
 

@@ -8,6 +8,7 @@ const settings = {
   tokenUrl: "http://sso.test/token",
   clientId: "csp-simulator",
   clientSecret: "test-secret",
+  referenceSupplier: "DoctorAI" as const,
 };
 
 type Recording = { supplier: SupplierCode; reference: string; answer: unknown };
