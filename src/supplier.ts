@@ -6,6 +6,7 @@ export type SupplierCode =
   | "Dentaltix"
   | "DoctorStrong"
   | "DoctorAI"
+  | "GACD"
   | "Godentaire"
   | "HenrySchein"
   | "Komet"
@@ -20,6 +21,7 @@ export const supplierNames: Record<SupplierCode, string> = {
   Dentaltix: "Dentaltix",
   DoctorStrong: "Doctor Strong",
   DoctorAI: "Doctor AI",
+  GACD: "GACD",
   Godentaire: "Go!dentaire",
   HenrySchein: "Henry Schein",
   Komet: "Komet",

@@ -30,6 +30,7 @@ function show({
       scanAndStockUser={false}
       averageSavingEuros={undefined}
       calendlyUrl="https://calendly.example/default"
+      referenceSupplier="GACD"
       {...props}
     />,
   );
@@ -171,12 +172,19 @@ describe("ResultScreen", () => {
 
   // Catches: Doctor AI amounts taken for Club Santé Premium prices during the trial.
   it("says the reference price is Doctor AI pending GACD", () => {
-    show();
+    show({ referenceSupplier: "DoctorAI" });
 
     expect(
       screen.getByText(
         "Version d'essai : le prix de référence est celui de Doctor AI, en attendant les tarifs GACD. Les montants ne sont pas des tarifs Club Santé Premium.",
       ),
     ).toBeInTheDocument();
+  });
+
+  // Catches: the trial banner kept once GACD is the reference.
+  it("says nothing of a trial when the reference is GACD", () => {
+    show({ referenceSupplier: "GACD" });
+
+    expect(screen.queryByText(/^Version d'essai/)).not.toBeInTheDocument();
   });
 });

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { amount } from "@/format";
 import type { Result } from "@/server/invoices";
+import type { SupplierCode } from "@/supplier";
 import { SimulationScreen } from "./simulation-screen";
 import styles from "./result-screen.module.css";
 
@@ -29,11 +30,13 @@ export function ResultScreen({
   scanAndStockUser,
   averageSavingEuros,
   calendlyUrl,
+  referenceSupplier,
 }: {
   result: Result;
   scanAndStockUser: boolean;
   averageSavingEuros: number | undefined;
   calendlyUrl: string;
+  referenceSupplier: SupplierCode;
 }) {
   const invoices =
     result.invoices === 1 ? "votre facture" : `vos ${result.invoices} factures`;
@@ -49,11 +52,13 @@ export function ResultScreen({
 
   return (
     <SimulationScreen step={4}>
-      <p className={styles.trialBanner}>
-        Version d&apos;essai : le prix de référence est celui de Doctor AI, en
-        attendant les tarifs GACD. Les montants ne sont pas des tarifs Club
-        Santé Premium.
-      </p>
+      {referenceSupplier === "DoctorAI" && (
+        <p className={styles.trialBanner}>
+          Version d&apos;essai : le prix de référence est celui de Doctor AI, en
+          attendant les tarifs GACD. Les montants ne sont pas des tarifs Club
+          Santé Premium.
+        </p>
+      )}
       {scanAndStockUser && (
         <p className={styles.message}>
           Vous utilisez déjà Scan&amp;Stock : l’adhésion Club Santé Premium vous

@@ -2,8 +2,10 @@ import { createServer } from "node:http";
 
 const token = "e2e-token";
 
-// Prices of the references of test-invoices/doctor-ai-fake.pdf; a reference left out is unknown.
-const doctorAiPrices: Record<string, number> = {
+const askedProviders: string[][] = [];
+
+// Reference prices of the references of test-invoices/doctor-ai-fake.pdf; a reference left out is unknown.
+const prices: Record<string, number> = {
   "412-0815": 25,
   "512-3344": 8,
   "233-1002": 4.05,
@@ -19,12 +21,15 @@ createServer((request, response) => {
   }
   // Answers the readiness check of Playwright.
   if (url.pathname === "/") return json(response, 200, {});
+  if (url.pathname === "/requests") return json(response, 200, askedProviders);
   if (request.headers.authorization !== `Bearer ${token}`) {
     return json(response, 401, {});
   }
   if (url.pathname !== "/api/compare/products") return json(response, 404, {});
   const reference = url.searchParams.get("q") ?? "";
-  const price = doctorAiPrices[reference];
+  const providers = url.searchParams.get("providers")?.split(",") ?? [];
+  askedProviders.push(providers);
+  const price = prices[reference];
   const content =
     price === undefined
       ? []
@@ -32,15 +37,19 @@ createServer((request, response) => {
           {
             id: 1,
             designation: "Produit",
-            offers: [
-              {
-                id: 1,
-                provider: "DoctorAI",
-                price,
-                currency: "EUR",
-                matchedRef: reference,
-              },
-            ],
+            offers: [...new Set(providers)].map((provider, index) =>
+              // The invoices' supplier carries the line's reference, at another price than the
+              // reference supplier's, so that a saving taken on its offer shows.
+              provider === "DoctorAI"
+                ? {
+                    id: index + 1,
+                    provider,
+                    price: price * 2,
+                    currency: "EUR",
+                    matchedRef: reference,
+                  }
+                : { id: index + 1, provider, price, currency: "EUR" },
+            ),
           },
         ];
   json(response, 200, {

@@ -1,5 +1,6 @@
 import "server-only";
 import { Pool } from "pg";
+import { databaseUrl } from "./settings";
 
 // Hot reloads re-evaluate this module; keeping the pool on globalThis avoids opening a new one each time.
 const globalWithPool = globalThis as typeof globalThis & {
@@ -8,9 +9,9 @@ const globalWithPool = globalThis as typeof globalThis & {
 
 export function databasePool(): Pool {
   if (!globalWithPool.simulatorPool) {
-    const connectionString = process.env.DATABASE_URL;
-    if (!connectionString) throw new Error("DATABASE_URL is not set.");
-    globalWithPool.simulatorPool = new Pool({ connectionString });
+    globalWithPool.simulatorPool = new Pool({
+      connectionString: databaseUrl(),
+    });
   }
   return globalWithPool.simulatorPool;
 }
