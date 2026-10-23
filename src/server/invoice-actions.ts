@@ -3,11 +3,10 @@
 import { notFound } from "next/navigation";
 import { readInvoice, type ReadInvoice } from "@/invoice-reading/read-invoice";
 import type { InvoiceUploadResult } from "@/invoice-upload";
-import { coompyPriceLookup } from "@/price-lookup/coompy";
 import { proposeReferences } from "@/simulation/confusable-reference";
 import { needsVerification } from "@/simulation/doubts";
 import { storeReadInvoice } from "./invoices";
-import { coompySettings } from "./settings";
+import { priceLookup } from "./price-lookup";
 import { simulationExists } from "./simulations";
 
 export async function readUploadedInvoice(
@@ -34,14 +33,14 @@ export async function readUploadedInvoice(
   };
 }
 
-// Without Coompy no reference is proposed: the computation then finds it out of reach, or the
+// Without the price lookup no reference is proposed: the computation then finds it out of reach, or the
 // line as read.
 async function withProposals(
   invoice: Extract<ReadInvoice, { status: "read" }>,
 ) {
   try {
     return await proposeReferences(
-      coompyPriceLookup(coompySettings()),
+      priceLookup({ implantsPerYear: undefined }),
       invoice.supplier,
       invoice.lines,
     );

@@ -18,6 +18,7 @@
     "test:e2e": "playwright test",
     "db:migrate": "node --env-file-if-exists=.env.local scripts/db-migrate.mts",
     "db:empty": "node --env-file-if-exists=.env.local scripts/db-empty.mts",
+    "price-lists:import": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env.local scripts/import-price-lists.mts",
     "settings:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-settings.mts",
     "coompy:record": "node --env-file-if-exists=.env.local scripts/record-coompy-answers.mts"
   },

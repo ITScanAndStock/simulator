@@ -10,7 +10,6 @@ import {
   type LineFieldErrors,
   type LineFields,
 } from "@/line-fields";
-import { coompyPriceLookup } from "@/price-lookup/coompy";
 import {
   PricesUnavailable,
   unavailableOnFailure,
@@ -26,7 +25,8 @@ import {
   type Corrections,
   type StoredInvoice,
 } from "./invoices";
-import { coompySettings, suspiciousSavingPercent } from "./settings";
+import { priceLookup } from "./price-lookup";
+import { suspiciousSavingPercent } from "./settings";
 import { simulationExists } from "./simulations";
 
 export type LinesSubmission = {
@@ -173,7 +173,8 @@ async function computeSaving(
         ...invoice,
         lines: [...invoice.lines, ...invoice.addedLines],
       })),
-      unavailableOnFailure(coompyPriceLookup(coompySettings())),
+      // Asked by the implant volume question (ticket 24); until then no rebate.
+      unavailableOnFailure(priceLookup({ implantsPerYear: undefined })),
       { suspiciousSavingPercent: suspiciousSavingPercent() },
     );
   } catch (error) {

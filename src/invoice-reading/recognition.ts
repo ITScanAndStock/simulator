@@ -1,7 +1,7 @@
 import path from "node:path";
 import french from "@tesseract.js-data/fra";
 import { createWorker, OEM, PSM } from "tesseract.js";
-import type { PdfPage, Row } from "./pdf-rows";
+import type { PdfPage, Row } from "./pdf-words";
 
 // Under ADR 0004's lowest confidence of a word read right on the real scan.
 const minConfidence = 80;

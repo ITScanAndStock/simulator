@@ -57,7 +57,8 @@ try {
     name: string;
   }>(
     `SELECT schemaname AS schema, tablename AS name FROM pg_tables
-      WHERE schemaname = current_schema() AND tablename <> 'schema_migration'
+      WHERE schemaname = current_schema()
+        AND tablename NOT IN ('schema_migration', 'group_price')
       ORDER BY tablename`,
   );
   const qualified = tables.map(

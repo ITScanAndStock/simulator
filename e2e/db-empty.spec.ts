@@ -1,7 +1,13 @@
 import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { expect, test, type Page } from "@playwright/test";
-import { e2eDatabase, runDbCommand } from "./run-db-command";
+import {
+  e2eDatabase,
+  e2eDatabaseUrl,
+  fakePriceLists,
+  groupPricesOf,
+  runDbCommand,
+} from "./run-db-command";
 
 async function storeSimulation(page: Page) {
   await page.goto("/coordonnees");
@@ -46,4 +52,13 @@ test("pnpm db:empty removes the stored simulations and keeps the database usable
   ).toContain("No pending migration.");
   const next = await storeSimulation(page);
   expect((await page.goto(next))?.status()).toBe(200);
+});
+
+// Catches: the group prices wiped with the practices' data, so that every group line becomes À étudier.
+test("pnpm db:empty keeps the imported group prices", async () => {
+  runDbCommand("price-lists:import", e2eDatabaseUrl(), fakePriceLists);
+
+  runDbCommand("db:empty", e2eDatabaseUrl());
+
+  expect(await groupPricesOf(e2eDatabaseUrl(), "091.0008S")).toHaveLength(1);
 });
