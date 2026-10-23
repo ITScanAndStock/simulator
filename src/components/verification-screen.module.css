@@ -248,3 +248,8 @@
   flex-direction: column;
   gap: 22px;
 }
+
+.reasons .linkButton {
+  margin-left: 10px;
+  font-size: 14px;
+}

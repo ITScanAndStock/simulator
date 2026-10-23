@@ -40,6 +40,7 @@ export default async function Verification({
       removed: line.removed ?? false,
       shown: toVerify.has(key(line)),
       read: {
+        reference: line.reference,
         quantity: line.quantity,
         unitPriceCents: line.unitPriceCents,
         amountCents: line.amountCents,

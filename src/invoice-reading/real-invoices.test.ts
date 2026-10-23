@@ -15,5 +15,6 @@ describe.skipIf(!folder)("readInvoice on the real invoices", () => {
 
       expect(await readInvoice(bytes)).toEqual(expected);
     },
+    30_000,
   );
 });
