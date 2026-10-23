@@ -14,9 +14,9 @@ function isSimulationId(id: unknown) {
 export async function startSimulation(details: ContactDetails) {
   const { rows } = await databasePool().query<{ id: string }>(
     `INSERT INTO simulation
-       (email, practice, practitioner, phone, csp_member, scan_and_stock_user, call_back,
+       (email, practice, practitioner, phone, scan_and_stock_user, call_back,
         data_information_read_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, CASE WHEN $8 THEN now() END)
+     VALUES ($1, $2, $3, $4, $5, $6, CASE WHEN $7 THEN now() END)
      RETURNING id`,
     toParameters(details),
   );
@@ -30,11 +30,11 @@ export async function updateContactDetails(
   if (!isSimulationId(id)) return false;
   const { rowCount } = await databasePool().query(
     `UPDATE simulation SET
-       email = $1, practice = $2, practitioner = $3, phone = $4, csp_member = $5,
-       scan_and_stock_user = $6, call_back = $7,
-       data_information_read_at = CASE WHEN $8 THEN coalesce(data_information_read_at, now()) END,
+       email = $1, practice = $2, practitioner = $3, phone = $4,
+       scan_and_stock_user = $5, call_back = $6,
+       data_information_read_at = CASE WHEN $7 THEN coalesce(data_information_read_at, now()) END,
        updated_at = now()
-     WHERE id = $9`,
+     WHERE id = $8`,
     [...toParameters(details), id],
   );
   return rowCount === 1;
@@ -49,12 +49,11 @@ export async function findContactDetails(
     practice: string;
     practitioner: string;
     phone: string;
-    csp_member: boolean;
     scan_and_stock_user: boolean;
     call_back: boolean;
     data_information_read: boolean;
   }>(
-    `SELECT email, practice, practitioner, phone, csp_member, scan_and_stock_user, call_back,
+    `SELECT email, practice, practitioner, phone, scan_and_stock_user, call_back,
             data_information_read_at IS NOT NULL AS data_information_read
      FROM simulation WHERE id = $1`,
     [id],
@@ -66,7 +65,6 @@ export async function findContactDetails(
     practice: row.practice,
     practitioner: row.practitioner,
     phone: row.phone,
-    cspMember: row.csp_member,
     scanAndStockUser: row.scan_and_stock_user,
     callBack: row.call_back,
     dataInformationRead: row.data_information_read,
@@ -88,7 +86,6 @@ function toParameters(details: ContactDetails) {
     details.practice,
     details.practitioner,
     details.phone,
-    details.cspMember,
     details.scanAndStockUser,
     details.callBack,
     details.dataInformationRead,

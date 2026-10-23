@@ -149,9 +149,6 @@ test("badly formed values are refused by the server and every typed value and bo
   );
   await expect(field(page, "Téléphone")).toHaveValue("04 72 00");
   await expect(scanAndStock).toBeChecked();
-  await expect(
-    page.getByRole("checkbox", { name: "affilié Club Santé Premium" }),
-  ).not.toBeChecked();
   await expect(callBack).not.toBeChecked();
   await expect(dataInformationBox(page)).toBeChecked();
 });

@@ -114,10 +114,6 @@ export function ContactDetailsFormElement({
         <legend className={styles.legend}>Vous êtes déjà… (facultatif)</legend>
         <div className={styles.statusBox}>
           <label className={styles.status}>
-            <Checkbox name="cspMember" defaultChecked={values?.cspMember} />
-            affilié Club Santé Premium
-          </label>
-          <label className={styles.status}>
             <Checkbox
               name="scanAndStockUser"
               defaultChecked={values?.scanAndStockUser}
