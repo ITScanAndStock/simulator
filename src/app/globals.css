@@ -52,6 +52,24 @@ body {
   cursor: pointer;
 }
 
+:where(.secondary-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 24px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--color-green-dark);
+  border-radius: var(--radius-control);
+  background: var(--color-white);
+  color: var(--color-green-dark);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 :where(.primary-button:disabled) {
   opacity: 0.5;
   cursor: not-allowed;

@@ -87,6 +87,25 @@ export function calendlyUrl() {
   return value;
 }
 
+// Kept under the Server Action body limit of next.config.ts (10 MB), form encoding included.
+const maxAllowedInvoiceMegabytes = 9;
+
+export function maxInvoiceMegabytes() {
+  const value = process.env.MAX_INVOICE_MEGABYTES;
+  if (value === undefined || value === "") return 4;
+  const megabytes = Number(value);
+  if (
+    !/^\d+$/.test(value) ||
+    megabytes < 1 ||
+    megabytes > maxAllowedInvoiceMegabytes
+  ) {
+    throw new Error(
+      `MAX_INVOICE_MEGABYTES must be a whole number of megabytes from 1 to ${maxAllowedInvoiceMegabytes}; it is "${value}".`,
+    );
+  }
+  return megabytes;
+}
+
 const coompySettingNames = {
   apiUrl: "COOMPY_API_URL",
   tokenUrl: "COOMPY_TOKEN_URL",
@@ -113,6 +132,7 @@ export function validateSettings() {
     suspiciousSavingPercent,
     averageSavingEuros,
     calendlyUrl,
+    maxInvoiceMegabytes,
   ];
   const problems = checks.flatMap((check) => {
     try {

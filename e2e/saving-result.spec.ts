@@ -1,6 +1,12 @@
+import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { e2eReferenceSupplier, fakeCoompyPort } from "./fake-coompy-settings";
-import { invoiceInput, openInvoicesStep, uploadedFile } from "./invoices-step";
+import {
+  invoiceInput,
+  openInvoicesStep,
+  pdfFile,
+  uploadedFile,
+} from "./invoices-step";
 
 // Against e2e/fake-coompy.mts: 512-3344 (3 × 8,91 for 8,00) and 233-1002 compared,
 // 412-0815 already cheaper, 233-1001 unknown.
@@ -78,6 +84,25 @@ test("only the invoices listed on screen 3 are counted", async ({ page }) => {
     "Lue · 4 lignes",
   );
 
+  await page.getByRole("button", { name: "Vérifier les lignes lues" }).click();
+
+  await expect(page).toHaveURL(/\/resultat$/);
+  await expectResult(page);
+});
+
+// Catches: an invoice removed from screen 3 counted in the saving (6,36 € instead of 3,18 €).
+test("an invoice removed from screen 3 is not counted", async ({ page }) => {
+  await openInvoicesStep(page);
+  const fake = readFileSync("test-invoices/doctor-ai-fake.pdf");
+  await invoiceInput(page).setInputFiles([
+    pdfFile("facture-1.pdf", fake),
+    pdfFile("facture-2.pdf", fake),
+  ]);
+  await expect(uploadedFile(page, "facture-2.pdf")).toContainText(
+    "Lue · 4 lignes",
+  );
+
+  await page.getByRole("button", { name: "Retirer facture-2.pdf" }).click();
   await page.getByRole("button", { name: "Vérifier les lignes lues" }).click();
 
   await expect(page).toHaveURL(/\/resultat$/);

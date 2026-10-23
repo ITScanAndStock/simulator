@@ -95,6 +95,8 @@ L'écran 5 se règle aussi sans toucher au code :
 - `AVERAGE_SAVING_EUROS` : l'économie moyenne des affiliés, en euros entiers (« En moyenne, nos affiliés économisent 26 500 € par an ») ; sans valeur, la phrase n'est pas affichée. Le chiffre attend encore sa source chez CSP avant la mise en ligne ;
 - `CALENDLY_URL` : le lien du bouton « Prendre rendez-vous avec un conseiller », par défaut https://calendly.com/clubsantepremium-rdvoffert/1h.
 
+L'écran 3 refuse, avant tout envoi, un fichier plus lourd que `MAX_INVOICE_MEGABYTES` mégaoctets (4 par défaut, en entier de 1 à 9 : le serveur refuse tout envoi au-delà de 10 Mo).
+
 Les tests de l'adaptateur Coompy rejouent des réponses de `GET /products` enregistrées une fois (`test-coompy/`). Pour les enregistrer de nouveau, Coompy lancé :
 
 ```sh

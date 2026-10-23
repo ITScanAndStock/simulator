@@ -12,6 +12,7 @@ import {
 } from "@/line-fields";
 import type { LineDoubt } from "@/simulation/doubts";
 import { skipVerification, validateLines } from "@/server/simulation-actions";
+import { useSetComputing } from "./simulation-screen";
 import styles from "./verification-screen.module.css";
 
 export type ReadLineView = LineFields & {
@@ -61,6 +62,7 @@ export function LinesForm({
   const [othersShown, setOthersShown] = useState(false);
   const [errors, setErrors] = useState<Record<string, LineFieldErrors>>({});
   const [pending, startTransition] = useTransition();
+  const setComputing = useSetComputing();
   const nextAdded = useRef(0);
   const initial = new Map(initialLines.map((line) => [line.key, line]));
   const others = lines.filter((line) => !line.shown).length;
@@ -104,6 +106,7 @@ export function LinesForm({
     }
     show(found);
     if (Object.keys(found).length > 0) return;
+    setComputing(true);
     startTransition(async () => {
       const refusal = await validateLines(simulationId, {
         lines: lines.map((line) => ({
@@ -125,7 +128,10 @@ export function LinesForm({
         })),
       });
       // State set after an await leaves the transition unless wrapped again.
-      startTransition(() => show(refusal.errors));
+      startTransition(() => {
+        setComputing(false);
+        show(refusal.errors);
+      });
     });
   }
 
@@ -271,11 +277,12 @@ export function LinesForm({
           </button>
           <button
             type="button"
-            className={styles.secondaryButton}
+            className="secondary-button"
             disabled={pending}
-            onClick={() =>
-              startTransition(() => skipVerification(simulationId))
-            }
+            onClick={() => {
+              setComputing(true);
+              startTransition(() => skipVerification(simulationId));
+            }}
           >
             Passer cette étape
           </button>

@@ -37,3 +37,74 @@
   margin: 0 auto;
   padding: 24px 64px 40px;
 }
+
+.screen {
+  display: contents;
+}
+
+.hidden {
+  display: none;
+}
+
+.computing {
+  width: 640px;
+  max-width: 100%;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 24px;
+}
+
+.computingTitle {
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-size: 44px;
+  line-height: 1.1;
+}
+
+.progress {
+  height: 10px;
+  border-radius: 5px;
+  background: #e3efeb;
+  overflow: hidden;
+}
+
+.progressBar {
+  width: 40%;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--color-green);
+  animation: progress 1.6s ease-in-out infinite;
+}
+
+@keyframes progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressBar {
+    animation: none;
+    width: 100%;
+    opacity: 0.4;
+  }
+}
+
+.computingStep {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.computingNote {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
