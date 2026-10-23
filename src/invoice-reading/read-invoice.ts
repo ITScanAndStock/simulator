@@ -1,6 +1,7 @@
 import { isDoctorAiInvoice, readDoctorAiInvoice } from "./doctor-ai";
 import type { InvoiceLine } from "./invoice-line";
-import { readPdfRows } from "./pdf-rows";
+import { readPdfRows, renderPdfPages } from "./pdf-rows";
+import { isImage, recognisePages } from "./recognition";
 
 export type TaxBasis = "inclusive" | "exclusive";
 
@@ -9,6 +10,7 @@ export type ReadInvoice =
   | {
       status: "read";
       supplier: "DoctorAI";
+      recognised: boolean;
       taxBasis: TaxBasis;
       lines: InvoiceLine[];
       otherChargesCents: number;
@@ -19,11 +21,12 @@ export type ReadInvoice =
 
 export async function readInvoice(bytes: Uint8Array): Promise<ReadInvoice> {
   try {
-    const pages = await readPdfRows(bytes);
+    const { pages, recognised } = await readPages(bytes);
     if (!isDoctorAiInvoice(pages)) return { status: "unsupported" };
     return {
       status: "read",
       supplier: "DoctorAI",
+      recognised,
       taxBasis: "inclusive",
       ...readDoctorAiInvoice(pages),
       otherChargesCents: 0,
@@ -31,4 +34,17 @@ export async function readInvoice(bytes: Uint8Array): Promise<ReadInvoice> {
   } catch {
     return { status: "unreadable" };
   }
+}
+
+// A scanned PDF has no text layer: its pages are read like images.
+async function readPages(bytes: Uint8Array) {
+  if (isImage(bytes)) {
+    return { pages: await recognisePages([bytes]), recognised: true };
+  }
+  const pages = await readPdfRows(bytes);
+  if (pages.some((page) => page.length > 0)) {
+    return { pages, recognised: false };
+  }
+  const images = await renderPdfPages(bytes);
+  return { pages: await recognisePages(images), recognised: true };
 }

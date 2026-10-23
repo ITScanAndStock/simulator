@@ -59,6 +59,45 @@ test("a doubtful line is shown on screen 4 and skipping keeps it as read", async
   );
 });
 
+// Catches: a scanned invoice whose doubtful reference or price, or confusable reference, is
+// not sent to screen 4, or a proposed reference that cannot be taken. Against
+// e2e/fake-coompy.mts, the gloves taken as 512-3344 save 3 × 0,91 and the compress 0,45.
+test("a scanned invoice shows its doubtful words and the reference proposed", async ({
+  page,
+}) => {
+  await openScreen4(page, "doctor-ai-scanned-fake.pdf");
+
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Trois lignes à vérifier",
+  );
+  await expect(line(page, "DESINFECTANT")).toContainText(
+    "À vérifierRéférence peu lisible sur la facture.",
+  );
+  const gloves = line(page, "GANTS NITRILE");
+  await expect(gloves.getByLabel("Référence")).toHaveValue("S12-3344");
+  await expect(gloves).toContainText(
+    "À vérifierRéférence incertaine : S12-3344 ou 512-3344 ?Corriger en 512-3344",
+  );
+  const alcohol = line(page, "ALCOOL MODIFIE");
+  await expect(alcohol.getByLabel("Prix unitaire payé")).toHaveValue(
+    /^12,60\s€$/,
+  );
+  await expect(alcohol).toContainText(
+    "À vérifierPrix unitaire peu lisible sur la facture. Montant incohérent : 2 × 12,60 € font 25,20 €, la facture indique 25,00 €.",
+  );
+
+  await gloves.getByRole("button", { name: "Corriger en 512-3344" }).click();
+  await expect(gloves.getByLabel("Référence")).toHaveValue("512-3344");
+  await page
+    .getByRole("button", { name: "Valider et calculer mon économie" })
+    .click();
+
+  await expect(page).toHaveURL(/\/resultat$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    savingHeading("3,18 €"),
+  );
+});
+
 // Catches: a correction ignored by the calculation (2,27 € instead of 3 × 0,91 + 0,45),
 // or not stored with the simulation.
 test("a corrected line changes the total and is stored", async ({

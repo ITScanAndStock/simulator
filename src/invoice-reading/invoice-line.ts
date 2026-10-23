@@ -1,3 +1,5 @@
+export type UnsureField = "reference" | "unitPrice";
+
 export type InvoiceLine = {
   reference: string;
   designation: string;
@@ -5,4 +7,5 @@ export type InvoiceLine = {
   unitPriceCents: number;
   amountCents: number;
   vatRate: number | undefined;
+  unsure: UnsureField[];
 };

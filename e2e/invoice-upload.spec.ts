@@ -55,7 +55,9 @@ test("screen 3 takes 5 invoices at most", async ({ page }) => {
 });
 
 // Catches: a file of another type sent for reading, or taking one of the 5 places.
-test("a file that is not a PDF is refused", async ({ page }) => {
+test("a file that is not a PDF, a JPG or a PNG is refused", async ({
+  page,
+}) => {
   await openInvoicesStep(page);
   const fake = readFileSync("test-invoices/doctor-ai-fake.pdf");
 
@@ -65,10 +67,23 @@ test("a file that is not a PDF is refused", async ({ page }) => {
   ]);
 
   await expect(toast(page)).toHaveText([
-    "Format non accepté« facture.docx » n'est pas accepté : déposez un PDF.",
+    "Format non accepté« facture.docx » n'est pas accepté : déposez un PDF, un JPG ou un PNG.",
   ]);
   await expect(page.getByText(/^facture-\d\.pdf$/)).toHaveCount(5);
   await expect(uploadedFile(page, "facture.docx")).toHaveCount(0);
+});
+
+// Catches: an image refused in the browser, or sent but not read on the server.
+test("a photo saved as JPG is read", async ({ page }) => {
+  await openInvoicesStep(page);
+
+  await invoiceInput(page).setInputFiles(
+    "test-invoices/doctor-ai-photo-fake.jpg",
+  );
+
+  await expect(uploadedFile(page, "doctor-ai-photo-fake.jpg")).toContainText(
+    "Lue · 4 lignes",
+  );
 });
 
 // Catches: an error toast that cannot be closed.
@@ -117,7 +132,7 @@ test("a file over the maximum size is refused before sending", async ({
 }) => {
   await openInvoicesStep(page);
   await expect(page.getByText(/au plus/).first()).toHaveText(
-    "PDF · 3 Mo au plus · 5 factures au plus",
+    "PDF, JPG ou PNG · 3 Mo au plus · 5 factures au plus",
   );
   await invoiceInput(page).setInputFiles([
     pdfFile("trop-lourde.pdf", Buffer.alloc(3 * 1024 * 1024 + 1)),

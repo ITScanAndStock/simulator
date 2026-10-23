@@ -3,6 +3,7 @@ import type { ReadInvoice } from "@/invoice-reading/read-invoice";
 export const doctorAiFakeExpected: ReadInvoice = {
   status: "read",
   supplier: "DoctorAI",
+  recognised: false,
   taxBasis: "inclusive",
   lines: [
     {
@@ -12,6 +13,7 @@ export const doctorAiFakeExpected: ReadInvoice = {
       unitPriceCents: 2400,
       amountCents: 2400,
       vatRate: 20,
+      unsure: [],
     },
     {
       reference: "512-3344",
@@ -20,6 +22,7 @@ export const doctorAiFakeExpected: ReadInvoice = {
       unitPriceCents: 891,
       amountCents: 2673,
       vatRate: 20,
+      unsure: [],
     },
     {
       reference: "233-1001",
@@ -28,6 +31,7 @@ export const doctorAiFakeExpected: ReadInvoice = {
       unitPriceCents: 1250,
       amountCents: 2500,
       vatRate: 20,
+      unsure: [],
     },
     {
       reference: "233-1002",
@@ -36,6 +40,7 @@ export const doctorAiFakeExpected: ReadInvoice = {
       unitPriceCents: 450,
       amountCents: 450,
       vatRate: 20,
+      unsure: [],
     },
   ],
   otherChargesCents: 0,
