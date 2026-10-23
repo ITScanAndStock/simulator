@@ -1,4 +1,4 @@
-import type { SupplierCode } from "@/supplier";
+import type { CoompySupplierCode } from "@/supplier";
 import type { PriceLookup } from "./price-lookup";
 
 export type CoompySettings = {
@@ -6,7 +6,7 @@ export type CoompySettings = {
   tokenUrl: string;
   clientId: string;
   clientSecret: string;
-  referenceSupplier: SupplierCode;
+  referenceSupplier: CoompySupplierCode;
 };
 
 type Offer = {

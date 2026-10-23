@@ -3,6 +3,7 @@ import {
   appEnv,
   maxInvoiceMegabytes,
   referenceSupplier,
+  straumannGroupAgreement,
   validateSettings,
 } from "./settings";
 
@@ -122,6 +123,79 @@ describe("maxInvoiceMegabytes", () => {
   });
 });
 
+// Invented figures: the CSP agreement is confidential and never committed.
+const discounts =
+  "straumann=12,anthogyr=17.5,neodent=22,biomaterials=9,xenograft=3";
+const rebateTiers = "20=1,61=2.5,900=6";
+
+describe("straumannGroupAgreement", () => {
+  // Catches: a range read under another one's name, or a decimal percentage truncated.
+  it("reads the discount of each range and the year-end rebate tiers", () => {
+    vi.stubEnv("STRAUMANN_GROUP_DISCOUNTS", discounts);
+    vi.stubEnv("STRAUMANN_GROUP_REBATE_TIERS", rebateTiers);
+    expect(straumannGroupAgreement()).toEqual({
+      discountBasisPoints: {
+        straumann: 1200,
+        anthogyr: 1750,
+        neodent: 2200,
+        biomaterials: 900,
+        xenograft: 300,
+      },
+      rebateTiers: [
+        { fromImplants: 20, basisPoints: 100 },
+        { fromImplants: 61, basisPoints: 250 },
+        { fromImplants: 900, basisPoints: 600 },
+      ],
+    });
+  });
+
+  // Catches: the agreement left out of the local configuration, read as no discount.
+  it.each(["STRAUMANN_GROUP_DISCOUNTS", "STRAUMANN_GROUP_REBATE_TIERS"])(
+    "refuses a missing %s",
+    (name) => {
+      vi.stubEnv("STRAUMANN_GROUP_DISCOUNTS", discounts);
+      vi.stubEnv("STRAUMANN_GROUP_REBATE_TIERS", rebateTiers);
+      vi.stubEnv(name, "");
+      expect(straumannGroupAgreement).toThrow(name);
+    },
+  );
+
+  // Catches: a range priced at the catalogue price because its discount is missing or misspelled.
+  it.each([
+    "straumann=12,anthogyr=17.5,neodent=22,biomaterials=9",
+    "straumann=12,anthogyr=17.5,neodent=22,biomaterials=9,xenograft=3,clearcorrect=5",
+    "straumann=12,straumann=13,anthogyr=17.5,neodent=22,biomaterials=9,xenograft=3",
+    "straumann=100,anthogyr=17.5,neodent=22,biomaterials=9,xenograft=3",
+    "straumann=-1,anthogyr=17.5,neodent=22,biomaterials=9,xenograft=3",
+    "straumann=12%,anthogyr=17.5,neodent=22,biomaterials=9,xenograft=3",
+    "straumann=12.555,anthogyr=17.5,neodent=22,biomaterials=9,xenograft=3",
+  ])("refuses the discounts %j", (value) => {
+    vi.stubEnv("STRAUMANN_GROUP_DISCOUNTS", value);
+    vi.stubEnv("STRAUMANN_GROUP_REBATE_TIERS", rebateTiers);
+    expect(straumannGroupAgreement).toThrow("STRAUMANN_GROUP_DISCOUNTS");
+  });
+
+  // Catches: the confidential agreement printed in the server log by a slightly malformed value.
+  it("does not show the value it refuses", () => {
+    vi.stubEnv("STRAUMANN_GROUP_DISCOUNTS", `${discounts}%`);
+    vi.stubEnv("STRAUMANN_GROUP_REBATE_TIERS", `${rebateTiers}%`);
+    expect(validateSettings).not.toThrow("17.5");
+    expect(validateSettings).not.toThrow("61=2.5");
+    expect(validateSettings).toThrow("STRAUMANN_GROUP_DISCOUNTS");
+    expect(validateSettings).toThrow("STRAUMANN_GROUP_REBATE_TIERS");
+  });
+
+  // Catches: tiers out of order, which would give a practice the rebate of a lower tier.
+  it.each(["61=2.5,20=1", "20=1,20=2", "0=1", "20=0", "20=100", "20", "20=1,"])(
+    "refuses the tiers %j",
+    (value) => {
+      vi.stubEnv("STRAUMANN_GROUP_DISCOUNTS", discounts);
+      vi.stubEnv("STRAUMANN_GROUP_REBATE_TIERS", value);
+      expect(straumannGroupAgreement).toThrow("STRAUMANN_GROUP_REBATE_TIERS");
+    },
+  );
+});
+
 const validSettings = {
   APP_ENV: "staging",
   REFERENCE_SUPPLIER: "GACD",
@@ -134,6 +208,8 @@ const validSettings = {
   AVERAGE_SAVING_EUROS: "",
   CALENDLY_URL: "",
   MAX_INVOICE_MEGABYTES: "",
+  STRAUMANN_GROUP_DISCOUNTS: discounts,
+  STRAUMANN_GROUP_REBATE_TIERS: rebateTiers,
 };
 
 function stubSettings(overrides: Record<string, string> = {}) {
@@ -165,6 +241,8 @@ describe("validateSettings", () => {
       AVERAGE_SAVING_EUROS: "26 500",
       CALENDLY_URL: "http://calendly.example",
       MAX_INVOICE_MEGABYTES: "12",
+      STRAUMANN_GROUP_DISCOUNTS: "",
+      STRAUMANN_GROUP_REBATE_TIERS: "",
     });
     for (const name of [
       "REFERENCE_SUPPLIER",
@@ -177,6 +255,8 @@ describe("validateSettings", () => {
       "AVERAGE_SAVING_EUROS",
       "CALENDLY_URL",
       "MAX_INVOICE_MEGABYTES",
+      "STRAUMANN_GROUP_DISCOUNTS",
+      "STRAUMANN_GROUP_REBATE_TIERS",
     ]) {
       expect(validateSettings).toThrow(name);
     }

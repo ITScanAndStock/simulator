@@ -94,6 +94,10 @@ export default defineConfig({
         AVERAGE_SAVING_EUROS: "31200",
         CALENDLY_URL: "https://calendly.example/e2e",
         MAX_INVOICE_MEGABYTES: "3",
+        // Invented: the CSP agreement is confidential and never committed.
+        STRAUMANN_GROUP_DISCOUNTS:
+          "straumann=12,anthogyr=17.5,neodent=22,biomaterials=9,xenograft=3",
+        STRAUMANN_GROUP_REBATE_TIERS: "20=1,61=2.5,900=6",
       },
       reuseExistingServer: false,
       timeout: 180_000,

@@ -8,6 +8,11 @@ export type PriceLookupResult =
       issuingPackQty: number | undefined;
       referencePackQty: number | undefined;
     }
+  | {
+      outcome: "agreement";
+      cspUnitPriceCents: number;
+      rebateUnitCents: number;
+    }
   | { outcome: "unknownReference" }
   | { outcome: "ambiguous" }
   | { outcome: "absentAtReference" };

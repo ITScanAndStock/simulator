@@ -1,6 +1,16 @@
 // Relative imports with extensions: scripts/check-settings.mts loads this module with plain Node.
 import type { CoompySettings } from "./price-lookup/coompy.ts";
-import { supplierNames, type SupplierCode } from "./supplier.ts";
+import {
+  groupRanges,
+  type GroupAgreement,
+  type GroupRange,
+} from "./straumann-group/agreement.ts";
+import {
+  isStraumannGroupSupplier,
+  supplierNames,
+  type CoompySupplierCode,
+  type SupplierCode,
+} from "./supplier.ts";
 
 const appEnvs = [
   "development",
@@ -14,7 +24,9 @@ export type AppEnv = (typeof appEnvs)[number];
 
 const allowedReferenceSuppliers: Record<AppEnv, readonly string[]> = {
   development: ["DoctorAI", "GACD"],
-  test: Object.keys(supplierNames),
+  test: (Object.keys(supplierNames) as SupplierCode[]).filter(
+    (code) => !isStraumannGroupSupplier(code),
+  ),
   technical: ["GACD"],
   staging: ["GACD"],
   production: ["GACD"],
@@ -36,7 +48,7 @@ export function appEnv(): AppEnv {
   return found;
 }
 
-export function referenceSupplier(): SupplierCode {
+export function referenceSupplier(): CoompySupplierCode {
   const value = process.env.REFERENCE_SUPPLIER ?? "";
   const environment = appEnv();
   const allowed = allowedReferenceSuppliers[environment];
@@ -45,7 +57,7 @@ export function referenceSupplier(): SupplierCode {
       `REFERENCE_SUPPLIER must be ${allowed.join(" or ")} when APP_ENV is ${environment}; it is "${value}".`,
     );
   }
-  return value as SupplierCode;
+  return value as CoompySupplierCode;
 }
 
 export function databaseUrl() {
@@ -123,6 +135,63 @@ export function coompySettings(): CoompySettings {
   };
 }
 
+const discountsName = "STRAUMANN_GROUP_DISCOUNTS";
+const rebateTiersName = "STRAUMANN_GROUP_REBATE_TIERS";
+
+export function straumannGroupAgreement(): GroupAgreement {
+  return {
+    discountBasisPoints: groupDiscounts(required(discountsName)),
+    rebateTiers: rebateTiers(required(rebateTiersName)),
+  };
+}
+
+function groupDiscounts(value: string) {
+  const refused = () =>
+    new Error(
+      `${discountsName} must give each range of ${groupRanges.join(", ")} once, as range=percent from 0 to below 100 separated by commas (its value is confidential and not shown).`,
+    );
+  const discounts = new Map<string, number>();
+  for (const pair of value.split(",")) {
+    const [range, percent] = pair.split("=");
+    const basisPoints = percentBasisPoints(percent ?? "");
+    if (discounts.has(range) || basisPoints === undefined) throw refused();
+    discounts.set(range, basisPoints);
+  }
+  if (
+    discounts.size !== groupRanges.length ||
+    !groupRanges.every((range) => discounts.has(range))
+  ) {
+    throw refused();
+  }
+  return Object.fromEntries(discounts) as Record<GroupRange, number>;
+}
+
+function rebateTiers(value: string) {
+  const refused = () =>
+    new Error(
+      `${rebateTiersName} must list the tiers as implants=percent, from 1 implant up, in increasing order of implants, each percentage above 0 and below 100 (its value is confidential and not shown).`,
+    );
+  const tiers = value.split(",").map((pair) => {
+    const [from, percent] = pair.split("=");
+    const basisPoints = percentBasisPoints(percent ?? "");
+    if (!/^\d+$/.test(from) || !basisPoints) throw refused();
+    return { fromImplants: Number(from), basisPoints };
+  });
+  const ascending = tiers.every(
+    (tier, index) =>
+      tier.fromImplants > (index === 0 ? 0 : tiers[index - 1].fromImplants),
+  );
+  if (!ascending) throw refused();
+  return tiers;
+}
+
+// In basis points so that the prices are computed in whole numbers; two decimals at most.
+function percentBasisPoints(value: string) {
+  if (!/^\d{1,2}(\.\d{1,2})?$/.test(value)) return undefined;
+  const [units, decimals = ""] = value.split(".");
+  return Number(units) * 100 + Number(decimals.padEnd(2, "0"));
+}
+
 export function validateSettings() {
   const checks = [
     appEnv,
@@ -133,6 +202,8 @@ export function validateSettings() {
     averageSavingEuros,
     calendlyUrl,
     maxInvoiceMegabytes,
+    () => groupDiscounts(required(discountsName)),
+    () => rebateTiers(required(rebateTiersName)),
   ];
   const problems = checks.flatMap((check) => {
     try {
