@@ -3,7 +3,6 @@ export type ContactDetails = {
   practice: string;
   practitioner: string;
   phone: string;
-  cspMember: boolean;
   scanAndStockUser: boolean;
   callBack: boolean;
   dataInformationRead: boolean;

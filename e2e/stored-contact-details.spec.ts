@@ -6,7 +6,6 @@ type ContactDetails = {
   practice: string;
   practitioner: string;
   phone: string;
-  cspMember: boolean;
   scanAndStockUser: boolean;
   callBack: boolean;
 };
@@ -19,7 +18,7 @@ const textFields = [
 ] as const;
 
 function someContactDetails(
-  statuses: Pick<ContactDetails, "cspMember" | "scanAndStockUser" | "callBack">,
+  statuses: Pick<ContactDetails, "scanAndStockUser" | "callBack">,
 ): ContactDetails {
   return {
     email: `claire.martin+${randomUUID()}@cabinet-tilleuls.fr`,
@@ -32,9 +31,6 @@ function someContactDetails(
 
 function boxes(page: Page) {
   return {
-    cspMember: page.getByRole("checkbox", {
-      name: "affilié Club Santé Premium",
-    }),
     scanAndStockUser: page.getByRole("checkbox", {
       name: "utilisateur de Scan&Stock",
     }),
@@ -52,9 +48,7 @@ async function fill(page: Page, details: ContactDetails) {
   for (const [label, key] of textFields) {
     await page.getByLabel(label, { exact: true }).fill(details[key]);
   }
-  const { cspMember, scanAndStockUser, callBack, dataInformationRead } =
-    boxes(page);
-  await cspMember.setChecked(details.cspMember);
+  const { scanAndStockUser, callBack, dataInformationRead } = boxes(page);
   await scanAndStockUser.setChecked(details.scanAndStockUser);
   await callBack.setChecked(details.callBack);
   await dataInformationRead.check();
@@ -74,9 +68,7 @@ async function expectPrefilled(page: Page, details: ContactDetails) {
       details[key],
     );
   }
-  const { cspMember, scanAndStockUser, callBack, dataInformationRead } =
-    boxes(page);
-  await expect(cspMember).toBeChecked({ checked: details.cspMember });
+  const { scanAndStockUser, callBack, dataInformationRead } = boxes(page);
   await expect(scanAndStockUser).toBeChecked({
     checked: details.scanAndStockUser,
   });
@@ -91,7 +83,6 @@ test("Continuer leads to the invoices step of a new simulation", async ({
   await fill(
     page,
     someContactDetails({
-      cspMember: false,
       scanAndStockUser: true,
       callBack: false,
     }),
@@ -118,11 +109,11 @@ test("Continuer leads to the invoices step of a new simulation", async ({
   }
 });
 
-// Each case differs box by box from the defaults and from the other case, so values kept only in the
-// browser, a status in the wrong column or a call-back default over a stored "no" leave a box wrong.
+// The first case sets every box away from its default and the second the other way, so values kept only in the
+// browser, the two boxes stored in each other's column or a call-back default over a stored "no" leave a box wrong.
 for (const statuses of [
-  { cspMember: false, scanAndStockUser: true, callBack: false },
-  { cspMember: true, scanAndStockUser: false, callBack: true },
+  { scanAndStockUser: true, callBack: false },
+  { scanAndStockUser: false, callBack: true },
 ]) {
   test(`a new browser finds the stored contact details pre-filled (${JSON.stringify(statuses)})`, async ({
     page,
@@ -146,7 +137,6 @@ test("Retour on the invoices step goes back to this simulation's contact details
   page,
 }) => {
   const details = someContactDetails({
-    cspMember: false,
     scanAndStockUser: true,
     callBack: false,
   });
@@ -165,7 +155,6 @@ test("Continuer on a reopened simulation updates it instead of starting another 
   browser,
 }) => {
   const details = someContactDetails({
-    cspMember: false,
     scanAndStockUser: true,
     callBack: false,
   });
@@ -177,12 +166,12 @@ test("Continuer on a reopened simulation updates it instead of starting another 
   const changed = {
     ...details,
     practice: "Centre dentaire du Parc",
-    cspMember: true,
+    scanAndStockUser: false,
   };
   await page
     .getByLabel("Nom du cabinet", { exact: true })
     .fill(changed.practice);
-  await boxes(page).cspMember.check();
+  await boxes(page).scanAndStockUser.uncheck();
   expect(await continueToInvoices(page)).toBe(simulation);
 
   const elsewhere = await browser.newContext();
@@ -201,7 +190,6 @@ test("browser Back from the invoices step skips the submitted contact details sc
   await fill(
     page,
     someContactDetails({
-      cspMember: false,
       scanAndStockUser: true,
       callBack: false,
     }),
@@ -220,7 +208,6 @@ test("after a change and browser Back, Retour shows the changed contact details"
   page,
 }) => {
   const details = someContactDetails({
-    cspMember: false,
     scanAndStockUser: true,
     callBack: false,
   });

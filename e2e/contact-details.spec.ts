@@ -59,29 +59,17 @@ test("each contact field is named by its label and typed for autofill", async ({
   }
 });
 
-test("both declared statuses start unticked and are independent", async ({
+test("the declared statuses offer only the Scan&Stock use, unticked", async ({
   page,
 }) => {
   const statuses = page.getByRole("group", {
     name: "Vous êtes déjà… (facultatif)",
   });
-  const member = statuses.getByRole("checkbox", {
-    name: "affilié Club Santé Premium",
-  });
-  const scanAndStock = statuses.getByRole("checkbox", {
-    name: "utilisateur de Scan&Stock",
-  });
 
-  await expect(member).not.toBeChecked();
-  await expect(scanAndStock).not.toBeChecked();
-
-  await member.check();
-  await expect(member).toBeChecked();
-  await expect(scanAndStock).not.toBeChecked();
-
-  await scanAndStock.check();
-  await expect(scanAndStock).toBeChecked();
-  await expect(member).toBeChecked();
+  await expect(statuses.getByRole("checkbox")).toHaveCount(1);
+  await expect(
+    statuses.getByRole("checkbox", { name: "utilisateur de Scan&Stock" }),
+  ).not.toBeChecked();
 });
 
 test("the data box starts unticked and the call-back box starts ticked", async ({
@@ -114,7 +102,9 @@ test("the consent boxes are reached with Tab and toggled with Space", async ({
 
   await page.getByLabel("Téléphone", { exact: true }).focus();
   await page.keyboard.press("Tab");
-  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("checkbox", { name: "utilisateur de Scan&Stock" }),
+  ).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(dataBox).toBeFocused();
   await expect(dataBox).not.toBeChecked();

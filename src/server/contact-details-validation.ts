@@ -100,7 +100,6 @@ function readSubmittedValues(formData: FormData): ContactDetails {
     practice: text("practice"),
     practitioner: text("practitioner"),
     phone: text("phone"),
-    cspMember: ticked("cspMember"),
     scanAndStockUser: ticked("scanAndStockUser"),
     callBack: ticked("callBack"),
     dataInformationRead: ticked("dataInformationRead"),
