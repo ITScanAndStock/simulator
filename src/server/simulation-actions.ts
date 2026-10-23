@@ -10,17 +10,12 @@ import {
   type LineFieldErrors,
   type LineFields,
 } from "@/line-fields";
-import { coompyPriceLookup } from "@/price-lookup/coompy";
-import { routedPriceLookup } from "@/price-lookup/routed";
-import { straumannGroupPriceLookup } from "@/price-lookup/straumann-group";
 import {
   PricesUnavailable,
   unavailableOnFailure,
 } from "@/price-lookup/price-lookup";
 import { needsVerification } from "@/simulation/doubts";
 import { simulate } from "@/simulation/simulate";
-import { findGroupPrices } from "@/straumann-group/price-list-store";
-import { databasePool } from "./db";
 import {
   clearCorrections,
   findListedInvoices,
@@ -30,11 +25,8 @@ import {
   type Corrections,
   type StoredInvoice,
 } from "./invoices";
-import {
-  coompySettings,
-  straumannGroupAgreement,
-  suspiciousSavingPercent,
-} from "./settings";
+import { priceLookup } from "./price-lookup";
+import { suspiciousSavingPercent } from "./settings";
 import { simulationExists } from "./simulations";
 
 export type LinesSubmission = {
@@ -181,18 +173,8 @@ async function computeSaving(
         ...invoice,
         lines: [...invoice.lines, ...invoice.addedLines],
       })),
-      unavailableOnFailure(
-        routedPriceLookup({
-          coompy: coompyPriceLookup(coompySettings()),
-          straumannGroup: straumannGroupPriceLookup({
-            findPrices: (reference) =>
-              findGroupPrices(databasePool(), reference),
-            agreement: straumannGroupAgreement(),
-            // Asked by the implant volume question (ticket 24); until then no rebate.
-            implantsPerYear: undefined,
-          }),
-        }),
-      ),
+      // Asked by the implant volume question (ticket 24); until then no rebate.
+      unavailableOnFailure(priceLookup({ implantsPerYear: undefined })),
       { suspiciousSavingPercent: suspiciousSavingPercent() },
     );
   } catch (error) {

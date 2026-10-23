@@ -82,6 +82,7 @@ function line(
     unitPriceCents,
     amountCents: quantity * unitPriceCents,
     vatRate: 20,
+    unsure: [],
   };
 }
 

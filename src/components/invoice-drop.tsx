@@ -12,8 +12,12 @@ import { Toasts, type Toast } from "./toasts";
 
 type Upload = { id: number; name: string; outcome?: InvoiceUploadResult };
 
-function isPdf(file: File) {
-  return file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+const acceptedTypes = ["application/pdf", "image/jpeg", "image/png"];
+
+function isAccepted(file: File) {
+  return (
+    acceptedTypes.includes(file.type) || /\.(pdf|jpe?g|png)$/i.test(file.name)
+  );
 }
 
 export function InvoiceDrop({
@@ -36,11 +40,11 @@ export function InvoiceDrop({
     const accepted: { id: number; file: File }[] = [];
     const refused: Toast[] = [];
     for (const file of files ?? []) {
-      if (!isPdf(file)) {
+      if (!isAccepted(file)) {
         refused.push(
           refusal(
             "Format non accepté",
-            `« ${file.name} » n'est pas accepté : déposez un PDF.`,
+            `« ${file.name} » n'est pas accepté : déposez un PDF, un JPG ou un PNG.`,
           ),
         );
       } else if (file.size > maxMegabytes * 1024 * 1024) {
@@ -136,12 +140,13 @@ export function InvoiceDrop({
           Glissez vos factures ici, ou choisissez des fichiers
         </span>
         <span className={styles.hint}>
-          PDF · {maxMegabytes} Mo au plus · {maxInvoices} factures au plus
+          PDF, JPG ou PNG · {maxMegabytes} Mo au plus · {maxInvoices} factures
+          au plus
         </span>
         <input
           id="fichiers"
           type="file"
-          accept="application/pdf"
+          accept={acceptedTypes.join(",")}
           multiple
           className={styles.input}
           onChange={(event) => {

@@ -4,7 +4,7 @@ import {
   toRows,
   type PlacedWord,
   type Row,
-} from "../invoice-reading/pdf-rows.ts";
+} from "../invoice-reading/pdf-words.ts";
 import type { GroupRange } from "./agreement.ts";
 
 export type PriceListRow = {

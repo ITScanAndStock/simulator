@@ -22,7 +22,12 @@ export type ReadLineView = LineFields & {
   designation: string;
   removed: boolean;
   shown: boolean;
-  read: { quantity: number; unitPriceCents: number; amountCents: number };
+  read: {
+    reference: string;
+    quantity: number;
+    unitPriceCents: number;
+    amountCents: number;
+  };
   doubts: LineDoubt[];
 };
 
@@ -35,10 +40,18 @@ export type AddedLineView = LineFields & {
 const fieldNames = ["reference", "quantity", "unitPrice"] as const;
 
 function reason(read: ReadLineView["read"], doubt: LineDoubt) {
-  if (doubt.reason === "noVatRate") {
-    return "Prix hors taxes sans taux de TVA lisible.";
+  switch (doubt.reason) {
+    case "noVatRate":
+      return "Prix hors taxes sans taux de TVA lisible.";
+    case "unsureReading":
+      return doubt.field === "reference"
+        ? "Référence peu lisible sur la facture."
+        : "Prix unitaire peu lisible sur la facture.";
+    case "confusableReference":
+      return `Référence incertaine : ${read.reference} ou ${doubt.proposedReference} ?`;
+    case "amountMismatch":
+      return `Montant incohérent : ${read.quantity} × ${amount(read.unitPriceCents)} font ${amount(doubt.computedCents)}, la facture indique ${amount(read.amountCents)}.`;
   }
-  return `Montant incohérent : ${read.quantity} × ${amount(read.unitPriceCents)} font ${amount(doubt.computedCents)}, la facture indique ${amount(read.amountCents)}.`;
 }
 
 function changeOne<T extends { key: string }>(key: string, change: Partial<T>) {
@@ -195,6 +208,26 @@ export function LinesForm({
                     {line.doubts
                       .map((doubt) => reason(line.read, doubt))
                       .join(" ")}
+                    {line.doubts.map(
+                      (doubt) =>
+                        doubt.reason === "confusableReference" &&
+                        line.reference !== doubt.proposedReference && (
+                          <button
+                            key={doubt.proposedReference}
+                            type="button"
+                            className={styles.linkButton}
+                            onClick={() =>
+                              setLines(
+                                changeOne<ReadLineView>(line.key, {
+                                  reference: doubt.proposedReference,
+                                }),
+                              )
+                            }
+                          >
+                            Corriger en {doubt.proposedReference}
+                          </button>
+                        ),
+                    )}
                   </td>
                 </tr>
               )}

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { InvoiceLine } from "@/invoice-reading/invoice-line";
 import {
   findDoubts,
+  type CheckedLine,
   linesToVerify,
   needsVerification,
   type CheckedInvoice,
@@ -19,11 +20,12 @@ function line(
     unitPriceCents,
     amountCents,
     vatRate: 20,
+    unsure: [],
   };
 }
 
 function invoice(
-  lines: InvoiceLine[],
+  lines: CheckedLine[],
   overrides: Partial<CheckedInvoice> = {},
 ): CheckedInvoice {
   const otherChargesCents = overrides.otherChargesCents ?? 0;
@@ -38,6 +40,35 @@ function invoice(
 }
 
 describe("findDoubts", () => {
+  // Catches: a reference or price read with low confidence let through, or reported under
+  // the other field.
+  it("doubts a line whose reference or price was recognised with low confidence", () => {
+    const doubts = findDoubts(
+      invoice([
+        { ...line(1, 450, 450), unsure: ["reference"] },
+        { ...line(1, 450, 450), unsure: ["unitPrice"] },
+        line(1, 450, 450),
+      ]),
+    );
+
+    expect(doubts.lines).toEqual([
+      [{ reason: "unsureReading", field: "reference" }],
+      [{ reason: "unsureReading", field: "unitPrice" }],
+      [],
+    ]);
+  });
+
+  // Catches: a reference proposed for a confusable one left out of screen 4.
+  it("doubts a line for which a near-identical reference is proposed", () => {
+    const doubts = findDoubts(
+      invoice([{ ...line(3, 891, 2673), proposedReference: "512-3344" }]),
+    );
+
+    expect(doubts.lines).toEqual([
+      [{ reason: "confusableReference", proposedReference: "512-3344" }],
+    ]);
+  });
+
   // Catches: a misread quantity let through, a unit price rounded to the cent taken for a
   // misreading, or a tolerance wider than half a cent per unit.
   it("doubts a line whose quantity times unit price does not give its amount", () => {

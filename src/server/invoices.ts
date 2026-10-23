@@ -1,6 +1,7 @@
 import "server-only";
-import type { ReadInvoice, TaxBasis } from "@/invoice-reading/read-invoice";
-import type { CheckedInvoice } from "@/simulation/doubts";
+import type { TaxBasis } from "@/invoice-reading/read-invoice";
+import type { UnsureField } from "@/invoice-reading/invoice-line";
+import type { CheckedInvoice, CheckedLine } from "@/simulation/doubts";
 import type {
   CorrectableLine,
   LineCorrection,
@@ -10,10 +11,11 @@ import type { SupplierCode } from "@/supplier";
 import type { PoolClient } from "pg";
 import { databasePool } from "./db";
 
-export type StoredLine = CorrectableLine & {
-  invoiceId: string;
-  position: number;
-};
+export type StoredLine = CorrectableLine &
+  CheckedLine & {
+    invoiceId: string;
+    position: number;
+  };
 
 export type StoredInvoice = Omit<CheckedInvoice, "lines"> & {
   id: string;
@@ -49,7 +51,7 @@ async function inTransaction<T>(run: (client: PoolClient) => Promise<T>) {
 
 export async function storeReadInvoice(
   simulationId: string,
-  invoice: Extract<ReadInvoice, { status: "read" }>,
+  invoice: CheckedInvoice & { supplier: SupplierCode },
 ) {
   return inTransaction(async (client) => {
     const { rows } = await client.query<{ id: string }>(
@@ -67,8 +69,8 @@ export async function storeReadInvoice(
       await client.query(
         `INSERT INTO invoice_line
            (invoice_id, position, reference, designation, quantity, unit_price_cents,
-            amount_cents, vat_rate)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            amount_cents, vat_rate, unsure, proposed_reference)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
         [
           rows[0].id,
           position,
@@ -78,6 +80,8 @@ export async function storeReadInvoice(
           line.unitPriceCents,
           line.amountCents,
           line.vatRate,
+          line.unsure,
+          line.proposedReference ?? null,
         ],
       );
     }
@@ -110,6 +114,8 @@ export async function findListedInvoices(simulationId: string) {
     unit_price_cents: number;
     amount_cents: number;
     vat_rate: string | null;
+    unsure: UnsureField[];
+    proposed_reference: string | null;
     added: boolean;
     removed: boolean;
     corrected_reference: string | null;
@@ -118,8 +124,8 @@ export async function findListedInvoices(simulationId: string) {
   }>(
     `SELECT i.id AS invoice_id, i.supplier, i.tax_basis, i.other_charges_cents, i.total_cents,
             l.position, l.reference, l.designation, l.quantity, l.unit_price_cents,
-            l.amount_cents, l.vat_rate, l.added, l.removed, l.corrected_reference,
-            l.corrected_quantity, l.corrected_unit_price_cents
+            l.amount_cents, l.vat_rate, l.unsure, l.proposed_reference, l.added, l.removed,
+            l.corrected_reference, l.corrected_quantity, l.corrected_unit_price_cents
      FROM invoice i JOIN invoice_line l ON l.invoice_id = i.id
      WHERE i.simulation_id = $1 AND i.listed
      ORDER BY i.read_at, i.id, l.position`,
@@ -145,6 +151,8 @@ export async function findListedInvoices(simulationId: string) {
       unitPriceCents: row.unit_price_cents,
       amountCents: row.amount_cents,
       vatRate: row.vat_rate === null ? undefined : Number(row.vat_rate),
+      unsure: row.unsure,
+      proposedReference: row.proposed_reference ?? undefined,
       removed: row.removed,
       correction:
         row.corrected_reference === null ||

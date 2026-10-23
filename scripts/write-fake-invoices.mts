@@ -1,4 +1,6 @@
 import { writeFileSync } from "node:fs";
+import { createCanvas, loadImage } from "@napi-rs/canvas";
+import { renderPageAsImage } from "unpdf";
 import { writePdf, type Page, type Text } from "./fake-pdf.mts";
 
 const doctorAiLines: {
@@ -199,3 +201,106 @@ writeFileSync(
   writePdf(doctorAiInvoice(doctorAiLines, "85.00 €")),
 );
 writeFileSync("test-invoices/stock-export-fake.pdf", writePdf(stockExport()));
+
+const scanDpi = 300;
+
+// White bars across a word, as a fold or a faded print would leave them.
+type Smudge = { x: number; y: number; width: number };
+
+async function scannedPage(pdf: Buffer, smudges: Smudge[]) {
+  const scale = scanDpi / 72;
+  const rendered = await renderPageAsImage(new Uint8Array(pdf), 1, {
+    canvasImport: () => import("@napi-rs/canvas"),
+    scale,
+  });
+  const image = await loadImage(Buffer.from(rendered));
+  const canvas = createCanvas(image.width, image.height);
+  const context = canvas.getContext("2d");
+  context.drawImage(image, 0, 0);
+  context.fillStyle = "white";
+  for (const { x, y, width } of smudges) {
+    for (let bar = 0; bar < 3; bar++) {
+      context.fillRect(
+        (x + (bar * width) / 3) * scale,
+        (842 - y - 5) * scale,
+        (width / 14) * scale,
+        3 * scale,
+      );
+    }
+  }
+  return canvas;
+}
+
+function writeImagePdf(jpeg: Buffer, width: number, height: number) {
+  const content = "q 595 0 0 842 0 0 cm /Scan Do Q";
+  const objects = [
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Scan 4 0 R >> >> /Contents 5 0 R >>",
+    `<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>`,
+    `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,
+  ];
+  const parts: Buffer[] = [Buffer.from("%PDF-1.4\n", "latin1")];
+  let length = parts[0].length;
+  const offsets: number[] = [];
+  for (const [index, body] of objects.entries()) {
+    offsets.push(length);
+    const object =
+      index === 3
+        ? Buffer.concat([
+            Buffer.from(`${index + 1} 0 obj\n${body}\nstream\n`, "latin1"),
+            jpeg,
+            Buffer.from("\nendstream\nendobj\n", "latin1"),
+          ])
+        : Buffer.from(`${index + 1} 0 obj\n${body}\nendobj\n`, "latin1");
+    parts.push(object);
+    length += object.length;
+  }
+  parts.push(
+    Buffer.from(
+      `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n` +
+        offsets
+          .map((offset) => `${String(offset).padStart(10, "0")} 00000 n \n`)
+          .join("") +
+        `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${length}\n%%EOF\n`,
+      "latin1",
+    ),
+  );
+  return Buffer.concat(parts);
+}
+
+// Recognition reads an en dash with a confidence that swings from one image format to another.
+const scannedLines = doctorAiLines.map((line) => ({
+  ...line,
+  reference: line.reference.replace("–", "-"),
+}));
+// The S printed in S12-3344 is read for a letter; reference 412-0815 and the unit price of
+// 233-1001 are smudged.
+const scan = await scannedPage(
+  writePdf(
+    doctorAiInvoice(
+      scannedLines.map((line) =>
+        line.reference === "512-3344"
+          ? { ...line, reference: "S12-3344" }
+          : line,
+      ),
+    ),
+  ),
+  [
+    { x: 440, y: 507, width: 16 },
+    { x: 43, y: 542, width: 28 },
+  ],
+);
+writeFileSync(
+  "test-invoices/doctor-ai-scanned-fake.pdf",
+  writeImagePdf(await scan.encode("jpeg", 90), scan.width, scan.height),
+);
+const photo = await scannedPage(writePdf(doctorAiInvoice(scannedLines)), []);
+writeFileSync(
+  "test-invoices/doctor-ai-photo-fake.jpg",
+  await photo.encode("jpeg", 90),
+);
+writeFileSync(
+  "test-invoices/doctor-ai-photo-fake.png",
+  await photo.encode("png"),
+);

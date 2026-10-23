@@ -4,6 +4,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
   "pdf_invoice-2ed1f14878147bc3d79fffe3.pdf": {
     status: "read",
     supplier: "DoctorAI",
+    recognised: false,
     taxBasis: "inclusive",
     lines: [
       {
@@ -13,6 +14,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
         unitPriceCents: 5625,
         amountCents: 5625,
         vatRate: 20,
+        unsure: [],
       },
       {
         reference: "778-9273",
@@ -21,6 +23,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
         unitPriceCents: 11790,
         amountCents: 11790,
         vatRate: 20,
+        unsure: [],
       },
       {
         reference: "778-9272",
@@ -29,6 +32,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
         unitPriceCents: 11654,
         amountCents: 11654,
         vatRate: 20,
+        unsure: [],
       },
       {
         reference: "028-8273",
@@ -37,6 +41,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
         unitPriceCents: 716,
         amountCents: 1432,
         vatRate: 20,
+        unsure: [],
       },
       {
         reference: "768-9094",
@@ -45,6 +50,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
         unitPriceCents: 1420,
         amountCents: 2840,
         vatRate: 20,
+        unsure: [],
       },
       {
         reference: "768-9095",
@@ -53,6 +59,7 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
         unitPriceCents: 1420,
         amountCents: 1420,
         vatRate: 20,
+        unsure: [],
       },
       {
         reference: "058-8240",
@@ -61,9 +68,12 @@ export const realInvoicesExpected: Record<string, ReadInvoice> = {
         unitPriceCents: 1590,
         amountCents: 1590,
         vatRate: 20,
+        unsure: [],
       },
     ],
     otherChargesCents: 0,
     totalCents: 36351,
   },
+  // Scanned, four pages, no text layer: recognition must get through it; its supplier has no rule yet.
+  "SIBE00002276 CABINET DENTAIRE FIRST SMILE.pdf": { status: "unsupported" },
 };

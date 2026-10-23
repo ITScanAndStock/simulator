@@ -1,15 +1,20 @@
-import type { InvoiceLine } from "@/invoice-reading/invoice-line";
+import type { InvoiceLine, UnsureField } from "@/invoice-reading/invoice-line";
 import type { ReadInvoice, TaxBasis } from "@/invoice-reading/read-invoice";
 
 export type LineDoubt =
-  { reason: "amountMismatch"; computedCents: number } | { reason: "noVatRate" };
+  | { reason: "amountMismatch"; computedCents: number }
+  | { reason: "noVatRate" }
+  | { reason: "unsureReading"; field: UnsureField }
+  | { reason: "confusableReference"; proposedReference: string };
+
+export type CheckedLine = InvoiceLine & { proposedReference?: string };
 
 export type TotalDoubt = { addedUpCents: number; totalCents: number };
 
 export type CheckedInvoice = Pick<
   Extract<ReadInvoice, { status: "read" }>,
-  "taxBasis" | "lines" | "otherChargesCents" | "totalCents"
->;
+  "taxBasis" | "otherChargesCents" | "totalCents"
+> & { lines: CheckedLine[] };
 
 export function findDoubts(invoice: CheckedInvoice) {
   return {
@@ -50,8 +55,17 @@ function hasDoubts(doubts: ReturnType<typeof findDoubts>) {
   );
 }
 
-function lineDoubts(line: InvoiceLine, taxBasis: TaxBasis) {
-  const doubts: LineDoubt[] = [];
+function lineDoubts(line: CheckedLine, taxBasis: TaxBasis) {
+  const doubts: LineDoubt[] = line.unsure.map((field) => ({
+    reason: "unsureReading",
+    field,
+  }));
+  if (line.proposedReference !== undefined) {
+    doubts.push({
+      reason: "confusableReference",
+      proposedReference: line.proposedReference,
+    });
+  }
   const computedCents = line.quantity * line.unitPriceCents;
   // A unit price rounded to the cent may be off by half a cent on each unit.
   if (2 * Math.abs(computedCents - line.amountCents) > line.quantity) {
